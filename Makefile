@@ -1,4 +1,4 @@
-NAME := hello_world
+NAME := qbert
 
 include sdcc_msx/Makefile.in
 
