@@ -11,19 +11,45 @@ T_SA SA0, SA1;
 
 #include <res/fonts/font1.png.h>
 #include <res/fonts/font2.png.h>
+
+#include "qbert.h"
 #include "sprites.h"
+#include "lookup_tables.h"
 
 #define NUM_SPRITES 4
 
+#define UP_LEFT         48
+#define DOWN_LEFT       80
+#define DOWN_RIGHT      192
+#define UP_RIGHT        160
+
+#define tiles_init Tiles_init
+
 T_M2_MS_Font main_font; // Big structures, like this one, its better to store them in global storage
 
+//extern uint8_t _jump_down_right_length;
 
-static void init_sprites() {
+extern struct Qbert qbert;
+const int16_t (*jump_table)[16];
+
+
+static void init_sprites()
+{
+    for (int i = 0; i < NUM_SPRITES; i++)
+    {
+        TMS99X8_writeSprite8((i * 4) + 0, &sprites[i][0]);
+        TMS99X8_writeSprite8((i * 4) + 1, &sprites[i][8]);
+        TMS99X8_writeSprite8((i * 4) + 2, &sprites[i][16]);
+        TMS99X8_writeSprite8((i * 4) + 3, &sprites[i][24]);
+    }
+}
+
+
+static void put_sprite(uint8_t x, uint8_t y)
+{
     uint8_t colors0[] = {BWhite, BBlack, BLightRed, BDarkRed,};
     uint8_t colors1[] = {BWhite, BBlack, BLightRed, BDarkRed,};
     uint8_t i, j;
-    uint8_t x = 128 - 22;
-    uint8_t y = 96 - 16;
 
     for (j = 0, i = 0; i < NUM_SPRITES * 4; i += 4, j++)
     {
@@ -37,12 +63,12 @@ static void init_sprites() {
         SA0[i + 2].y = SA1[i + 2].y = y;
         SA0[i + 3].y = SA1[i + 3].y = y + 8;
 
-	    SA0[i + 0].pattern = SA1[i + 0].pattern = i + 0;
+        SA0[i + 0].pattern = SA1[i + 0].pattern = i + 0;
         SA0[i + 1].pattern = SA1[i + 1].pattern = i + 1;
         SA0[i + 2].pattern = SA1[i + 2].pattern = i + 2;
         SA0[i + 3].pattern = SA1[i + 3].pattern = i + 3;
 
-	    SA0[i + 0].color = colors0[j];
+        SA0[i + 0].color = colors0[j];
         SA1[i + 0].color = colors1[j];
         SA0[i + 1].color = colors0[j];
         SA1[i + 1].color = colors1[j];
@@ -50,14 +76,6 @@ static void init_sprites() {
         SA1[i + 2].color = colors1[j];
         SA0[i + 3].color = colors0[j];
         SA1[i + 3].color = colors1[j];
-    }
-
-    for (i = 0; i < NUM_SPRITES; i++)
-    {
-        TMS99X8_writeSprite8((i * 4) + 0, &sprites[i][0]);
-        TMS99X8_writeSprite8((i * 4) + 1, &sprites[i][8]);
-        TMS99X8_writeSprite8((i * 4) + 2, &sprites[i][16]);
-        TMS99X8_writeSprite8((i * 4) + 3, &sprites[i][24]);
     }
 
     TMS99X8_writeSpriteAttributes(MODE2_BUFFER_0, SA0);
@@ -269,11 +287,53 @@ static void draw_scenary()
 }
 
 
-int main(void) {
+static void update_player_l(int8_t fps) __z88dk_fastcall
+{
+    UNUSED(fps);
+
+    if (qbert.frame < 16)
+    {
+        qbert.y = qbert.y0 + (*jump_table)[qbert.frame];
+        qbert.x = qbert.x0 - ++qbert.frame;
+    }
+    else
+    {
+        // reset animation status
+        qbert.x0 = qbert.x;
+        qbert.y0 = qbert.y;
+        qbert.frame = 0;
+        qbert.update = nullptr;
+    }
+}
+
+
+static void update_player_r(int8_t fps) __z88dk_fastcall
+{
+    UNUSED(fps);
+
+    if (qbert.frame < 16)
+    {
+        qbert.y = qbert.y0 + (*jump_table)[qbert.frame];
+        qbert.x = qbert.x0 + ++qbert.frame;
+    }
+    else
+    {
+        // reset animation status
+        qbert.x0 = qbert.x;
+        qbert.y0 = qbert.y;
+        qbert.frame = 0;
+        qbert.update = nullptr;
+    }
+}
+
+
+int main(void)
+{
+    uint8_t input;
 
     // Normal initialization routine
     msxhal_init(); // Bare minimum initialization of the msx support
-    Tiles_init(); // It initializes the global tile storage (i.e., to allow to load a font afterwards)
+    tiles_init(); // It initializes the global tile storage (i.e., to allow to load a font afterwards)
     TMS99X8_activateMode2(MODE2_ALL_ROWS); // Activates mode 2 and clears the screen (in black)
 
     init_font();
@@ -284,43 +344,65 @@ int main(void) {
     // Set the hello world, also getting some information from the BIOS (i.e., the frequency of this MSX).
     draw_scenary();
 
+    put_sprite(qbert.x0, qbert.y0);
+
     // Main loop, we alternate between buffers at each interruption.
     while (true)
     {
+        input = msxhal_joystick_read(0);
+
+        if (qbert.update == nullptr)
+        {
+            switch (input)
+            {
+            case 16: // left
+            case 32: // up
+            case 64: // down
+            case 128: // right
+                goto cycle_frames;
+
+            case UP_LEFT:
+                jump_table = &jump_up;
+                qbert.update = update_player_l;
+                break;
+
+            case DOWN_LEFT:
+                jump_table = &jump_down;
+                qbert.update = update_player_l;
+                break;
+
+            case UP_RIGHT:
+                jump_table = &jump_up;
+                qbert.update = update_player_r;
+                break;
+
+            case DOWN_RIGHT:
+                jump_table = &jump_down;
+                qbert.update = update_player_r;
+                break;
+
+            default:
+                goto cycle_frames;
+            }
+        }
+
+        qbert.update(1);
+        put_sprite(qbert.x, qbert.y);
+
+cycle_frames:
         wait_frame();
 
         //debugBorder(BMagenta);
 
         TMS99X8_activateBuffer(MODE2_BUFFER_0);
+
         // We select buffer 0, we modify sprites on buffer 1
         //debugBorder(BWhite);
 
-	// TMS99X8_writeSpriteAttributes(MODE2_BUFFER_1,SA1);
-	// {
-	//     uint8_t i=0;
-	//     for (i=0; i<32; i++) {
-	// 	uint8_t y = SA1[i].y, p = SA1[i].pattern;
-	// 	SA1[i].y = (y==24*8?247:y+1);
-	// 	SA1[i].pattern = (p==32?0:p+1);
-	// 	if (p==1) SA0[i].x = SA1[i].x = rand16();
-	//     }
-	// }
-	// debugBorder(BTransparent);
+        wait_frame();
 
-	wait_frame();
-
-	// We select buffer 1, so we modify sprites on buffer 0
-	TMS99X8_activateBuffer(MODE2_BUFFER_1);
-	// {
-	//     uint8_t i=0;
-	//     for (i=0; i<32; i++) {
-	// 	SA0[i].y = SA1[i].y;
-	// 	SA0[i].x = SA1[i].x;
-	// 	SA0[i].pattern = SA1[i].pattern;
-    //
-	//     }
-	// }
-	// TMS99X8_writeSpriteAttributes(MODE2_BUFFER_0,SA0);
+        // We select buffer 1, so we modify sprites on buffer 0
+        TMS99X8_activateBuffer(MODE2_BUFFER_1);
     };
 
     return 0;
