@@ -18,11 +18,6 @@ T_SA SA0, SA1;
 
 #define NUM_SPRITES 4
 
-#define UP_LEFT         48
-#define DOWN_LEFT       80
-#define DOWN_RIGHT      192
-#define UP_RIGHT        160
-
 #define tiles_init Tiles_init
 
 T_M2_MS_Font main_font; // Big structures, like this one, its better to store them in global storage
@@ -35,21 +30,55 @@ const int16_t (*jump_table)[16];
 
 static void init_sprites()
 {
-    for (int i = 0; i < NUM_SPRITES; i++)
+    // 0: facing down, 1: facing up
+    for (int j = 0; j < 2; ++j)
     {
-        TMS99X8_writeSprite8((i * 4) + 0, &sprites[i][0]);
-        TMS99X8_writeSprite8((i * 4) + 1, &sprites[i][8]);
-        TMS99X8_writeSprite8((i * 4) + 2, &sprites[i][16]);
-        TMS99X8_writeSprite8((i * 4) + 3, &sprites[i][24]);
+        for (int i = 0; i < NUM_SPRITES; i++)
+        {
+            // j = 0: down right
+            // 0,1,2,3
+            // 4,5,6,7
+            // 8,9,10,11
+            // 12,13,14,15
+            // j = 1: up right
+            // 32,33,34,35
+            // 36,37,38,39
+            // 40,41,42,42
+            // 44,45,46,47
+            TMS99X8_writeSprite8(j * 32 + i * 4 + 0, &sprites[j][i][0]);
+            TMS99X8_writeSprite8(j * 32 + i * 4 + 1, &sprites[j][i][8]);
+            TMS99X8_writeSprite8(j * 32 + i * 4 + 2, &sprites[j][i][16]);
+            TMS99X8_writeSprite8(j * 32 + i * 4 + 3, &sprites[j][i][24]);
+
+	    // flipped (down left)
+	    // 16,17,18,19
+            // 20,21,22,23
+            // 24,25,26,27
+            // 28,29,30,31
+            // j = 1 (up left)
+            // 48,49,50,51
+            // 52,53,54,55
+            // 56,57,58,59
+            // 60,61,62,63
+            TMS99X8_writeSprite8_flip(j * 32 + i * 4 + 16, &sprites[j][i][16]);
+            TMS99X8_writeSprite8_flip(j * 32 + i * 4 + 17, &sprites[j][i][24]);
+            TMS99X8_writeSprite8_flip(j * 32 + i * 4 + 18, &sprites[j][i][0]);
+            TMS99X8_writeSprite8_flip(j * 32 + i * 4 + 19, &sprites[j][i][8]);
+	}
     }
 }
 
 
-static void put_sprite(uint8_t x, uint8_t y)
+static void put_sprite(uint8_t x, uint8_t y, enum Direction dir)
 {
     uint8_t colors0[] = {BWhite, BBlack, BLightRed, BDarkRed,};
     uint8_t colors1[] = {BWhite, BBlack, BLightRed, BDarkRed,};
     uint8_t i, j;
+
+    if (dir & DIR_LEFT)
+    {
+        x -= 4;
+    }
 
     for (j = 0, i = 0; i < NUM_SPRITES * 4; i += 4, j++)
     {
@@ -57,25 +86,42 @@ static void put_sprite(uint8_t x, uint8_t y)
         SA0[i + 1].x = SA1[i + 1].x = x;
         SA0[i + 2].x = SA1[i + 2].x = x + 8;
         SA0[i + 3].x = SA1[i + 3].x = x + 8;
-
         SA0[i + 0].y = SA1[i + 0].y = y;
         SA0[i + 1].y = SA1[i + 1].y = y + 8;
         SA0[i + 2].y = SA1[i + 2].y = y;
         SA0[i + 3].y = SA1[i + 3].y = y + 8;
 
-        SA0[i + 0].pattern = SA1[i + 0].pattern = i + 0;
-        SA0[i + 1].pattern = SA1[i + 1].pattern = i + 1;
-        SA0[i + 2].pattern = SA1[i + 2].pattern = i + 2;
-        SA0[i + 3].pattern = SA1[i + 3].pattern = i + 3;
+	if (dir == DIR_DOWN_RIGHT)
+	{
+            SA0[i + 0].pattern = SA1[i + 0].pattern = i + 0;
+            SA0[i + 1].pattern = SA1[i + 1].pattern = i + 1;
+            SA0[i + 2].pattern = SA1[i + 2].pattern = i + 2;
+            SA0[i + 3].pattern = SA1[i + 3].pattern = i + 3;
+	}
+	else if (dir == DIR_DOWN_LEFT)
+	{
+            SA0[i + 0].pattern = SA1[i + 0].pattern = i + 16;
+            SA0[i + 1].pattern = SA1[i + 1].pattern = i + 17;
+            SA0[i + 2].pattern = SA1[i + 2].pattern = i + 18;
+            SA0[i + 3].pattern = SA1[i + 3].pattern = i + 19;
+	}
+	else if (dir == DIR_UP_RIGHT)
+	{
+            SA0[i + 0].pattern = SA1[i + 0].pattern = i + 32;
+            SA0[i + 1].pattern = SA1[i + 1].pattern = i + 33;
+            SA0[i + 2].pattern = SA1[i + 2].pattern = i + 34;
+            SA0[i + 3].pattern = SA1[i + 3].pattern = i + 35;
+	}
+	else if (dir == DIR_UP_LEFT)
+	{
+            SA0[i + 0].pattern = SA1[i + 0].pattern = i + 48;
+            SA0[i + 1].pattern = SA1[i + 1].pattern = i + 49;
+            SA0[i + 2].pattern = SA1[i + 2].pattern = i + 50;
+            SA0[i + 3].pattern = SA1[i + 3].pattern = i + 51;
+	}
 
-        SA0[i + 0].color = colors0[j];
-        SA1[i + 0].color = colors1[j];
-        SA0[i + 1].color = colors0[j];
-        SA1[i + 1].color = colors1[j];
-        SA0[i + 2].color = colors0[j];
-        SA1[i + 2].color = colors1[j];
-        SA0[i + 3].color = colors0[j];
-        SA1[i + 3].color = colors1[j];
+        SA0[i].color = SA0[i + 1].color = SA0[i + 2].color = SA0[i + 3].color = colors0[j];
+        SA1[i].color = SA1[i + 1].color = SA1[i + 2].color = SA1[i + 3].color = colors1[j];
     }
 
     TMS99X8_writeSpriteAttributes(MODE2_BUFFER_0, SA0);
@@ -344,7 +390,7 @@ int main(void)
     // Set the hello world, also getting some information from the BIOS (i.e., the frequency of this MSX).
     draw_scenary();
 
-    put_sprite(qbert.x0, qbert.y0);
+    put_sprite(qbert.x0, qbert.y0, DIR_DOWN_RIGHT);
 
     // Main loop, we alternate between buffers at each interruption.
     while (true)
@@ -361,24 +407,28 @@ int main(void)
             case 128: // right
                 goto cycle_frames;
 
-            case UP_LEFT:
-                jump_table = &jump_up;
-                qbert.update = update_player_l;
+            case DIR_DOWN_RIGHT:
+                qbert.direction = DIR_DOWN_RIGHT;
+                jump_table = &jump_down;
+                qbert.update = update_player_r;
                 break;
 
-            case DOWN_LEFT:
+            case DIR_DOWN_LEFT:
+                qbert.direction = DIR_DOWN_LEFT;
                 jump_table = &jump_down;
                 qbert.update = update_player_l;
                 break;
 
-            case UP_RIGHT:
+            case DIR_UP_RIGHT:
+                qbert.direction = DIR_UP_RIGHT;
                 jump_table = &jump_up;
                 qbert.update = update_player_r;
                 break;
 
-            case DOWN_RIGHT:
-                jump_table = &jump_down;
-                qbert.update = update_player_r;
+            case DIR_UP_LEFT:
+                qbert.direction = DIR_UP_LEFT;
+                jump_table = &jump_up;
+                qbert.update = update_player_l;
                 break;
 
             default:
@@ -387,7 +437,7 @@ int main(void)
         }
 
         qbert.update(1);
-        put_sprite(qbert.x, qbert.y);
+        put_sprite(qbert.x, qbert.y, qbert.direction);
 
 cycle_frames:
         wait_frame();
