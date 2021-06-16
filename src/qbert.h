@@ -1,10 +1,8 @@
 #ifndef _QBERT_H_
 #define _QBERT_H_
 
-
+#pragma once
 #include <stdint.h>
-#include <msxhal.h>
-
 
 enum Direction {
     DIR_LEFT       =  16,
@@ -20,6 +18,7 @@ enum Direction {
 
 struct Qbert
 {
+    bool dirty;
     uint8_t frame;
     uint8_t x0;
     uint8_t y0;
@@ -30,5 +29,8 @@ struct Qbert
     void (*update)(int8_t) __z88dk_fastcall;
 };
 
+void init_qbert_sprites();
+
+void put_qbert_sprite(EM2_Buffer BUFFER);
 
 #endif /* _QBERT_H_ */
