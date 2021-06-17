@@ -23,6 +23,9 @@ T_SA SA0, SA1;
 
 void init_qbert_sprites()
 {
+    qbert.x0 = 122;
+    qbert.y0 = 8;
+
     // 0: facing down, 1: facing up
     for (int j = 0; j < 2; ++j)
     {
@@ -63,10 +66,9 @@ void init_qbert_sprites()
 
 
 /* update sprite allocation table (SAT) */
-INLINE static void update_sat(T_SA *SA, uint8_t pat, uint8_t id)
+INLINE void update_sat(T_SA *SA, uint8_t pat, uint8_t id)
 {
-    static uint8_t colors0[] = {BWhite, BBlack, BLightRed, BDarkRed,};
-    static uint8_t colors1[] = {BWhite, BBlack, BLightRed, BDarkRed,};
+    static uint8_t colors[] = {BWhite, BBlack, BLightRed, BDarkRed,};
 
     if (qbert.direction == DIR_DOWN_RIGHT)
     {
@@ -97,7 +99,7 @@ INLINE static void update_sat(T_SA *SA, uint8_t pat, uint8_t id)
             (*SA)[pat + 3].pattern = pat + 51;
     }
 
-    (*SA)[pat].color = (*SA)[pat + 1].color = (*SA)[pat + 2].color = (*SA)[pat + 3].color = colors0[id];
+    (*SA)[pat].color = (*SA)[pat + 1].color = (*SA)[pat + 2].color = (*SA)[pat + 3].color = colors[id];
 }
 
 void put_qbert_sprite(EM2_Buffer BUFFER)

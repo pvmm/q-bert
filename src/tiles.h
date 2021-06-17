@@ -7,8 +7,6 @@ void set_tile(uint8_t index,
               const U8x8 shape0, const U8x8 color0,
               const U8x8 shape1, const U8x8 color1);
 
-void init_font();
-
-void draw_scenary();
+void draw_scenery();
 
 #endif /* _TILES_H */

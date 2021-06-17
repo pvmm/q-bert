@@ -10,12 +10,6 @@
 static T_M2_MS_Font main_font; // Big structures, like this one, its better to store them in global storage
 
 
-void tiles_init()
-{
-    Tiles_init();
-}
-
-
 INLINE void set_tile(uint8_t index,
                      const U8x8 shape0, const U8x8 color0,
                      const U8x8 shape1, const U8x8 color1)
@@ -181,7 +175,7 @@ static void draw_block2(uint8_t x, uint8_t y)
 }
 
 
-void draw_scenary()
+void draw_scenery()
 {
     draw_block2(2, 20);
     draw_block2(6, 20);
@@ -217,4 +211,11 @@ void draw_scenary()
     draw_block1(16, 5);
 
     draw_block1(14, 2);
+}
+
+
+void tiles_init()
+{
+    Tiles_init();
+    init_font();
 }

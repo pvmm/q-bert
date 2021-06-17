@@ -57,25 +57,17 @@ void update_player_r(int8_t fps) __z88dk_fastcall
 
 int main(void)
 {
-    uint8_t input, old_input;
+    uint8_t input = 0, old_input = 255;
 
-    // Normal initialization routine
-    msxhal_init(); // Bare minimum initialization of the msx support
+    msxhal_init();
 
-    tiles_init(); // It initializes the global tile storage (i.e., to allow to load a font afterwards)
+    TMS99X8_activateMode2(MODE2_ALL_ROWS);
 
-    TMS99X8_activateMode2(MODE2_ALL_ROWS); // Activates mode 2 and clears the screen (in black)
+    tiles_init();
 
-    init_font();
-
-    // We also show a few sprites along the way :)
     init_qbert_sprites();
 
-    // Set the hello world, also getting some information from the BIOS (i.e., the frequency of this MSX).
-    draw_scenary();
-
-    put_qbert_sprite(MODE2_BUFFER_0);
-    put_qbert_sprite(MODE2_BUFFER_1);
+    draw_scenery();
 
     // Main loop, we alternate between buffers at each interruption.
     while (true)
