@@ -1,7 +1,7 @@
 #ifndef _TILES_H
 #define _TILES_H
 
-void tiles_init();
+void init_tiles();
 
 void set_tile(uint8_t index,
               const U8x8 shape0, const U8x8 color0,

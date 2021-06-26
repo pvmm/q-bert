@@ -34,6 +34,7 @@ void update_player_l(int8_t fps) __z88dk_fastcall
 }
 
 
+#ifdef MSX
 #pragma disable_warning 85
 void _print(char* msg) {
         __asm
@@ -61,6 +62,12 @@ void _print(char* msg) {
 
         return;
 }
+#else
+void _print(const char* msg)
+{
+    printf("%s", msg);
+}
+#endif
 
 
 void update_player_r(int8_t fps) __z88dk_fastcall
@@ -102,7 +109,7 @@ int main(void)
 
     TMS99X8_activateMode2(MODE2_ALL_ROWS);
 
-    tiles_init();
+    init_tiles();
 
     init_qbert_sprites();
 
