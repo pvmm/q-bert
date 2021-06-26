@@ -10,9 +10,12 @@
 static T_M2_MS_Font main_font; // Big structures, like this one, its better to store them in global storage
 
 
-INLINE void set_tile(uint8_t index,
-                     const U8x8 shape0, const U8x8 color0,
-                     const U8x8 shape1, const U8x8 color1)
+INLINE void set_tile
+(
+    uint8_t index,
+    const U8x8 shape0, const U8x8 color0,
+    const U8x8 shape1, const U8x8 color1
+)
 {
     M2_MS_setCharDouble(main_font, MODE2_ALL_ROWS, index,
                         shape0, color0,

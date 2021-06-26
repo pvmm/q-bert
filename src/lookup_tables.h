@@ -15,12 +15,12 @@
 
 #pragma once
 
-const int16_t jump_down[16] =
+const int8_t jump_down[16] =
 {
     0, -1, -1, 0, 1, 2, 3, 4, 6, 7, 9, 12, 15, 17, 20, 24
 };
 
-const int16_t jump_up[16] =
+const int8_t jump_up[16] =
 {
     0, -2, -5, -8, -10, -12, -14, -16, -18, -19, -21, -22, -23, -24, -25, -24
 };

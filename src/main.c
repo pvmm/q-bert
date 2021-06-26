@@ -3,7 +3,6 @@
 
 #include <msxhal.h>
 #include <tms99X8.h>
-//#include <monospace.h>
 #include <tile.h>
 //#include <rand.h>
 
@@ -13,7 +12,7 @@
 
 extern struct Qbert qbert;
 
-const int16_t (*jump_table)[16];
+const int8_t (*jump_table)[16];
 
 void update_player_l(int8_t fps) __z88dk_fastcall
 {
@@ -32,6 +31,35 @@ void update_player_l(int8_t fps) __z88dk_fastcall
         qbert.frame = 0;
         qbert.update = nullptr;
     }
+}
+
+
+#pragma disable_warning 85
+void _print(char* msg) {
+        __asm
+                ld      hl, #2; retrieve address from stack
+                add     hl, sp
+                ld              b, (hl)
+                inc             hl
+                ld              h, (hl)
+                ld              l, b
+
+                _printMSG_loop :
+                ld              a, (hl); print
+                or              a
+                ret z
+                push    hl
+                push    ix
+                ld              iy, (#0xfcc0); BIOS_ROMSLT
+                ld              ix, #0x00a2; BIOS_CHPUT
+                call    #0x001c; BIOS_CALSLT
+                pop             ix
+                pop             hl
+                inc             hl
+                jr              _printMSG_loop
+        __endasm;
+
+        return;
 }
 
 
@@ -55,9 +83,20 @@ void update_player_r(int8_t fps) __z88dk_fastcall
 }
 
 
+void print_num(uint16_t num)
+{
+    do
+    {
+        _print("A");
+        num--;
+    }
+    while (num != 0);
+}
+
+
 int main(void)
 {
-    uint8_t input = 0, old_input = 255;
+    uint8_t input = 0, old_input = 1;
 
     msxhal_init();
 
