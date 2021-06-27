@@ -51,15 +51,15 @@ void prepare_tileset()
 
     static const uint8_t names1[] =
     {
-        0, 1, 2, 3,     // 1..4: first row tiles (upper)
-        4, 5, 6, 7,     // 5..8: first row tiles (lower)
-        12, 12,         // 9..10: square tiles (lighted and shaded)
-        0, 1, 2, 3,     // 11..14: middle row tiles
-        -1, -1, -1, -1, // 15..18: last row of tiles
-        2, 3, 0, 1,     // 19..22: connection tiles
+        1, 2, 3, 4,     // 1..4: first row tiles (upper)
+        5, 6, 7, 8,     // 5..8: first row tiles (lower)
+        13, 13,         // 9..10: square tiles (lighted and shaded)
+        1, 2, 3, 4,     // 11..14: middle row tiles
+        0, 0, 0, 0,     // 15..18: last row of tiles
+        3, 4, 1, 2,     // 19..22: connection tiles
         /* pressed tiles */
-        -1, -1, -1, -1, // 23..26: middle row tiles (top)
-        -1, -1, -1, -1, // 27..30: middle row tiles (top)
+        0, 0, 0, 0,     // 23..26: middle row tiles (top)
+        0, 0, 0, 0,     // 27..30: middle row tiles (top)
     };
 
     static const uint8_t color_indexes1[] =
@@ -71,21 +71,21 @@ void prepare_tileset()
         0, 0, 0, 0,     // 15..18: last row of tiles
         1, 1, 1, 1,     // 19..22: connection tiles
         /* pressed tiles */
-        0, 0, 0, 0,
-        0, 0, 0, 0,
+        0, 0, 0, 0,     // 23..26: middle row tiles (top)
+        0, 0, 0, 0,     // 27..30: middle row tiles (top)
     };
 
     static const uint8_t names2[] =
     {
-        0, 1, 2, 3,     // 1..4: tiles from first row
-        2, 3, 0, 1,     // 5..8: tiles from second row
-        12, 12,         // 9..10: square tiles (lighted and shaded)
-        8, 9, 10, 11,   // 11..14: middle row tiles (top)
-        4, 5, 6, 7,     // 15..18: last row tiles
-        4, 5, 6, 7,     // 19..22: connection tiles
+        1, 2, 3, 4,     // 1..4: tiles from first row
+        3, 4, 1, 2,     // 5..8: tiles from second row
+        13, 13,         // 9..10: square tiles (lighted and shaded)
+        9, 10, 11, 12,  // 11..14: middle row tiles (top)
+        5, 6, 7, 8,     // 15..18: last row tiles
+        5, 6, 7, 8,     // 19..22: connection tiles
         /* pressed tiles */
-        8, 9, 10, 11,   // 23..26: middle row tiles (top)
-        4, 5, 6, 7,     // 27..30: last row tiles
+        9, 10, 11, 12,  // 23..26: middle row tiles (top)
+        5, 6, 7, 8,     // 27..30: last row tiles
     };
 
     static const uint8_t color_indexes2[] =
