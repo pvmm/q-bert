@@ -28,6 +28,15 @@
 #define BLOCK_END_3 "\x11"
 #define BLOCK_END_4 "\x12"
 
+#define BLOCK_PRESSED_1 "\x17"
+#define BLOCK_PRESSED_2 "\x18"
+#define BLOCK_PRESSED_3 "\x19"
+#define BLOCK_PRESSED_4 "\x1a"
+#define BLOCK_PRESSED_5 "\x1b"
+#define BLOCK_PRESSED_6 "\x1c"
+#define BLOCK_PRESSED_7 "\x1d"
+#define BLOCK_PRESSED_8 "\x1e"
+
 
 /* Big structures, like this one, its better to store them in global storage */
 static tileset_t main_tileset;
@@ -51,15 +60,15 @@ void prepare_tileset()
 
     static const uint8_t names1[] =
     {
-        1, 2, 3, 4,     // 1..4: first row tiles (upper)
-        5, 6, 7, 8,     // 5..8: first row tiles (lower)
+        1, 2, 3, 4,     // 1..4: first row tiles (top)
+        5, 6, 7, 8,     // 5..8: first row tiles (bottom)
         13, 13,         // 9..10: square tiles (lighted and shaded)
         1, 2, 3, 4,     // 11..14: middle row tiles
         0, 0, 0, 0,     // 15..18: last row of tiles
         3, 4, 1, 2,     // 19..22: connection tiles
         /* pressed tiles */
-        0, 0, 0, 0,     // 23..26: middle row tiles (top)
-        0, 0, 0, 0,     // 27..30: middle row tiles (top)
+        1, 2, 3, 4,     // 23..26: first row tiles (top)
+        5, 6, 7, 8,     // 27..30: first row tiles (bottom)
     };
 
     static const uint8_t color_indexes1[] =
@@ -71,8 +80,8 @@ void prepare_tileset()
         0, 0, 0, 0,     // 15..18: last row of tiles
         1, 1, 1, 1,     // 19..22: connection tiles
         /* pressed tiles */
-        0, 0, 0, 0,     // 23..26: middle row tiles (top)
-        0, 0, 0, 0,     // 27..30: middle row tiles (top)
+        4, 4, 4, 4,     // 23..26: first row tiles (top)
+        4, 4, 4, 4,     // 27..30: first row tiles (bottom)
     };
 
     static const uint8_t names2[] =
@@ -80,12 +89,12 @@ void prepare_tileset()
         1, 2, 3, 4,     // 1..4: tiles from first row
         3, 4, 1, 2,     // 5..8: tiles from second row
         13, 13,         // 9..10: square tiles (lighted and shaded)
-        9, 10, 11, 12,  // 11..14: middle row tiles (top)
+        0, 0, 0, 0,     // 11..14: middle row tiles (lighted and shaded)
         5, 6, 7, 8,     // 15..18: last row tiles
         5, 6, 7, 8,     // 19..22: connection tiles
         /* pressed tiles */
-        9, 10, 11, 12,  // 23..26: middle row tiles (top)
-        5, 6, 7, 8,     // 27..30: last row tiles
+        1, 2, 3, 4,     // 23..26: first row tiles (top)
+        3, 4, 1, 2,     // 27..30: first row tiles (bottom)
     };
 
     static const uint8_t color_indexes2[] =
@@ -97,8 +106,8 @@ void prepare_tileset()
         5, 5, 6, 6,     // 15..18: last row of tiles
         5, 5, 6, 6,     // 19..22: connection tiles
         /* pressed tiles */
-        5, 5, 5, 5,
-        5, 5, 5, 5,
+        4, 4, 4, 4,     // 23..26: first row tiles (top)
+        5, 5, 6, 6,     // 27..30: first row tiles (bottom)
     };
 
     static const u8x8_t colors[] =
@@ -112,7 +121,7 @@ void prepare_tileset()
         {BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue},
     };
 
-    for (uint8_t i = 0; i < 22; ++i)
+    for (uint8_t i = 0; i < 30; ++i)
     {
         set_tile_w(i + 1,
                    tiles[names1[i]], colors[color_indexes1[i]],
@@ -132,8 +141,8 @@ static void draw_block1(uint8_t x, uint8_t y)
 
 static void draw_block1_pressed(uint8_t x, uint8_t y)
 {
-    g2_put_at (x, y, BLOCK_TOP_1 BLOCK_TOP_2 BLOCK_TOP_3 BLOCK_TOP_4, 4);
-    g2_put_at (x, y + 1, BLOCK_TOP_5 BLOCK_TOP_6 BLOCK_TOP_7 BLOCK_TOP_8, 4);
+    g2_put_at (x, y, BLOCK_PRESSED_1 BLOCK_PRESSED_2 BLOCK_PRESSED_3 BLOCK_PRESSED_4, 4);
+    g2_put_at (x, y + 1, BLOCK_PRESSED_5 BLOCK_PRESSED_6 BLOCK_PRESSED_7 BLOCK_PRESSED_8, 4);
 }
 
 
@@ -183,6 +192,8 @@ void draw_scenery()
     draw_block1(16, 5);
 
     draw_block1(14, 2);
+
+    // draw_block1_pressed(12, 17);
 }
 
 
