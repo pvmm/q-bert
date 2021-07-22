@@ -43,87 +43,77 @@
 static tileset_t main_tileset;
 
 
-INLINE void set_tile_w (uint8_t index,
-                        const U8x8 shape0, const U8x8 color0,
-                        const U8x8 shape1, const U8x8 color1)
-{
-    g2_set_tile (MODE2_ALL_ROWS, index, shape0, color0);
-    g2_set_tile (MODE2_ALL_ROWS, index + 128, shape1, color1); // TODO: remove this fixed rule and set tiles manually
-}
-
-
 void prepare_tileset()
 {
-    g2_wipe_tileset (main_tileset);
-
-    static const uint8_t names1[] =
+    static const uint8_t shape_indexes[] =
     {
-        1, 2, 3, 4,     // 1..4: tiles from first row (top tiles), colors: BBlack+FLightRed / BBlack+FWhite : BBlack+FLightRed (negative) / BBlack+Fwhite (negative)
-        5, 6, 7, 8,     // 5..8: tiles from first row (bottom tiles), colors: BBlack+FLightRed/BWhite+FLightBlue
-        13, 13,         // 9..10: square tiles (lighted and shaded)
-        0, 0, 0, 0,     // 11..14: tiles from last row
+        1, 2, 3, 4,     // 1..4: tiles from first row (top tiles)
+        5, 6, 7, 8,     // 5..8: tiles from first row (bottom tiles)
+        5, 6, 7, 8,     // 9..12: tiles from first row (bottom tiles) (2nd frame)
+        0, 0,           // 13..14: square tiles (lighted and shaded)
         3, 4, 1, 2,     // 15..18: connection tiles
-        /* pressed tiles */
+
+        /* pressed plate tiles */
         1, 2, 3, 4,     // 19..22: first row tiles (top tiles)
         5, 6, 7, 8,     // 23..26: first row tiles (bottom tiles)
     };
 
-    static const uint8_t color_indexes1[] =
+    static const uint8_t color_indexes[] =
     {
         1, 1, 1, 1,     // 1..4: first row tiles (top tiles)
         1, 1, 1, 1,     // 5..8: first row tiles (bottom tiles)
-        0, 0,           // 9..10: square tiles (lighted and shaded)
-        0, 0, 0, 0,     // 11..14: tiles from last row
-        1, 1, 1, 1,     // 15..18: connection tiles
-        /* pressed tiles */
+        2, 2, 3, 3,     // 9..12: first row tiles (bottom tiles) (2nd frame)
+        2, 3,           // 13..14: square tiles (lighted and shaded)
+        2, 2, 3, 3,     // 15..18: connection tiles
+
+        /* pressed plate tiles */
         4, 4, 4, 4,     // 19..22: first row tiles (top tiles)
         4, 4, 4, 4,     // 23..26: first row tiles (bottom tiles)
+
+        255,            // end marker
     };
 
-    static const uint8_t names2[] =
+    static const uint8_t assoc_tiles[][2] =
     {
-        0, 0, 0, 0,     // 1..4: tiles from first row (top tiles)
-        5, 6, 7, 8,     // 5..8: tiles from second row (bottom tiles)
-        13, 13,         // 9..10: square tiles (lighted and shaded solid blocks)
-
-        3, 4, 1, 2,     // 11..14: tiles from last row
-        3, 4, 1, 2,     // 15..18: connection tiles
-        /* pressed tiles */
-        0, 0, 0, 0,     // 19..22: first row tiles (top tiles)
-        5, 6, 7, 8,     // 23..26: first row tiles (bottom tiles)
-    };
-
-    static const uint8_t color_indexes2[] =
-    {
-        0, 0, 0, 0,     // 1..4: first row tiles (top tiles)
-        7, 7, 8, 8,     // 5..8: first row tiles (bottom tiles)
-        5, 6,           // 9..10: square tiles (lighted and shaded)
-
-        7, 7, 8, 8,     // 15..18: tiles from last row
-        7, 7, 8, 8,     // 19..22: connection tiles
-        /* pressed tiles */
-        4, 4, 4, 4,     // 23..26: first row tiles (top tiles)
-        7, 7, 8, 8,     // 27..30: first row tiles (bottom tiles)
+        // plate (1-8)
+        {1, 0}, {2, 0}, {3, 0}, {4, 0},
+        {5, 9}, {6, 10}, {7, 11}, {8, 12},
+        // wall tiles (9-10)
+        {13, 0}, {14, 0},
+        // tiles from last row (11-14)
+        {15, 0}, {16, 0}, {17, 0}, {18, 0},
+        // connection tiles (15-18)
+        {3, 15}, {4, 16}, {1, 17}, {2, 18},
+        // pressed tiles (19-26)
+        {19, 0}, {20, 0}, {21, 0}, {22, 0},
+        {23, 9}, {24, 10}, {25, 11}, {26, 12},
+        // end marker
+        {0, 0},
     };
 
     static const u8x8_t colors[] =
     {
         /* 0 */ {BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, },
         /* 1 */ {BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, },
-        /* 2 */ {BBlack+FLightBlue, BBlack+FLightBlue, BBlack+FLightBlue, BBlack+FLightBlue, BBlack+FLightBlue, BBlack+FLightBlue, BBlack+FLightBlue, BBlack+FLightBlue, },
-        /* 3 */ {BBlack+FDarkBlue, BBlack+FDarkBlue, BBlack+FDarkBlue, BBlack+FDarkBlue, BBlack+FDarkBlue, BBlack+FDarkBlue, BBlack+FDarkBlue, BBlack+FDarkBlue, },
+        /* 2 */ {BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, },
+        /* 3 */ {BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, },
         /* 4 */ {BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, },
-        /* 5 */ {BLightBlue+FLightBlue, BWhite+FLightBlue, BWhite+FLightBlue, BWhite+FLightBlue, BWhite+FLightBlue, BWhite+FLightBlue, BWhite+FLightBlue, BWhite+FLightBlue, },
-        /* 6 */ {BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, BWhite+FDarkBlue, },
-        /* 7 */ {BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, },
-        /* 8 */ {BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, },
     };
 
-    for (uint8_t i = 0; i < 26; ++i)
+    for (int i = 0; i < 256; ++i)
     {
-        set_tile_w (i + 1,
-                    tiles[names1[i]], colors[color_indexes1[i]],
-                    tiles[names2[i]], colors[color_indexes2[i]]);
+        if (color_indexes[i] == 255)
+            break;
+
+        g2_set_tile (MODE2_ALL_ROWS, i + 1, tiles[shape_indexes[i]], colors[color_indexes[i]]);
+    }
+
+    for (int i = 0; i < 256; ++i)
+    {
+        if (assoc_tiles[i][0] == 0 && assoc_tiles[i][1] == 0)
+            break;
+
+        g2_set_tile_pairing (i + 1, assoc_tiles[i][0], assoc_tiles[i][1]);
     }
 }
 
@@ -295,26 +285,9 @@ void draw_scenery()
 }
 
 
-void change_floor_color ()
-{
-    static u8x8_t color1 = {BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow,
-        BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow,
-        BBlack+FLightYellow};
-    // static u8x8_t color2 = {BBlack+FWhite, BBlack+FWhite, BBlack+FWhite, BBlack+FWhite,
-    // BBlack+FWhite, BBlack+FWhite, BBlack+FWhite, BBlack+FWhite};
-
-    for (uint8_t i = 1; i < 9; ++i)
-    {
-        g2_set_tile_color (MODE2_ALL_ROWS, i, color1);
-        //g2_set_tile_color (MODE2_ALL_ROWS, i + 128, color2);
-    }
-}
-
-
 void init_tiles ()
 {
     Tiles_init ();
-    g2_set_interlaced (true);
+    g2_init_tileset (true);
     prepare_tileset ();
-    //change_floor_color ();
 }
