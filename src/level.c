@@ -5,12 +5,13 @@
 
 void compose_scenery
     (
+        uint8_t bg_color,
         uint8_t plate_color,
         uint8_t wall_color1,
         uint8_t wall_color2
     )
 {
-    init_tiles (plate_color, wall_color1, wall_color2);
+    init_tiles (bg_color, plate_color, wall_color1, wall_color2);
 
     draw_block_00 (14, 2);
 
@@ -65,7 +66,7 @@ void press_plate (uint8_t x, uint8_t y)
     {
         case 78:
             draw_block_00_pressed (x, y);
-            break;            
+            break;
         case 172: case 266: case 360: case 454: case 548: case 642:
             draw_block_01_pressed (x, y);
             break;

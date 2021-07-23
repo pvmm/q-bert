@@ -83,10 +83,11 @@ int main (void)
 
     init_qbert ();
 
-    uint8_t plate_color = BBlack + FLightRed;
-    uint8_t wall_color1 = BLightBlue + FBlack;
-    uint8_t wall_color2 = BDarkBlue + FBlack;
-    compose_scenery (plate_color, wall_color1, wall_color2);
+    uint8_t bg_color = BBlack + FBlack;
+    uint8_t plate_color = (bg_color & 0xF) + FLightRed;
+    uint8_t wall_color1 = BLightBlue + (bg_color & 0xF0);
+    uint8_t wall_color2 = BDarkBlue + (bg_color & 0xF0);
+    compose_scenery (bg_color, plate_color, wall_color1, wall_color2);
 
     // Main loop, we alternate between buffers at each interruption.
     while (true)

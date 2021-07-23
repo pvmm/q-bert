@@ -49,12 +49,12 @@ typedef const u8x8_t *colormap_t[5];
 // TODO: add more colors as parameters (bg_color)?
 static colormap_t* prepare_colors
     (
+        uint8_t bg_color,
         uint8_t plate_color,
         uint8_t wall_color1,
         uint8_t wall_color2
     )
 {
-    static const uint8_t bg_color = BBlack + FBlack;
     static colormap_t colors;
     static u8x8_t plate_ct;
     static u8x8_t bright_plate_ct;
@@ -88,15 +88,18 @@ static colormap_t* prepare_colors
 
 static void prepare_tileset
     (
+        uint8_t bg_color,
         uint8_t plate_color,
         uint8_t wall_color1,
         uint8_t wall_color2
     )
 {
-    const colormap_t* colors = prepare_colors (plate_color, wall_color1, wall_color2);
+    const colormap_t* colors = prepare_colors (bg_color, plate_color,
+        wall_color1, wall_color2);
 
     static const uint8_t shape_indexes[] =
     {
+        0,
         1, 2, 3, 4,     // 1..4: tiles from first row (top tiles)
         5, 6, 7, 8,     // 5..8: tiles from first row (bottom tiles)
         5, 6, 7, 8,     // 9..12: tiles from first row (bottom tiles) (2nd frame)
@@ -110,6 +113,7 @@ static void prepare_tileset
 
     static const uint8_t color_indexes[] =
     {
+        0,
         1, 1, 1, 1,     // 1..4: first row tiles (top tiles)
         1, 1, 1, 1,     // 5..8: first row tiles (bottom tiles)
         2, 2, 3, 3,     // 9..12: first row tiles (bottom tiles) (2nd frame)
@@ -125,6 +129,7 @@ static void prepare_tileset
 
     static const uint8_t assoc_tiles[][2] =
     {
+        {0, 0},
         // plate (1-8)
         {1, 0}, {2, 0}, {3, 0}, {4, 0},
         {5, 9}, {6, 10}, {7, 11}, {8, 12},
@@ -140,7 +145,7 @@ static void prepare_tileset
         // connection tiles pressed (27-30)
         {21, 15}, {22, 16}, {19, 17}, {20, 18},
         // end marker
-        {0, 0},
+        {255, 255},
     };
 
     for (int i = 0; i < 256; ++i)
@@ -150,15 +155,15 @@ static void prepare_tileset
         if (color_indexes[i] == 255)
             break;
 
-        g2_set_tile(MODE2_ALL_ROWS, i + 1, tiles[shape_indexes[i]], *color);
+        g2_set_tile(MODE2_ALL_ROWS, i, tiles[shape_indexes[i]], *color);
     }
 
     for (int i = 0; i < 256; ++i)
     {
-        if (assoc_tiles[i][0] == 0 && assoc_tiles[i][1] == 0)
+        if (assoc_tiles[i][0] == 255 && assoc_tiles[i][1] == 255)
             break;
 
-        g2_set_tile_pairing (i + 1, assoc_tiles[i][0], assoc_tiles[i][1]);
+        g2_set_tile_pairing (i, assoc_tiles[i][0], assoc_tiles[i][1]);
     }
 }
 
@@ -340,16 +345,16 @@ void draw_block_end(uint8_t x, uint8_t y)
 static bool _initialized = false;
 
 
-void init_tiles (uint8_t plate_color, uint8_t wall_color1, uint8_t wall_color2)
+void init_tiles (uint8_t bg_color, uint8_t plate_color, uint8_t wall_color1, uint8_t wall_color2)
 {
     if (!_initialized)
     {
         Tiles_init ();
         g2_init_tileset (true);
-        prepare_tileset (plate_color, wall_color1, wall_color2);
+        prepare_tileset (bg_color, plate_color, wall_color1, wall_color2);
     }
     else
     {
-        prepare_tileset (plate_color, wall_color1, wall_color2);
+        prepare_tileset (bg_color, plate_color, wall_color1, wall_color2);
     }
 }
