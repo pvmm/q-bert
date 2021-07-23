@@ -5,26 +5,26 @@
 #include "sprites.h"
 #include "qbert.h"
 
+
 #define NUM_SPRITES 4
 
-struct Qbert qbert =
-{
-    .dirty = true,
-    .frame = 0,
-    .x0 = 122,
-    .y0 = 8,
-    .x = 122,
-    .y = 8,
-    .direction = DIR_DOWN_RIGHT,
-    .update = nullptr,
-};
+struct Qbert qbert;
 
 T_SA SA0, SA1;
 
-void init_qbert_sprites()
+
+void init_qbert ()
 {
+    qbert.dirty = true;
+    qbert.frame = 0;
     qbert.x0 = 122;
     qbert.y0 = 8;
+    qbert.x = 122;
+    qbert.y = 8;
+    qbert.tile_x = 14;
+    qbert.tile_y = 2;
+    qbert.direction = DIR_DOWN_RIGHT;
+    qbert.update = nullptr;
 
     // 0: facing down, 1: facing up
     for (int j = 0; j < 2; ++j)
@@ -62,6 +62,10 @@ void init_qbert_sprites()
             TMS99X8_writeSprite8_flip(j * 32 + i * 4 + 19, &sprites[j][i][8]);
         }
     }
+
+    // Put Q*Bert on screen.
+    put_qbert_sprite (MODE2_BUFFER_0);
+    put_qbert_sprite (MODE2_BUFFER_1);
 }
 
 
@@ -101,6 +105,7 @@ INLINE void update_sat(T_SA *SA, uint8_t pat, uint8_t id)
 
     (*SA)[pat].color = (*SA)[pat + 1].color = (*SA)[pat + 2].color = (*SA)[pat + 3].color = colors[id];
 }
+
 
 void put_qbert_sprite(EM2_Buffer BUFFER)
 {

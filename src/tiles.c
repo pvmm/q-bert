@@ -1,8 +1,8 @@
 #include <stdint.h>
 #include <msxhal.h>
 #include <tile_.h>
-
 #include <res/fonts/tiles.png.h>
+
 
 /* character blocks */
 #define PLATE_1         "\x01" // 1
@@ -38,13 +38,63 @@
 #define PLATE_PRESSED_7 "\x19" // 25
 #define PLATE_PRESSED_8 "\x1a" // 26
 
+#define WALL_PRESSED_5  "\x1b" // 27
+#define WALL_PRESSED_6  "\x1c" // 28
+#define WALL_PRESSED_7  "\x1d" // 29
+#define WALL_PRESSED_8  "\x1e" // 30
 
-/* Big structures, like this one, its better to store them in global storage */
-static tileset_t main_tileset;
 
+typedef const u8x8_t *colormap_t[5];
 
-void prepare_tileset()
+// TODO: add more colors as parameters (bg_color)?
+static colormap_t* prepare_colors
+    (
+        uint8_t plate_color,
+        uint8_t wall_color1,
+        uint8_t wall_color2
+    )
 {
+    static const uint8_t bg_color = BBlack + FBlack;
+    static colormap_t colors;
+    static u8x8_t plate_ct;
+    static u8x8_t bright_plate_ct;
+    static u8x8_t bright_wall_ct;
+    static u8x8_t dark_wall_ct;
+    static u8x8_t bg_ct;
+
+    for (int i = 0; i < 8; ++i)
+        bg_ct[i] = bg_color;
+
+    for (int i = 0; i < 8; ++i)
+        bright_plate_ct[i] = (0xF & bg_color) + FLightYellow;
+
+    for (int i = 0; i < 8; ++i)
+        plate_ct[i] = plate_color;
+
+    for (int i = 0; i < 8; ++i)
+        bright_wall_ct[i] = wall_color1;
+
+    for (int i = 0; i < 8; ++i)
+        dark_wall_ct[i] = wall_color2;
+
+    colors[0] = &bg_ct;
+    colors[1] = &plate_ct;
+    colors[2] = &bright_wall_ct;
+    colors[3] = &dark_wall_ct;
+    colors[4] = &bright_plate_ct;
+
+    return &colors;
+}
+
+static void prepare_tileset
+    (
+        uint8_t plate_color,
+        uint8_t wall_color1,
+        uint8_t wall_color2
+    )
+{
+    const colormap_t* colors = prepare_colors (plate_color, wall_color1, wall_color2);
+
     static const uint8_t shape_indexes[] =
     {
         1, 2, 3, 4,     // 1..4: tiles from first row (top tiles)
@@ -87,25 +137,20 @@ void prepare_tileset()
         // pressed tiles (19-26)
         {19, 0}, {20, 0}, {21, 0}, {22, 0},
         {23, 9}, {24, 10}, {25, 11}, {26, 12},
+        // connection tiles pressed (27-30)
+        {21, 15}, {22, 16}, {19, 17}, {20, 18},
         // end marker
         {0, 0},
     };
 
-    static const u8x8_t colors[] =
-    {
-        /* 0 */ {BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, BBlack+FBlack, },
-        /* 1 */ {BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, BBlack+FLightRed, },
-        /* 2 */ {BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, BLightBlue+FBlack, },
-        /* 3 */ {BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, BDarkBlue+FBlack, },
-        /* 4 */ {BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, BBlack+FLightYellow, },
-    };
-
     for (int i = 0; i < 256; ++i)
     {
+        const u8x8_t *color = (*colors)[color_indexes[i]];
+
         if (color_indexes[i] == 255)
             break;
 
-        g2_set_tile (MODE2_ALL_ROWS, i + 1, tiles[shape_indexes[i]], colors[color_indexes[i]]);
+        g2_set_tile(MODE2_ALL_ROWS, i + 1, tiles[shape_indexes[i]], *color);
     }
 
     for (int i = 0; i < 256; ++i)
@@ -146,148 +191,165 @@ static void draw_plate_0_pressed_right (uint8_t x, uint8_t y)
 }
 
 
-static void draw_plate_00(uint8_t x, uint8_t y)
+static void draw_plate_00 (uint8_t x, uint8_t y)
 {
     draw_plate_0_left (x, y);
     draw_plate_0_right (x, y);
 }
 
 
-static void draw_plate_00_pressed(uint8_t x, uint8_t y)
+static void draw_plate_00_pressed (uint8_t x, uint8_t y)
 {
     draw_plate_0_pressed_left (x, y);
     draw_plate_0_pressed_right (x, y);
 }
 
 
-static void draw_plate_1_left(uint8_t x, uint8_t y)
+static void draw_plate_1_left (uint8_t x, uint8_t y)
 {
     g2_put_at (x, y, WALL_7 WALL_8, 2);
     g2_put_at (x, y + 1, PLATE_5 PLATE_6, 2);
 }
 
 
-static void draw_plate_1_right(uint8_t x, uint8_t y)
+static void draw_plate_1_pressed_left (uint8_t x, uint8_t y)
+{
+    g2_put_at (x, y, WALL_PRESSED_7 WALL_PRESSED_8, 2);
+    g2_put_at (x, y + 1, PLATE_PRESSED_5 PLATE_PRESSED_6, 2);
+}
+
+
+static void draw_plate_1_right (uint8_t x, uint8_t y)
 {
     g2_put_at (x + 2, y, WALL_5 WALL_6, 2);
     g2_put_at (x + 2, y + 1, PLATE_7 PLATE_8, 2);
 }
 
 
-static void draw_plate_11(uint8_t x, uint8_t y)
+static void draw_plate_1_pressed_right (uint8_t x, uint8_t y)
+{
+    g2_put_at (x + 2, y, WALL_PRESSED_5 WALL_PRESSED_6, 2);
+    g2_put_at (x + 2, y + 1, PLATE_PRESSED_7 PLATE_PRESSED_8, 2);
+}
+
+
+static void draw_plate_11 (uint8_t x, uint8_t y)
 {
     draw_plate_1_left (x, y);
     draw_plate_1_right (x, y);
 }
 
 
-static void draw_plate_01(uint8_t x, uint8_t y)
+static void draw_plate_11_pressed (uint8_t x, uint8_t y)
+{
+    draw_plate_1_pressed_left (x, y);
+    draw_plate_1_pressed_right (x, y);
+}
+
+
+static void draw_plate_01 (uint8_t x, uint8_t y)
 {
     draw_plate_0_left (x, y);
     draw_plate_1_right (x, y);
 }
 
 
-static void draw_plate_10(uint8_t x, uint8_t y)
+static void draw_plate_01_pressed (uint8_t x, uint8_t y)
+{
+    draw_plate_0_pressed_left (x, y);
+    draw_plate_1_pressed_right (x, y);
+}
+
+
+static void draw_plate_10 (uint8_t x, uint8_t y)
 {
     draw_plate_1_left (x, y);
     draw_plate_0_right (x, y);
 }
 
 
-static void draw_block_00(uint8_t x, uint8_t y)
+static void draw_plate_10_pressed (uint8_t x, uint8_t y)
+{
+    draw_plate_1_pressed_left (x, y);
+    draw_plate_0_pressed_right (x, y);
+}
+
+
+void draw_block_00 (uint8_t x, uint8_t y)
 {
     draw_plate_00 (x, y);
     g2_put_at (x, y + 2, WALL_1 WALL_2 WALL_3 WALL_4, 4);
 }
 
 
-static void draw_block_00_pressed(uint8_t x, uint8_t y)
+void draw_block_00_pressed (uint8_t x, uint8_t y)
 {
     draw_plate_00_pressed (x, y);
     g2_put_at (x, y + 2, WALL_1 WALL_2 WALL_3 WALL_4, 4);
 }
 
 
-static void draw_block_01(uint8_t x, uint8_t y)
+void draw_block_01 (uint8_t x, uint8_t y)
 {
     draw_plate_01 (x, y);
     g2_put_at (x, y + 2, WALL_1 WALL_2 WALL_3 WALL_4, 4);
 }
 
 
-static void draw_block_10(uint8_t x, uint8_t y)
+void draw_block_01_pressed (uint8_t x, uint8_t y)
+{
+    draw_plate_01_pressed (x, y);
+    g2_put_at (x, y + 2, WALL_1 WALL_2 WALL_3 WALL_4, 4);
+}
+
+
+void draw_block_10 (uint8_t x, uint8_t y)
 {
     draw_plate_10 (x, y);
     g2_put_at (x, y + 2, WALL_1 WALL_2 WALL_3 WALL_4, 4);
 }
 
 
-static void draw_block_11(uint8_t x, uint8_t y)
+void draw_block_10_pressed (uint8_t x, uint8_t y)
+{
+    draw_plate_10_pressed (x, y);
+    g2_put_at (x, y + 2, WALL_1 WALL_2 WALL_3 WALL_4, 4);
+}
+
+
+void draw_block_11(uint8_t x, uint8_t y)
 {
     draw_plate_11 (x, y);
     g2_put_at (x, y + 2, WALL_1 WALL_2 WALL_3 WALL_4, 4);
 }
 
 
-static void draw_block_end(uint8_t x, uint8_t y)
+void draw_block_11_pressed (uint8_t x, uint8_t y)
+{
+    draw_plate_11_pressed (x, y);
+    g2_put_at (x, y + 2, WALL_1 WALL_2 WALL_3 WALL_4, 4);
+}
+
+
+void draw_block_end(uint8_t x, uint8_t y)
 {
     g2_put_at (x, y, WALL_END_1 WALL_END_2 WALL_END_3 WALL_END_4, 4);
 }
 
 
-void draw_scenery()
+static bool _initialized = false;
+
+
+void init_tiles (uint8_t plate_color, uint8_t wall_color1, uint8_t wall_color2)
 {
-    draw_block_00 (14, 2);
-
-    draw_block_01 (12, 5);
-    draw_block_10 (16, 5);
-
-    draw_block_01 (10, 8);
-    draw_block_11 (14, 8);
-    draw_block_10 (18, 8);
-
-    draw_block_01 (8, 11);
-    draw_block_11 (12, 11);
-    draw_block_11 (16, 11);
-    draw_block_10 (20, 11);
-
-    draw_block_01 (6, 14);
-    draw_block_11 (10, 14);
-    draw_block_11 (14, 14);
-    draw_block_11 (18, 14);
-    draw_block_10 (22, 14);
-
-    draw_block_01 (4, 17);
-    draw_block_11 (8, 17);
-    draw_block_11 (12, 17);
-    draw_block_11 (16, 17);
-    draw_block_11 (20, 17);
-    draw_block_10 (24, 17);
-
-    draw_block_01 (2, 20);
-    draw_block_11 (6, 20);
-    draw_block_11 (10, 20);
-    draw_block_11 (14, 20);
-    draw_block_11 (18, 20);
-    draw_block_11 (22, 20);
-    draw_block_10 (26, 20);
-
-    draw_block_end (2, 23);
-    draw_block_end (6, 23);
-    draw_block_end (10, 23);
-    draw_block_end (14, 23);
-    draw_block_end (18, 23);
-    draw_block_end (22, 23);
-    draw_block_end (26, 23);
-
-    draw_block_00_pressed (14, 2);
-}
-
-
-void init_tiles ()
-{
-    Tiles_init ();
-    g2_init_tileset (true);
-    prepare_tileset ();
+    if (!_initialized)
+    {
+        Tiles_init ();
+        g2_init_tileset (true);
+        prepare_tileset (plate_color, wall_color1, wall_color2);
+    }
+    else
+    {
+        prepare_tileset (plate_color, wall_color1, wall_color2);
+    }
 }
