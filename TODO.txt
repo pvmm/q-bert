@@ -1,0 +1,5 @@
+* Convert 8bit sprites (8x8) to 16bit (16x16) in qbert.c;
+* Create ball of tiles animation;
+* Move body sprite to tile;
+* music and sfx;
+* Opening;
