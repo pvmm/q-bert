@@ -14,6 +14,8 @@ enum Direction {
     DIR_UP_LEFT    =  48,	//  32 + 16
 };
 
+#define DIR_RIGHT_MASK(d)     (0x80 & d)
+#define DIR_LEFT_MASK(d)      (0x10 & d)
 
 struct Qbert
 {

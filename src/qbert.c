@@ -123,6 +123,14 @@ void put_qbert_sprite(EM2_Buffer BUFFER)
     fast_y1 = qbert.y;
     fast_y2 = qbert.y + 8;
 
+    if (DIR_LEFT_MASK (qbert.direction))
+    {
+        fast_x1 += 1;
+        fast_x2 += 1;
+        fast_y1 += 1;
+        fast_y2 += 1;
+    }
+
     for (j = 0, i = 0; i < NUM_SPRITES * 4; i += 4, j++)
     {
         // Update sprite positions.
