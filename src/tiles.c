@@ -3,6 +3,8 @@
 #include <tile_.h>
 #include <res/fonts/tiles.png.h>
 
+#include "tiles.h"
+
 
 /* character blocks */
 #define PLATE_1         "\x01" // 1
@@ -46,7 +48,7 @@
 
 typedef const u8x8_t *colormap_t[5];
 
-// TODO: add more colors as parameters (bg_color)?
+// TODO: add more colors as parameters?
 static colormap_t* prepare_colors
     (
         uint8_t bg_color,
@@ -66,7 +68,7 @@ static colormap_t* prepare_colors
         bg_ct[i] = bg_color;
 
     for (int i = 0; i < 8; ++i)
-        bright_plate_ct[i] = (0xF & bg_color) + FLightYellow;
+        bright_plate_ct[i] = BG_MASK(bg_color) + FLightYellow;
 
     for (int i = 0; i < 8; ++i)
         plate_ct[i] = plate_color;

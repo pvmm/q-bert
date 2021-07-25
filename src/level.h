@@ -2,14 +2,13 @@
 #define _LEVEL_H
 
 
-void compose_scenery
-    (
-        uint8_t bg_color,
-        uint8_t plate_color,
-        uint8_t wall_color1,
-        uint8_t wall_color2
-    );
-    
+enum level_t {
+    LEVEL_1,
+    LEVEL_MAX = 12
+};
+
+
+void compose_level (enum level_t);
 
 void press_plate (uint8_t x, uint8_t y);
 

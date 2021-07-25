@@ -1,16 +1,29 @@
 #include <stdint.h>
 #include <msxhal.h>
+#include "tile_.h"
 #include "tiles.h"
 
 
-void compose_scenery
-    (
-        uint8_t bg_color,
-        uint8_t plate_color,
-        uint8_t wall_color1,
-        uint8_t wall_color2
-    )
+struct level_colors_t
 {
+    uint8_t bg_color;
+    uint8_t plate_color;
+    uint8_t wall_color1;
+    uint8_t wall_color2;
+};
+
+
+void compose_level (uint8_t level_num)
+{
+    static const struct level_colors_t LVL[] =
+    {
+        { BBlack + FBlack, FLightRed, BLightBlue, BDarkBlue, },
+    };
+
+    uint8_t bg_color = LVL[level_num].bg_color;
+    uint8_t plate_color = BG_MASK (bg_color) + LVL[level_num].plate_color;
+    uint8_t wall_color1 = LVL[level_num].wall_color1 + FG_MASK (bg_color);
+    uint8_t wall_color2 = LVL[level_num].wall_color2 + FG_MASK (bg_color);
     init_tiles (bg_color, plate_color, wall_color1, wall_color2);
 
     draw_block_00 (14, 2);

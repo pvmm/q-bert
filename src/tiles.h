@@ -10,6 +10,9 @@ void init_tiles
         uint8_t wall_color2
     );
 
+#define BG_MASK(c)    (c & 0xf)
+#define FG_MASK(c)    (c & 0xf0)
+
 
 void set_tile (uint8_t index,
                const U8x8 shape0, const U8x8 color0,
