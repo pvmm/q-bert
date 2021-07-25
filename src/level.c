@@ -1,6 +1,6 @@
 #include <stdint.h>
-#include <msxhal.h>
-#include "tile_.h"
+
+#include "tile.h"
 #include "tiles.h"
 
 

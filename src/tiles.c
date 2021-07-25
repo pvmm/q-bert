@@ -1,6 +1,5 @@
 #include <stdint.h>
-#include <msxhal.h>
-#include <tile_.h>
+#include <tile.h>
 #include <res/fonts/tiles.png.h>
 
 #include "tiles.h"
@@ -351,7 +350,6 @@ void init_tiles (uint8_t bg_color, uint8_t plate_color, uint8_t wall_color1, uin
 {
     if (!_initialized)
     {
-        Tiles_init ();
         g2_init_tileset (true);
         prepare_tileset (bg_color, plate_color, wall_color1, wall_color2);
     }
