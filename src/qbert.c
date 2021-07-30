@@ -41,10 +41,10 @@ void init_qbert ()
             // 36,37,38,39
             // 40,41,42,42
             // 44,45,46,47
-            TMS99X8_writeSprite8(j * 32 + i * 4 + 0, &sprites[j][i][0]);
-            TMS99X8_writeSprite8(j * 32 + i * 4 + 1, &sprites[j][i][8]);
-            TMS99X8_writeSprite8(j * 32 + i * 4 + 2, &sprites[j][i][16]);
-            TMS99X8_writeSprite8(j * 32 + i * 4 + 3, &sprites[j][i][24]);
+            TMS99X8_writeSprite8 (j * 32 + i * 4 + 0, &sprites[j][i][0]);
+            TMS99X8_writeSprite8 (j * 32 + i * 4 + 1, &sprites[j][i][8]);
+            TMS99X8_writeSprite8 (j * 32 + i * 4 + 2, &sprites[j][i][16]);
+            TMS99X8_writeSprite8 (j * 32 + i * 4 + 3, &sprites[j][i][24]);
 
 	    // flipped (down left)
 	    // 16,17,18,19
@@ -56,10 +56,10 @@ void init_qbert ()
             // 52,53,54,55
             // 56,57,58,59
             // 60,61,62,63
-            TMS99X8_writeSprite8_flip(j * 32 + i * 4 + 16, &sprites[j][i][16]);
-            TMS99X8_writeSprite8_flip(j * 32 + i * 4 + 17, &sprites[j][i][24]);
-            TMS99X8_writeSprite8_flip(j * 32 + i * 4 + 18, &sprites[j][i][0]);
-            TMS99X8_writeSprite8_flip(j * 32 + i * 4 + 19, &sprites[j][i][8]);
+            TMS99X8_writeSprite8_flip (j * 32 + i * 4 + 16, &sprites[j][i][16]);
+            TMS99X8_writeSprite8_flip (j * 32 + i * 4 + 17, &sprites[j][i][24]);
+            TMS99X8_writeSprite8_flip (j * 32 + i * 4 + 18, &sprites[j][i][0]);
+            TMS99X8_writeSprite8_flip (j * 32 + i * 4 + 19, &sprites[j][i][8]);
         }
     }
 
