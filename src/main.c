@@ -13,6 +13,11 @@ const int8_t (*jump_table)[16];
 
 void _print(const char* msg);
 
+uint8_t row;
+
+/* Level finished? */
+bool done = false;
+
 
 void update_player_l (int8_t fps) __z88dk_fastcall
 {
@@ -25,11 +30,24 @@ void update_player_l (int8_t fps) __z88dk_fastcall
     }
     else
     {
-        // reset animation status
         qbert.tile_x -= 2;
-        qbert.tile_y += (qbert.y0 < qbert.y) ? 3 : -3;
-        press_plate (qbert.tile_x, qbert.tile_y);
 
+        if (qbert.y0 < qbert.y)
+        {
+            // going down
+            qbert.tile_y += 3;
+            qbert.pos += row++;
+        }
+        else
+        {
+            // going up
+            qbert.tile_y -= 3;
+            qbert.pos -= row--;
+        }
+
+        done = press_plate (qbert.pos, qbert.tile_x, qbert.tile_y);
+
+        // reset animation status
         qbert.x0 = qbert.x;
         qbert.y0 = qbert.y;
         qbert.frame = 0;
@@ -49,11 +67,24 @@ void update_player_r (int8_t fps) __z88dk_fastcall
     }
     else
     {
-        // reset animation status
         qbert.tile_x += 2;
-        qbert.tile_y += (qbert.y0 < qbert.y) ? 3 : -3;
-        press_plate (qbert.tile_x, qbert.tile_y);
 
+        if (qbert.y0 < qbert.y)
+        {
+            // going down
+            qbert.tile_y += 3;
+            qbert.pos += ++row;
+        }
+        else
+        {
+            // going up
+            qbert.tile_y -= 3;
+            qbert.pos -= --row;
+        }
+
+        done = press_plate (qbert.pos, qbert.tile_x, qbert.tile_y);
+
+        // reset animation status
         qbert.x0 = qbert.x;
         qbert.y0 = qbert.y;
         qbert.frame = 0;
@@ -75,7 +106,9 @@ void print_num (uint16_t num)
 
 int main (void)
 {
-    uint8_t input = 0, old_input = 1;
+    enum Direction old_direction = DIR_DOWN_RIGHT;
+    uint8_t input = 0;
+    row = 1;
 
     msxhal_init ();
 
@@ -88,67 +121,82 @@ int main (void)
     // Main loop, we alternate between buffers at each interruption.
     while (true)
     {
+        if (done)
+        {
+            done = false;
+            finish_level (); 
+        }
+
+        wait_frame ();
+
+        debugBorder(BMagenta);
+
+        TMS99X8_activateBuffer (MODE2_BUFFER_0);
+
+        debugBorder(BWhite);
+
+        if (qbert.update != nullptr)
+            qbert.update (1);
+
+        debugBorder(BLightGreen);
+
+        put_qbert_sprite (MODE2_BUFFER_1, qbert.dirty);
+
+        debugBorder(BBlack);
+
+        wait_frame ();
+
+        TMS99X8_activateBuffer (MODE2_BUFFER_1);
+
+        put_qbert_sprite (MODE2_BUFFER_0, qbert.dirty);
+        qbert.dirty = false;
+
         if (qbert.update == nullptr)
         {
-            old_input = input;
             input = msxhal_joystick_read (0);
-            qbert.dirty = (old_input != input);
+            old_direction = qbert.direction;
 
             switch (input)
             {
-            default:
-            case 16: // left
-            case 32: // up
-            case 64: // down
-            case 128: // right
-                break;
+                default:
+                case 16: // left
+                case 32: // up
+                case 64: // down
+                case 128: // right
+                    break;
 
-            case DIR_DOWN_RIGHT:
-                qbert.direction = DIR_DOWN_RIGHT;
-                jump_table = &jump_down;
-                qbert.update = update_player_r;
-                break;
+                case DIR_DOWN_RIGHT:
+                    qbert.direction = DIR_DOWN_RIGHT;
+                    jump_table = &jump_down;
+                    qbert.update = update_player_r;
+                    break;
 
-            case DIR_DOWN_LEFT:
-                qbert.direction = DIR_DOWN_LEFT;
-                jump_table = &jump_down;
-                qbert.update = update_player_l;
-                break;
+                case DIR_DOWN_LEFT:
+                    qbert.direction = DIR_DOWN_LEFT;
+                    jump_table = &jump_down;
+                    qbert.update = update_player_l;
+                    break;
 
-            case DIR_UP_RIGHT:
-                qbert.direction = DIR_UP_RIGHT;
-                jump_table = &jump_up;
-                qbert.update = update_player_r;
-                break;
+                case DIR_UP_RIGHT:
+                    qbert.direction = DIR_UP_RIGHT;
+                    jump_table = &jump_up;
+                    qbert.update = update_player_r;
+                    break;
 
-            case DIR_UP_LEFT:
-                qbert.direction = DIR_UP_LEFT;
-                jump_table = &jump_up;
-                qbert.update = update_player_l;
-                break;
+                case DIR_UP_LEFT:
+                    qbert.direction = DIR_UP_LEFT;
+                    jump_table = &jump_up;
+                    qbert.update = update_player_l;
+                    break;
             }
+
+            qbert.dirty = (old_direction != qbert.direction);
         }
         else
         {
             qbert.update (1);
         }
-
-        wait_frame ();
-
-        // We select buffer 0, we modify sprites on buffer 1
-
-        //debugBorder(BMagenta);
-        TMS99X8_activateBuffer (MODE2_BUFFER_0);
-        put_qbert_sprite (MODE2_BUFFER_1);
-        wait_frame ();
-
-        // We select buffer 1, so we modify sprites on buffer 0
-
-        //debugBorder(BWhite);
-        TMS99X8_activateBuffer (MODE2_BUFFER_1);
-        put_qbert_sprite (MODE2_BUFFER_0);
-        qbert.dirty = false;
-    };
+    }
 
     return 0;
 }

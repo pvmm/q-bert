@@ -46,4 +46,7 @@ void draw_block_10_pressed (uint8_t x, uint8_t y);
 void draw_block_11_pressed (uint8_t x, uint8_t y);
 
 
+void change_plate_color (uint8_t color);
+
+
 #endif /* _TILES_H */

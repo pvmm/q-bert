@@ -358,3 +358,21 @@ void init_tiles (uint8_t bg_color, uint8_t plate_color, uint8_t wall_color1, uin
         prepare_tileset (bg_color, plate_color, wall_color1, wall_color2);
     }
 }
+
+
+/**
+ * When level is over, change plate color several times.
+ */
+void change_plate_color (uint8_t color)
+{
+    static u8x8_t plate_ct;
+
+    for (int i = 0; i < 8; ++i)
+        plate_ct[i] = color;
+
+    for (uint8_t i = 19; i < 26; ++i)
+    {
+        g2_set_tile_color (MODE2_ALL_ROWS, i, plate_ct);
+    }
+}
+

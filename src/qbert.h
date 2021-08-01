@@ -21,6 +21,7 @@ struct Qbert
 {
     bool dirty;
     uint8_t frame;
+    uint8_t pos; /* position in Pascal's triangle */
     uint8_t x0;
     uint8_t y0;
     uint8_t x;
@@ -35,7 +36,7 @@ struct Qbert
 
 void init_qbert ();
 
-void put_qbert_sprite (EM2_Buffer BUFFER);
+void put_qbert_sprite (EM2_Buffer BUFFER, bool is_dirty);
 
 
 #endif /* _QBERT_H_ */

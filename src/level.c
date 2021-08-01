@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <msxhal.h>
 
 #include "tile.h"
 #include "tiles.h"
@@ -12,12 +13,21 @@ struct level_colors_t
     uint8_t wall_color2;
 };
 
+#define MAX_PLATES      28
+#define PLATE_COUNT     29
 
+/* Store plate status. Last position is the total of plates pressed. */
+uint8_t plate_status[PLATE_COUNT + 1];
+
+
+/**
+ * Draw level according to level number in level_num.
+ */
 void compose_level (uint8_t level_num)
 {
     static const struct level_colors_t LVL[] =
     {
-        { BBlack + FBlack, FLightRed, BLightBlue, BDarkBlue, },
+        { BBlack + FBlack, FDarkRed, BLightBlue, BDarkBlue, },
     };
 
     uint8_t bg_color = LVL[level_num].bg_color;
@@ -69,24 +79,63 @@ void compose_level (uint8_t level_num)
     draw_block_end (22, 23);
     draw_block_end (26, 23);
 
+    /* Q*Bert lands here. */
     draw_block_00_pressed (14, 2);
+
+    /* Wipe all plates, except the first. */
+    for (int8_t i = 1; i < 28; ++i)
+        plate_status[i] = 0;
+
+    plate_status[0] = 1;
+    plate_status[29] = 1;
 }
 
 
-void press_plate (uint8_t x, uint8_t y)
+/**
+ * Press plate defined by position pos. If all plates were pressed, return true otherwise false.
+ */
+bool press_plate (uint8_t pos, uint8_t x, uint8_t y)
 {
-    switch (y * 32 + x)
+    switch (pos)
     {
-        case 78:
+        case 1:
             draw_block_00_pressed (x, y);
             break;
-        case 172: case 266: case 360: case 454: case 548: case 642:
+        case 2: case 4: case 7: case 11: case 16: case 22:
             draw_block_01_pressed (x, y);
             break;
-        case 176: case 274: case 372: case 470: case 568: case 666:
+        case 3: case 6: case 10: case 15: case 21: case 28:
             draw_block_10_pressed (x, y);
             break;
         default:
             draw_block_11_pressed (x, y);
     }
+
+    if (!plate_status[--pos])
+    {
+        plate_status[pos] = 1;
+        return (++plate_status[PLATE_COUNT] == MAX_PLATES);
+    }
+
+    return false;
+}
+
+
+void finish_level ()
+{
+    uint8_t foreground = 0;
+
+    for (int i = 0; i < 160; ++i)
+    {
+        foreground += 16;
+        change_plate_color (foreground + BBlack);
+
+        TMS99X8_activateBuffer (MODE2_BUFFER_0);
+        wait_frame ();
+
+        TMS99X8_activateBuffer (MODE2_BUFFER_1);
+        wait_frame ();
+    }
+
+    change_plate_color (FLightYellow + BBlack);
 }

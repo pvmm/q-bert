@@ -10,7 +10,9 @@ enum level_t {
 
 void compose_level (enum level_t);
 
-void press_plate (uint8_t x, uint8_t y);
+bool press_plate (uint8_t pos, uint8_t x, uint8_t y);
+
+void finish_level ();
 
 
 #endif /* _LEVEL_H */

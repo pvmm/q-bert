@@ -16,6 +16,7 @@ T_SA SA0, SA1;
 void init_qbert ()
 {
     qbert.dirty = true;
+    qbert.pos = 1;
     qbert.frame = 0;
     qbert.x0 = 122;
     qbert.y0 = 8;
@@ -64,8 +65,8 @@ void init_qbert ()
     }
 
     // Put Q*Bert on screen.
-    put_qbert_sprite (MODE2_BUFFER_0);
-    put_qbert_sprite (MODE2_BUFFER_1);
+    put_qbert_sprite (MODE2_BUFFER_0, true);
+    put_qbert_sprite (MODE2_BUFFER_1, true);
 }
 
 
@@ -107,7 +108,7 @@ INLINE void update_sat(T_SA *SA, uint8_t pat, uint8_t id)
 }
 
 
-void put_qbert_sprite(EM2_Buffer BUFFER)
+void put_qbert_sprite(EM2_Buffer BUFFER, bool is_dirty) 
 {
     static uint8_t fast_x1;
     static uint8_t fast_x2;
@@ -144,9 +145,12 @@ void put_qbert_sprite(EM2_Buffer BUFFER)
         (*SA)[i + 3].y = fast_y2;
 
         // Check if updating sprite shapes is need.
-        if (qbert.dirty)
+        if (is_dirty)
+        {
             update_sat(SA, i, j);
+        }
     }
 
     TMS99X8_writeSpriteAttributes(BUFFER, *SA);
 }
+
