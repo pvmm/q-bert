@@ -1,2 +1,6 @@
-# Q*Bert
-Q*Bert clone for the MSX
+Q*Bert clone
+============
+
+Q*Bert clone for the MSX1 or MSX2
+
+![older screenshot](docs/screenshot.jpg)
