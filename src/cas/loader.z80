@@ -1,0 +1,219 @@
+;
+; TAPE LOADER USING THE BIOS
+;
+
+TAPION = 0x00e1
+TAPIN  = 0x00e4
+TAPIOF = 0x00e7
+DISSCR = 0x0041
+ENASCR = 0x0044
+LDIRVM = 0x005c
+CHGMOD = 0x005f
+CHGCLR = 0x0062
+FORCLR = 0xf3e9
+BAKCLR = 0xf3ea
+BDRCLR = 0xf3eb
+CHPUT  = 0x00a2
+TOTEXT = 0x00d2
+ENASLT = 0x0024
+RSLREG = 0x0138
+
+        .area _CODE
+        di
+        ; init the stack
+        ld sp, #0xf380
+
+        ; sslot fix
+        ld a, (0xffff)
+        cpl
+        and #0xf0
+        ld c, a
+        rrca
+        rrca
+        rrca
+        rrca
+        or c
+        ld (0xffff),a
+
+        in a, (#0xa8)
+
+        ; map RAM on 0x8000
+        and #0xcf
+        ld c, #16
+        ld hl, #0x8000
+        call select_ram
+
+        ; map RAM on 0x4000
+        and #0xf3
+        ld c, #4
+        ld hl, #0x4000
+        call select_ram
+
+        ei
+
+        ; now we have: ROM RAM RAM RAM
+
+        ; set these to black
+        ld a, #1
+        ld (FORCLR), a
+        ld (BAKCLR), a
+        ld (BDRCLR), a
+        call CHGCLR
+
+        ; load the loading screen
+        call load_custom_block
+
+        ld hl, (block_addr)
+        ld de, #0x4000
+        call ap_uncompress
+
+        call upload_screen
+
+        ; load the code
+        call load_custom_block
+
+        ld hl, (block_addr)
+        ld de, #0x4000
+        call ap_uncompress
+
+        ; cas main
+        jp 0x4010
+
+upload_screen:
+        ld a, #2
+        call CHGMOD
+
+        call DISSCR
+
+        ld hl, #0x4000
+        ld de, #0
+        ld bc, #256 * 8
+        call LDIRVM
+
+        ld hl, #0x4000 + 256 * 8
+        ld de, #256 * 8
+        ld bc, #256 * 8
+        call LDIRVM
+
+        ld hl, #0x4000 + 256 * 8 * 2
+        ld de, #256 * 8 * 2
+        ld bc, #256 * 8
+        call LDIRVM
+
+        ld hl, #0x4000 + 256 * 8 * 3
+        ld de, #0x2000
+        ld bc, #256 * 8
+        call LDIRVM
+
+        ld hl, #0x4000 + 256 * 8 * 4
+        ld de, #0x2000 + 256 * 8
+        ld bc, #256 * 8
+        call LDIRVM
+
+        ld hl, #0x4000 + 256 * 8 * 5
+        ld de, #0x2000 + 256 * 8 * 2
+        ld bc, #256 * 8
+        call LDIRVM
+
+        jp ENASCR
+
+load_custom_block:
+        call TAPION
+        jp c, tape_error
+
+        ld bc, #4
+        ld hl, #block_addr
+        call load_block
+
+        ld bc, (block_len)
+        ld hl, (block_addr)
+        call load_block
+
+        jp TAPIOF
+
+load_block:
+        ld a, r
+        and #15
+        out (#0x99), a
+        ld a, #0x87
+        nop
+        nop
+        out (#0x99), a
+
+        push bc
+        push hl
+        call TAPIN
+        pop hl
+        pop bc
+        jr c, tape_error
+
+        ld (hl), a
+        inc hl
+
+        dec bc
+        ld a, b
+        or c
+        jr nz, load_block
+
+        ld a, #1
+        out (#0x99), a
+        ld a, #0x87
+        nop
+        nop
+        out (#0x99), a
+        ret
+
+select_ram:
+        ld b, #4
+select_ram_loop:
+        out (#0xa8), a
+        ld (hl), a
+        cp (hl)
+        ret z
+        add a, c
+        djnz select_ram_loop
+
+memory_error:
+        ld hl, #mem_err_message
+        jp display_error
+
+tape_error:
+        ld hl, #tape_err_message
+
+display_error:
+        push hl
+        call TOTEXT
+
+        ld a, #1
+        ld (BAKCLR), a
+        ld (BDRCLR), a
+        ld a, #6
+        ld (FORCLR), a
+        call CHGCLR
+
+        pop hl
+print_loop:
+        ld a, (hl)
+        or a
+        jr z, halt0
+        inc hl
+        call CHPUT
+        jr print_loop
+halt0:
+        halt
+        jr halt0
+
+tape_err_message:
+        .str "TAPE READ ERROR"
+        .db 0
+mem_err_message:
+        .str "MEMORY INIT ERROR"
+        .db 0
+
+        .area _DATA
+
+block_addr:
+        .dw 2
+block_len:
+        .dw 2
+
