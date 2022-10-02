@@ -10,7 +10,12 @@ OUTDIR := ../../bin
 TMPDIR := ../build
 
 # will automatically include (and compile) any .c or .z80 file
-OBJS := $(patsubst %.c,$(TMPDIR)/%.rel,$(wildcard *.c)) $(patsubst %.z80,$(TMPDIR)/%.rel,$(wildcard *.z80))
+ifeq ($(DEBUG),1)
+    C_FILES := data.c debug.c entities.c game.c helpers.c level.c main.c
+else
+    C_FILES := data.c entities.c game.c helpers.c level.c main.c
+endif
+OBJS := $(patsubst %.c,$(TMPDIR)/%.rel,$(C_FILES)) $(patsubst %.z80,$(TMPDIR)/%.rel,$(wildcard *.z80))
 # crt0.z80 is compiled as requirement of the targets and MUST be linked first,
 # so we exclude it from the list of user-provided source
 OBJS := $(filter-out $(TMPDIR)/crt0.rel,$(OBJS))
