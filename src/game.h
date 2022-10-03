@@ -1,6 +1,8 @@
 #ifndef _GAME_H
 #define _GAME_H
 
+#include "debug.h"
+
 #ifndef LOCAL
 #define LOCAL extern
 #else

@@ -12,6 +12,7 @@
 // generated
 #include "tiles.h"
 
+
 void draw_menu()
 {
     uint8_t i;
@@ -82,6 +83,9 @@ void draw_game_over()
 
 void main()
 {
+    //debug_msg("Q*Bert demo");
+    //debug_break();
+
     //  PAL: 50/2 = 25 FPS
     // NTSC: 60/2 = 30 FPS
     ubox_init_isr(2);

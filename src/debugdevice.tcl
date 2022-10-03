@@ -1,9 +1,3 @@
-proc DEBUG_HEX   {} { return 0 }
-proc DEBUG_INT   {} { return 1 }
-proc DEBUG_BIN   {} { return 2 }
-proc DEBUG_CHAR  {} { return 3 }
-proc DEBUG_PAUSE {} { return 0xff }
-
 set debug_mode 1
 set pos 0
 set int 0

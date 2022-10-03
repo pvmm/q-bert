@@ -1,10 +1,7 @@
-#ifdef USE_DEBUG_MODE
-
 #include "debug.h"
-
+#ifdef USE_DEBUG
 
 uint16_t _stored_debug_mode = DEBUG_INT;
-
 
 // send value to debug device (control)
 void _out2e(uint8_t value) __z88dk_fastcall
@@ -74,8 +71,8 @@ void debug_break()
     __endasm;
 }
 
-#else
+#else // USE_DEBUG
 
 typedef int make_iso_compilers_happy;
 
-#endif // USE_DEBUG_MODE
+#endif // USE_DEBUG

@@ -2,6 +2,7 @@
 #define _MAIN_H
 
 #include <stdint.h>
+#include "debug.h"
 
 #ifndef LOCAL
 #define LOCAL extern

@@ -2,26 +2,25 @@ TARGET := game
 
 include ../../config.env
 
-CODE := 0x4000
+CODE = 0x4000
 # leaves 222 bytes for AKM player buffer
-DATA := 0xc0de
-
-OUTDIR := ../../bin
-TMPDIR := ../build
+DATA = 0xc0de
+OUTDIR = ../../bin
+TMPDIR = ../build
 
 # will automatically include (and compile) any .c or .z80 file
-ifeq ($(DEBUG),1)
-    C_FILES := data.c debug.c entities.c game.c helpers.c level.c main.c
-else
-    C_FILES := data.c entities.c game.c helpers.c level.c main.c
+ifdef DEBUG
+  EXTRA_CFLAGS = -DUSE_DEBUG
 endif
+
+C_FILES := data.c debug.c entities.c game.c helpers.c level.c main.c
 OBJS := $(patsubst %.c,$(TMPDIR)/%.rel,$(C_FILES)) $(patsubst %.z80,$(TMPDIR)/%.rel,$(wildcard *.z80))
 # crt0.z80 is compiled as requirement of the targets and MUST be linked first,
 # so we exclude it from the list of user-provided source
 OBJS := $(filter-out $(TMPDIR)/crt0.rel,$(OBJS))
 
-UBOX_LIBS := $(wildcard ../../lib/*.lib)
-LIBS := -lubox -lspman -lmplayer -lap
+UBOX_LIBS = $(wildcard ../../lib/*.lib)
+LIBS = -lubox -lspman -lmplayer -lap
 
 CC := sdcc
 AS := sdasz80
