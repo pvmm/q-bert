@@ -26,7 +26,9 @@
 struct entity* self;
 
 // game still running?
-bool completed;
+uint8_t completed_delay;
+uint8_t completed;
+#define COMPLETED_DELAY_IN_FRAMES   20
 
 // Q*bert's rainbow-colored frisbees
 uint8_t frisbees;
@@ -162,7 +164,8 @@ void draw_hud()
 inline void update_frisbees()
 {
     frisbee_anim_delay--;
-    if (frisbees && frisbee_anim_delay == 0) {
+    if (frisbees && frisbee_anim_delay == 0)
+    {
         frisbee_anim_delay = FRISBEE_MAX_DELAY;
         ubox_put_tile(5, 12, FRISBEE_TILE1 + frisbee_frame);
         ubox_put_tile(6, 12, FRISBEE_TILE2 + frisbee_frame);
@@ -170,6 +173,20 @@ inline void update_frisbees()
         ubox_put_tile(26, 12, FRISBEE_TILE2 + frisbee_frame);
         frisbee_frame = (frisbee_frame < FRISBEE_MAX_TILES - FRISBEE_NUM_TILES) ? frisbee_frame + FRISBEE_NUM_TILES : 0;
     }
+}
+
+
+#include "set_tiles_colors_at.h"
+void set_plates_colors(uint8_t color)
+{
+    uint8_t colors[96]; // 96 = 12 * 8
+
+    for (uint8_t i = 0; i < sizeof(colors); ++i)
+    {
+        colors[i] = color;
+    }
+
+    set_tiles_colors_at(colors, 1800, sizeof(colors));
 }
 
 
@@ -184,7 +201,8 @@ void run_game()
     lives = MAX_LIVES;
     invuln = 0;
     gameover_delay = 0;
-    completed = false;
+    completed = 0;
+    completed_delay = COMPLETED_DELAY_IN_FRAMES;
     control = 0;
 
     ubox_disable_screen();
@@ -212,12 +230,20 @@ void run_game()
     // our game loop
     while (1)
     {
+        // game completed!
+        if (completed > 0) {
+            if (--completed_delay == 0) {
+                completed_delay = COMPLETED_DELAY_IN_FRAMES;
+            }
+            // done?
+            if (completed == 0xf0)
+                continue;
+            set_plates_colors(completed += 0x10);
+            break;
+        }
+
         // exit the game
         if (ubox_read_keys(7) == UBOX_MSX_KEY_ESC)
-            break;
-
-        // game completed!
-        if (completed)
             break;
 
         // we are in the gameover delay
