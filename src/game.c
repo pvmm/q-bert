@@ -120,7 +120,7 @@ void draw_hud()
     for (i = 0; i < MAX_LIVES; ++i)
         if (i < lives)
             // our hearts tile
-            ubox_put_tile(1 + i, 1, 193);
+            ubox_put_tile(1 + i, 1, 192);
         else
             ubox_put_tile(1 + i, 1, WHITESPACE_TILE);
 }
