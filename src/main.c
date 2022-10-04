@@ -29,13 +29,13 @@ void draw_menu()
         ubox_put_tile(11 + i, 8, 96 + i);
     }
 
-    put_text(2, 11, "PRESS SPACE OR ACTION BUTTON");
+    put_text(2, 13, "PRESS SPACE OR FIRE1 BUTTON");
 
-    put_text(7, 2, "MSXDEV22 APPLICANT");
-    put_text(7, 16, "CODE AND GRAPHICS");
-    put_text(7, 17, "PEDRO DE MEDEIROS");
-    put_text(8, 19, "SOUND AND MUSIC");
-    put_text(9, 20, "PABLO VASQUES");
+    put_text(7, 2, "MSXDEV'?? COMPETITOR");
+    put_text(9, 16, "CODE & GRAPHICS");
+    put_text(7, 17, "-PEDRO DE MEDEIROS-");
+    put_text(9, 19, "SOUND & MUSIC");
+    put_text(8, 20, "-PABLO VASQUES-");
     // 037 is ASCII 31 in octal, our Copyright sign
     put_text(6, 22, "\03720XX ?????????????");
 

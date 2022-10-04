@@ -228,7 +228,7 @@ void put_qbert_sprite()
     static uint8_t fast_y;
 
     fast_x = LEFT_PATTERN_MASK(qbert.pattern) ? qbert.x - 3 : qbert.x;
-    fast_y = qbert.y;
+    fast_y = qbert.y - 1;
 
     //
     // Update sprite atributes
