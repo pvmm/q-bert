@@ -86,9 +86,9 @@ void main()
     debug_msg("Q*Bert demo");
     //debug_break();
 
-    //  PAL: 50/2 = 25 FPS
-    // NTSC: 60/2 = 30 FPS
-    ubox_init_isr(2);
+    //  PAL: 50/1 = 50 FPS
+    // NTSC: 60/1 = 60 FPS
+    ubox_init_isr(1);
 
     // set screen 2
     ubox_set_mode(2);
