@@ -28,6 +28,17 @@ struct entity* self;
 // game still running?
 bool completed;
 
+// Q*bert's rainbow-colored frisbees
+uint8_t frisbees;
+uint8_t frisbee_frame;
+uint8_t frisbee_anim_delay;
+#define FRISBEE_MAX_DELAY           35
+#define FRISBEE_FRAME_DURATION      10
+#define FRISBEE_TILE1               193
+#define FRISBEE_TILE2               194
+#define FRISBEE_NUM_TILES           2
+#define FRISBEE_MAX_TILES           (4 * 2)
+
 
 void init_map_entities()
 {
@@ -115,14 +126,50 @@ void draw_hud()
 {
     uint8_t i;
 
-    put_text(0, 0, "LIVES");
+    // "Player 1"
+    ubox_put_tile(0, 1, 19);
+    ubox_put_tile(1, 1, 20);
+    ubox_put_tile(2, 1, 21);
+    ubox_put_tile(3, 1, 22);
+    ubox_put_tile(4, 1, 23);
+    ubox_put_tile(5, 1, 24);
+    ubox_put_tile(7, 0, 25);
+    ubox_put_tile(7, 1, 26);
+
+    // "change to"
+    ubox_put_tile(24, 1, 50);
+    ubox_put_tile(25, 1, 51);
+    ubox_put_tile(26, 1, 52);
+    ubox_put_tile(27, 1, 53);
+    ubox_put_tile(28, 1, 54);
+    ubox_put_tile(29, 1, 55);
+    ubox_put_tile(30, 1, 56);
+    ubox_put_tile(25, 2, 57);
+    ubox_put_tile(26, 2, 57);
+    ubox_put_tile(27, 2, 58);
+    ubox_put_tile(28, 2, 59);
+    ubox_put_tile(29, 2, 59);
 
     for (i = 0; i < MAX_LIVES; ++i)
         if (i < lives)
             // our hearts tile
-            ubox_put_tile(1 + i, 1, 192);
+            ubox_put_tile(2 + i, 2, 192);
         else
-            ubox_put_tile(1 + i, 1, WHITESPACE_TILE);
+            ubox_put_tile(2 + i, 2, WHITESPACE_TILE);
+}
+
+
+inline void update_frisbees()
+{
+    frisbee_anim_delay--;
+    if (frisbees && frisbee_anim_delay == 0) {
+        frisbee_anim_delay = FRISBEE_MAX_DELAY;
+        ubox_put_tile(5, 12, FRISBEE_TILE1 + frisbee_frame);
+        ubox_put_tile(6, 12, FRISBEE_TILE2 + frisbee_frame);
+        ubox_put_tile(25, 12, FRISBEE_TILE1 + frisbee_frame);
+        ubox_put_tile(26, 12, FRISBEE_TILE2 + frisbee_frame);
+        frisbee_frame = (frisbee_frame < FRISBEE_MAX_TILES - FRISBEE_NUM_TILES) ? frisbee_frame + FRISBEE_NUM_TILES : 0;
+    }
 }
 
 
@@ -131,6 +178,9 @@ void run_game()
     uint8_t i;
 
     // init some variables; look at game.h for description
+    frisbees = 4;
+    frisbee_anim_delay = 1;
+    frisbee_frame = 0;
     lives = MAX_LIVES;
     invuln = 0;
     gameover_delay = 0;
@@ -191,6 +241,10 @@ void run_game()
 
         // ensure we wait to our desired update rate
         ubox_wait();
+
+        //
+        update_frisbees();
+
         // update sprites on screen
         spman_update();
     }

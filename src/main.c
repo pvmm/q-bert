@@ -31,13 +31,13 @@ void draw_menu()
 
     put_text(2, 13, "PRESS SPACE OR FIRE1 BUTTON");
 
-    put_text(7, 2, "MSXDEV'?? COMPETITOR");
+    put_text(9, 2, "MSXDEV'2? ENTRY");
     put_text(9, 16, "CODE & GRAPHICS");
     put_text(7, 17, "-PEDRO DE MEDEIROS-");
-    put_text(9, 19, "SOUND & MUSIC");
-    put_text(8, 20, "-PABLO VASQUES-");
+    //put_text(9, 19, "SOUND & MUSIC");
+    //put_text(8, 20, "-PABLO VASQUES-");
     // 037 is ASCII 31 in octal, our Copyright sign
-    put_text(6, 22, "\03720XX ?????????????");
+    //put_text(6, 22, "\037202X ?????????????");
 
     ubox_enable_screen();
 }
@@ -84,7 +84,7 @@ void draw_game_over()
 void main()
 {
     debug_msg("Q*Bert demo");
-    //debug_break();
+    debug_break();
 
     //  PAL: 50/1 = 50 FPS
     // NTSC: 60/1 = 60 FPS
