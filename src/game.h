@@ -2,6 +2,7 @@
 #define _GAME_H
 
 #include "debug.h"
+#include <stdint.h>
 
 #ifndef LOCAL
 #define LOCAL extern
@@ -40,7 +41,7 @@ void run_game();
 void draw_map();
 void draw_hud();
 
-void erase_battery(uint8_t x, uint8_t y);
+//void erase_battery(uint8_t x, uint8_t y);
 
 uint8_t is_map_blocked(uint8_t x, uint8_t y);
 uint8_t is_map_elevator_up(uint8_t x, uint8_t y);

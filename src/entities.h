@@ -14,23 +14,23 @@
 // sprite pattern base offset
 enum Pattern {
     SPRITE_DOWN_RIGHT = 0,
-    SPRITE_DOWN_LEFT,
-    SPRITE_UP_RIGHT,
-    SPRITE_UP_LEFT,
+    SPRITE_DOWN_LEFT  = 16, // 010000
+    SPRITE_UP_RIGHT   = 32, // 100000
+    SPRITE_UP_LEFT    = 48, // 110000
 };
 
-#define DIR_LEFT_MASK(x)            ((x) & 0b100)
+#define LEFT_PATTERN_MASK(x)            ((x) & 0b10000)
 
 // sprite movement bits
 enum Moves {
-    MOV_LEFT            =  16,
-    MOV_UP              =  32,
-    MOV_DOWN            =  64,
-    MOV_RIGHT           = 128,
-    MOV_DOWN_RIGHT      = 192,      // 128 + 64
-    MOV_DOWN_LEFT       =  80,      //  64 + 16
-    MOV_UP_RIGHT        = 160,      // 128 + 32
-    MOV_UP_LEFT         =  48,      //  32 + 16
+    MOV_LEFT            =   4,
+    MOV_UP              =   1,
+    MOV_DOWN            =   2,
+    MOV_RIGHT           =   8,
+    MOV_DOWN_RIGHT      =  10,      // 2 + 8
+    MOV_DOWN_LEFT       =   6,      // 2 + 4
+    MOV_UP_RIGHT        =   9,      // 1 + 8
+    MOV_UP_LEFT         =   5,      // 1 + 4
 };
 
 // how long we wait between animation frames
