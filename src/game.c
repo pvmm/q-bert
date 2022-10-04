@@ -13,6 +13,7 @@
 #include "entities.h"
 #include "game.h"
 #include "sprites.h"
+#include "level.h"
 
 // generated
 #include "map.h"
@@ -25,7 +26,7 @@
 struct entity* self;
 
 // game still running?
-bool done;
+bool completed;
 
 
 void init_map_entities()
@@ -133,7 +134,7 @@ void run_game()
     lives = MAX_LIVES;
     invuln = 0;
     gameover_delay = 0;
-    done = false;
+    completed = false;
     control = 0;
 
     ubox_disable_screen();
@@ -149,6 +150,7 @@ void run_game()
     // init entities before drawing
     init_player();
     init_map_entities();
+    init_level();
     draw_map();
 
     draw_hud();
@@ -165,7 +167,7 @@ void run_game()
             break;
 
         // game completed!
-        if (!batteries)
+        if (completed)
             break;
 
         // we are in the gameover delay

@@ -8,7 +8,7 @@
 
 const int8_t (*jump_table)[16];
 
-extern uint8_t done;
+extern uint8_t completed;   // completed the plates?
 extern uint8_t control;
 uint8_t old_pattern;
 uint8_t row;                // player vertical coordinate
@@ -171,7 +171,7 @@ void update_player_left()
             qbert.pos -= row--;
         }
 
-        done = press_plate(qbert.pos, qbert.tile_x, qbert.tile_y);
+        completed = press_plate(qbert.pos, qbert.tile_x, qbert.tile_y);
 
         // reset animation status
         qbert.x0 = qbert.x;
@@ -210,7 +210,7 @@ void update_player_right()
             qbert.pos -= --row;
         }
 
-        done = press_plate(qbert.pos, qbert.tile_x, qbert.tile_y);
+        completed = press_plate(qbert.pos, qbert.tile_x, qbert.tile_y);
 
         // reset animation status
         qbert.x0 = qbert.x;
