@@ -10,7 +10,7 @@ TMPDIR = ../build
 
 # will automatically include (and compile) any .c or .z80 file
 ifdef DEBUG
-  EXTRA_CFLAGS = -DUSE_DEBUG
+  EXTRA_CFLAGS += -DUSE_DEBUG
 endif
 
 C_FILES := data.c debug.c entities.c game.c helpers.c level.c main.c
@@ -40,7 +40,7 @@ cas: $(TMPDIR)/$(TARGET).cas
 	@cp $(TMPDIR)/$(TARGET).cas $(OUTDIR)
 
 openmsx: all
-	ROM=$(OUTDIR)/$(TARGET).rom openmsx -script env.tcl
+	DEBUG=$(DEBUG) openmsx -script env.tcl
 
 $(TMPDIR)/%.rel: %.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -c $< -o $@

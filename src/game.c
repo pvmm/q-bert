@@ -178,7 +178,6 @@ void run_game()
 
         // read the selected control
         control = ubox_read_ctl(ctl);
-
         qbert.update();
 
         // update all the entities:

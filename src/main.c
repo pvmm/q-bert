@@ -83,7 +83,7 @@ void draw_game_over()
 
 void main()
 {
-    //debug_msg("Q*Bert demo");
+    debug_msg("Q*Bert demo");
     //debug_break();
 
     //  PAL: 50/2 = 25 FPS

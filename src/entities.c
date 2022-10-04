@@ -1,3 +1,4 @@
+#include "game.h"
 #include "entities.h"
 #include "palette.h"
 #include "lookup_tables.h"
