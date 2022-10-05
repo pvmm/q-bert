@@ -14,6 +14,7 @@
 #include "game.h"
 #include "sprites.h"
 #include "level.h"
+#include "plate.h"
 
 // generated
 #include "map.h"
@@ -176,20 +177,6 @@ inline void update_frisbees()
 }
 
 
-#include "set_tiles_colors_at.h"
-void set_plates_colors(uint8_t color)
-{
-    uint8_t colors[96]; // 96 = 12 * 8
-
-    for (uint8_t i = 0; i < sizeof(colors); ++i)
-    {
-        colors[i] = color;
-    }
-
-    set_tiles_colors_at(colors, 1800, sizeof(colors));
-}
-
-
 void run_game()
 {
     uint8_t i;
@@ -206,6 +193,10 @@ void run_game()
     control = 0;
 
     ubox_disable_screen();
+
+    init_plate_colors();
+    set_closed_plate_colors(0x90);
+    set_opened_plate_colors(0xe0);
 
     ubox_fill_screen(WHITESPACE_TILE);
 
@@ -238,7 +229,7 @@ void run_game()
             // done?
             if (completed == 0xf0)
                 continue;
-            set_plates_colors(completed += 0x10);
+            set_opened_plate_colors(completed += 0x10);
             break;
         }
 

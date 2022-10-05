@@ -13,7 +13,7 @@ ifdef DEBUG
   EXTRA_CFLAGS += -DUSE_DEBUG
 endif
 
-C_FILES := data.c debug.c entities.c game.c helpers.c level.c main.c
+C_FILES := data.c debug.c entities.c game.c helpers.c level.c plate.c main.c
 OBJS := $(patsubst %.c,$(TMPDIR)/%.rel,$(C_FILES)) $(patsubst %.z80,$(TMPDIR)/%.rel,$(wildcard *.z80))
 # crt0.z80 is compiled as requirement of the targets and MUST be linked first,
 # so we exclude it from the list of user-provided source
