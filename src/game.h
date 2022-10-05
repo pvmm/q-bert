@@ -4,6 +4,13 @@
 #include "debug.h"
 #include <stdint.h>
 
+enum game_status
+{
+    PLAYING = 0,
+    LEVEL_COMPLETED,
+    SECOND_CYCLE,
+};
+
 #ifndef LOCAL
 #define LOCAL extern
 #else

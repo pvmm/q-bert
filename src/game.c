@@ -27,9 +27,12 @@
 struct entity* self;
 
 // game still running?
-uint8_t completed_delay;
-uint8_t completed;
-#define COMPLETED_DELAY_IN_FRAMES   20
+bool looping;
+enum game_status game_status;
+int8_t completed_delay;
+uint8_t old_plate_color;
+uint8_t plate_color;
+#define COMPLETED_DELAY_IN_FRAMES   2
 
 // Q*bert's rainbow-colored frisbees
 uint8_t frisbees;
@@ -129,7 +132,7 @@ void draw_hud()
 {
     uint8_t i;
 
-    // "Player 1"
+    // "PLAYER 1"
     ubox_put_tile(0, 1, 19);
     ubox_put_tile(1, 1, 20);
     ubox_put_tile(2, 1, 21);
@@ -139,7 +142,7 @@ void draw_hud()
     ubox_put_tile(7, 0, 25);
     ubox_put_tile(7, 1, 26);
 
-    // "change to"
+    // "CHANGE TO"
     ubox_put_tile(24, 1, 50);
     ubox_put_tile(25, 1, 51);
     ubox_put_tile(26, 1, 52);
@@ -153,6 +156,7 @@ void draw_hud()
     ubox_put_tile(28, 2, 59);
     ubox_put_tile(29, 2, 59);
 
+    // hearts
     for (i = 0; i < MAX_LIVES; ++i)
         if (i < lives)
             // our hearts tile
@@ -182,21 +186,24 @@ void run_game()
     uint8_t i;
 
     // init some variables; look at game.h for description
-    frisbees = 4;
+    looping = true;
+    game_status = PLAYING;
+    frisbees = 2;
     frisbee_anim_delay = 1;
     frisbee_frame = 0;
     lives = MAX_LIVES;
     invuln = 0;
     gameover_delay = 0;
-    completed = 0;
     completed_delay = COMPLETED_DELAY_IN_FRAMES;
+    old_plate_color = 0xe0;
+    plate_color = 0xe0;
     control = 0;
 
     ubox_disable_screen();
 
     init_plate_colors();
     set_closed_plate_colors(0x90);
-    set_opened_plate_colors(0xe0);
+    set_opened_plate_colors(plate_color);
 
     ubox_fill_screen(WHITESPACE_TILE);
 
@@ -219,47 +226,57 @@ void run_game()
     mplayer_init(SONG, SONG_IN_GAME);
 
     // our game loop
-    while (1)
+    while (looping)
     {
-        // game completed!
-        if (completed > 0) {
-            if (--completed_delay == 0) {
-                completed_delay = COMPLETED_DELAY_IN_FRAMES;
-            }
-            // done?
-            if (completed == 0xf0)
-                continue;
-            set_opened_plate_colors(completed += 0x10);
-            break;
-        }
-
-        // exit the game
-        if (ubox_read_keys(7) == UBOX_MSX_KEY_ESC)
-            break;
-
-        // we are in the gameover delay
-        if (gameover_delay)
-        {
-            // if finished, exit
-            if (--gameover_delay == 0)
+        // level completed?
+        switch (game_status)
+	{
+        case PLAYING: {
+            // exit the game
+            if (ubox_read_keys(7) == UBOX_MSX_KEY_ESC)
                 break;
-        }
 
-        // read the selected control
-        control = ubox_read_ctl(ctl);
-        qbert.update();
+            // we are in the gameover delay
+            if (gameover_delay)
+            {
+                // if finished, exit
+                if (--gameover_delay == 0)
+                    break;
+            }
+
+            // read the selected control
+            control = ubox_read_ctl(ctl);
+
+            break;
+        }
+        case LEVEL_COMPLETED:
+	case SECOND_CYCLE: {
+            if (completed_delay-- <= 0) {
+                completed_delay = COMPLETED_DELAY_IN_FRAMES;
+                set_opened_plate_colors(plate_color += 0x10);
+                // cycle through palette twice
+                if (game_status == LEVEL_COMPLETED) {
+                    if (plate_color == old_plate_color)
+                        game_status = SECOND_CYCLE;
+                } else {
+                    if (plate_color == old_plate_color)
+                        looping = false;
+                }
+            }
+        }}
 
         // update all the entities:
         // - self is a pointer to THIS entity
         // - because we don't create/destroy entities dynamically
         //   when we found one that is unused we are done
+        qbert.update();
         for (i = 0, self = entities; i < MAX_ENTITIES && self->type; i++, self++)
             self->update();
 
         // ensure we wait to our desired update rate
         ubox_wait();
 
-        //
+        // rotate frisbees' colours
         update_frisbees();
 
         // update sprites on screen

@@ -1,9 +1,8 @@
-#include "main.h"
+#include "game.h"
 #include "level.h"
 
 
 #define MAX_PLATES      28
-//#define PLATE_COUNT     29
 
 /* Store plate status. Last position is the total of plates pressed. */
 uint8_t plate_status[MAX_PLATES + 1];
@@ -80,7 +79,7 @@ void draw_block_11_pressed(uint8_t x, uint8_t y)
 }
 
 
-bool press_plate(uint8_t pos, uint8_t x, uint8_t y)
+enum game_status press_plate(uint8_t pos, uint8_t x, uint8_t y)
 {
     switch (pos)
     {
@@ -101,8 +100,8 @@ bool press_plate(uint8_t pos, uint8_t x, uint8_t y)
     if (!plate_status[--pos])
     {
         plate_status[pos] = 1;
-        return ++plate_counter == MAX_PLATES;
+        return ++plate_counter == MAX_PLATES ? LEVEL_COMPLETED : PLAYING;
     }
 
-    return false;
+    return PLAYING;
 }
