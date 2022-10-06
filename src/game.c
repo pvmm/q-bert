@@ -230,7 +230,7 @@ void run_game()
     {
         // level completed?
         switch (game_status)
-	{
+        {
         case PLAYING: {
             // exit the game
             if (ubox_read_keys(7) == UBOX_MSX_KEY_ESC)
@@ -250,7 +250,7 @@ void run_game()
             break;
         }
         case LEVEL_COMPLETED:
-	case SECOND_CYCLE: {
+        case SECOND_CYCLE: {
             if (completed_delay-- <= 0) {
                 completed_delay = COMPLETED_DELAY_IN_FRAMES;
                 set_opened_plate_colors(plate_color += 0x10);
