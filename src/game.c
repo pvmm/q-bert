@@ -38,7 +38,7 @@ uint8_t plate_color;
 uint8_t frisbees;
 uint8_t frisbee_frame;
 uint8_t frisbee_anim_delay;
-#define FRISBEE_MAX_DELAY           35
+#define FRISBEE_MAX_DELAY           20
 #define FRISBEE_FRAME_DURATION      10
 #define FRISBEE_TILE1               193
 #define FRISBEE_TILE2               194

@@ -5,7 +5,7 @@ GENERATED := $(OUTPUT)/tiles.h $(OUTPUT)/player.h $(OUTPUT)/enemy.h $(OUTPUT)/ma
 all: $(GENERATED)
 
 $(OUTPUT)/tiles.h: tiles.png
-	../../tools/png2tiles.py -i tiles $< > $@
+	../../tools/png2tiles.py -i tiles --preferred-fg 15 $< > $@
 
 $(OUTPUT)/player.h: player.png
 	../../tools/png2sprites.py -c -i player_sprite $< > $@
