@@ -1,7 +1,7 @@
 #include <stdint.h>
 
 #include "ubox.h"
-#include "mplayer.h"
+//#include "mplayer.h"
 
 #include "helpers.h"
 #include "game.h"
@@ -76,7 +76,7 @@ void draw_game_over()
     ubox_enable_screen();
 
     // play game over music
-    mplayer_init(SONG, SONG_GAME_OVER);
+    //mplayer_init(SONG, SONG_GAME_OVER);
 
     ubox_wait_for(128);
 }
@@ -113,13 +113,14 @@ void main()
     ubox_wvdp(1, 0xe2);
 
     // init the player
-    mplayer_init(SONG, SONG_SILENCE);
-    mplayer_init_effects(EFFECTS);
+    //mplayer_init(SONG, SONG_SILENCE);
+    //mplayer_init_effects(EFFECTS);
 
     // we don't need anything in our ISR
     // other than the play function, so we
     // use that!
-    ubox_set_user_isr(mplayer_play);
+    //ubox_set_user_isr(mplayer_play);
+    ubox_set_user_isr(LVM_Decode);
 
 redraw_menu:
     draw_menu();
@@ -131,7 +132,7 @@ redraw_menu:
         ctl = ubox_select_ctl();
         if (ctl != UBOX_MSX_CTL_NONE)
         {
-            mplayer_play_effect_p(EFX_START, EFX_CHAN_NO, 0);
+            //mplayer_play_effect_p(EFX_START, EFX_CHAN_NO, 0);
             ubox_wait_for(16);
 
             // play the game

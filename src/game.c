@@ -3,7 +3,8 @@
 
 #include "ubox.h"
 #include "spman.h"
-#include "mplayer.h"
+//#include "mplayer.h"
+#include "lvgm_player.h"
 #include "ap.h"
 
 #include "helpers.h"
@@ -221,9 +222,11 @@ void run_game()
 
     draw_hud();
 
-    ubox_enable_screen();
+    // start song
+    LVGM_Play(song.data, true);
+    //mplayer_init(SONG, SONG_IN_GAME);
 
-    mplayer_init(SONG, SONG_IN_GAME);
+    ubox_enable_screen();
 
     // our game loop
     while (looping)
@@ -284,7 +287,9 @@ void run_game()
     }
 
     // stop the in game music
-    mplayer_init(SONG, SONG_SILENCE);
+    //mplayer_init(SONG, SONG_SILENCE);
+    LVGM_Stop();
+
     // hide all the sprites before going back to the menu
     spman_hide_all_sprites();
 }
