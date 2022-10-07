@@ -5,6 +5,8 @@
 // ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀────────┘
 //  by Guillaume 'Aoineko' Blanchard under CC BY-SA license
 //─────────────────────────────────────────────────────────────────────────────
+#include <stdint.h>
+#include <stdbool.h>
 #include "psg.h"
 
 //=============================================================================
@@ -40,17 +42,17 @@ enum LVGM_STATE
 // LVGM header structure
 struct LVGM_Header
 {
-	u8	Ident[4]; // 'ayM '
-	u8	Flag;     // see LVGM_FLAG
+	uint8_t	Ident[4]; // 'ayM '
+	uint8_t	Flag;     // see LVGM_FLAG
 };
 
 // Extern data
 extern const struct LVGM_Header* g_LVGM_Header;
-extern const u8* g_LVGM_Pointer;
-extern u8        g_LVGM_Wait;
-extern u8        g_LVGM_State;
-extern const u8  g_LVGM_RegTable[13];
-extern const u8  g_LVGM_Ident[4];
+extern const uint8_t* g_LVGM_Pointer;
+extern uint8_t        g_LVGM_Wait;
+extern uint8_t        g_LVGM_State;
+extern const uint8_t  g_LVGM_RegTable[13];
+extern const uint8_t  g_LVGM_Ident[4];
 
 //=============================================================================
 // FUNCTIONS

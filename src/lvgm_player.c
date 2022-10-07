@@ -5,6 +5,8 @@
 // ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀────────┘
 //  by Guillaume 'Aoineko' Blanchard under CC BY-SA license
 //─────────────────────────────────────────────────────────────────────────────
+#include <stdint.h>
+#include "core.h"
 #include "lvgm_player.h"
 #include "bios_mainrom.h"
 #if (USE_LVGM_SCC)
@@ -21,19 +23,19 @@
 //=============================================================================
 
 // ay regsiter convertor         -  1  2  3  4  5' 6  7' 8  9' A   B'  C
-const u8  g_LVGM_RegTable[] = { 0, 1, 3, 5, 6, 6, 8, 8, 9, 9, 10, 10, 13 };
+const uint8_t  g_LVGM_RegTable[] = { 0, 1, 3, 5, 6, 6, 8, 8, 9, 9, 10, 10, 13 };
 
 // File ident data
-const u8  g_LVGM_Ident[4] = { 'a', 'y', 'M', ' ' };
+const uint8_t  g_LVGM_Ident[4] = { 'a', 'y', 'M', ' ' };
 
 //=============================================================================
 // MEMORY DATA
 //=============================================================================
 
 const struct LVGM_Header* g_LVGM_Header;
-const u8* g_LVGM_Pointer;
-u8        g_LVGM_Wait;
-u8        g_LVGM_State;
+const uint8_t* g_LVGM_Pointer;
+uint8_t        g_LVGM_Wait;
+uint8_t        g_LVGM_State;
 
 //=============================================================================
 // FUNCTIONS
@@ -44,9 +46,9 @@ u8        g_LVGM_State;
 bool LVGM_Play(const void* addr, bool loop)
 {
 	g_LVGM_Header = (const struct LVGM_Header*)(addr);
-	for(u8 i = 0; i < 4; i++)
+	for(uint8_t i = 0; i < 4; i++)
 		if(g_LVGM_Header->Ident[i] != g_LVGM_Ident[i])
-			return FALSE;
+			return false;
 
 	g_LVGM_State = 0;
 	if(!(g_LVGM_Header->Flag & LVGM_FLAG_60HZ) || ((g_LVGM_Header->Flag & LVGM_FLAG_50HZ) && (g_ROMVersion.VSF)))
@@ -54,10 +56,10 @@ bool LVGM_Play(const void* addr, bool loop)
 	if(loop)
 		g_LVGM_State |= LVGM_STATE_LOOP;
 	
-	g_LVGM_Pointer = (const u8*)(g_LVGM_Header) + sizeof(struct LVGM_Header);
+	g_LVGM_Pointer = (const uint8_t*)(g_LVGM_Header) + sizeof(struct LVGM_Header);
 	g_LVGM_Wait = 0;
 	LVGM_Resume();
-	return TRUE;
+	return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -65,7 +67,7 @@ bool LVGM_Play(const void* addr, bool loop)
 void LVGM_Stop()
 {
 	LVGM_Pause();
-	g_LVGM_Pointer = (const u8*)(g_LVGM_Header) + sizeof(struct LVGM_Header);
+	g_LVGM_Pointer = (const uint8_t*)(g_LVGM_Header) + sizeof(struct LVGM_Header);
 	g_LVGM_Wait = 0;
 }
 
@@ -87,12 +89,12 @@ void LVGM_Decode()
 	// Parse music data
 	while(1)
 	{
-		u8 op = *g_LVGM_Pointer & 0xF0;
+		uint8_t op = *g_LVGM_Pointer & 0xF0;
 		switch(op)
 		{
 			case 0x00:
 			{
-				u8 reg = *g_LVGM_Pointer;
+				uint8_t reg = *g_LVGM_Pointer;
 				PSG_SetRegister(reg, *++g_LVGM_Pointer);
 				break;
 			}
@@ -130,7 +132,7 @@ void LVGM_Decode()
 				// F1 Fn    0x8F = n | 0x10    On/off switch channel 1 to 5
 				case 0xF1:
 				{
-					u8 val = g_LVGM_Pointer[1];
+					uint8_t val = g_LVGM_Pointer[1];
 					if((val & 0xF0) == 0x00)
 						SCC_SetRegister(0x8F, val & 0x0F);
 					else if((val & 0xF0) == 0xF0)
@@ -146,7 +148,7 @@ void LVGM_Decode()
 				case 0xF6: // F6 nn    0x86 = nn    Frequency channel 4 - LSB
 				case 0xF8: // F8 nn    0x88 = nn    Frequency channel 5 - LSB
 				{
-					u8 val = g_LVGM_Pointer[1];
+					uint8_t val = g_LVGM_Pointer[1];
 					SCC_SetRegister(0x80 + (*g_LVGM_Pointer & 0x0F), val);
 					g_LVGM_Pointer++;
 					break;
@@ -158,9 +160,9 @@ void LVGM_Decode()
 				// FD nn[32]    nn[32] -> 0xA0[32]    Waveform channel 5 (SCC+ only)
 				case 0xF5: // nn[bb] -> (0x00 + aa)[bb] (with bb > 1)
 				{
-					u8 reg = g_LVGM_Pointer[1];
-					u8 num = g_LVGM_Pointer[2];
-					for(u8 i = 0; i < num; i++)
+					uint8_t reg = g_LVGM_Pointer[1];
+					uint8_t num = g_LVGM_Pointer[2];
+					for(uint8_t i = 0; i < num; i++)
 						SCC_SetRegister(reg + i, g_LVGM_Pointer[3 + i]);
 					g_LVGM_Pointer += 2 + num;
 					break;
@@ -168,8 +170,8 @@ void LVGM_Decode()
 				case 0xFE: // End of music with loop
 					if(g_LVGM_State & LVGM_STATE_LOOP)
 					{
-						u16 loopOffset = *(u16*)++g_LVGM_Pointer;
-						g_LVGM_Pointer = (const u8*)(g_LVGM_Header) + sizeof(struct LVGM_Header) + loopOffset;
+						uint16_t loopOffset = *(u16*)++g_LVGM_Pointer;
+						g_LVGM_Pointer = (const uint8_t*)(g_LVGM_Header) + sizeof(struct LVGM_Header) + loopOffset;
 						return;
 					}
 				case 0xFF: // End of music
@@ -180,8 +182,8 @@ void LVGM_Decode()
 				// handle loop
 				if((*g_LVGM_Pointer == 0xFE) && (g_LVGM_State & LVGM_STATE_LOOP))
 				{
-					u16 loopOffset = *(u16*)++g_LVGM_Pointer;
-					g_LVGM_Pointer = (const u8*)(g_LVGM_Header) + sizeof(struct LVGM_Header) + loopOffset;
+					uint16_t loopOffset = *(uint16_t*)++g_LVGM_Pointer;
+					g_LVGM_Pointer = (const uint8_t*)(g_LVGM_Header) + sizeof(struct LVGM_Header) + loopOffset;
 					return;
 				}
 				// if(val == 0xF)

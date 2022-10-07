@@ -76,7 +76,7 @@ proc print_input {{value 0}} {
 machine msx1
 #set TARGET $::env(ROM)
 carta ../build/game.rom
-set mute on
+set mute off
 
 if { [info exists ::env(DEBUG)] } {
     puts stderr "debug mode active"

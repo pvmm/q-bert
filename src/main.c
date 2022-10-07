@@ -2,6 +2,7 @@
 
 #include "ubox.h"
 //#include "mplayer.h"
+#include "lvgm_player.h"
 
 #include "helpers.h"
 #include "game.h"
@@ -120,7 +121,7 @@ void main()
     // other than the play function, so we
     // use that!
     //ubox_set_user_isr(mplayer_play);
-    ubox_set_user_isr(LVM_Decode);
+    ubox_set_user_isr(LVGM_Decode);
 
 redraw_menu:
     draw_menu();

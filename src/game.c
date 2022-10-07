@@ -18,6 +18,8 @@
 #include "plate.h"
 
 // generated
+typedef uint8_t u8;
+#include "ayvgm_psg_music.h"
 #include "map.h"
 #include "player.h"
 #include "enemy.h"
@@ -223,7 +225,7 @@ void run_game()
     draw_hud();
 
     // start song
-    LVGM_Play(song.data, true);
+    LVGM_Play(g_ayVGM_psg_metalgear_05, true);
     //mplayer_init(SONG, SONG_IN_GAME);
 
     ubox_enable_screen();

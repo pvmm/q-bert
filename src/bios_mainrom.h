@@ -24,13 +24,13 @@
 //-----------------------------------------------------------------------------
 
 #define R_CGTABL	0x0004 // Character Generator TABLe - Base address of the MSX character set in ROM
-const u16 __at(R_CGTABL) g_CGTABL;
+const uint16_t __at(R_CGTABL) g_CGTABL;
 
 #define R_VDP_DR	0x0006 // Base port address for VDP data read
-const u8 __at(R_VDP_DR) g_VDP_DR;
+const uint8_t __at(R_VDP_DR) g_VDP_DR;
 
 #define R_VDP_DW	0x0007 // Base port address for VDP data write
-const u8 __at(R_VDP_DW) g_VDP_DW;
+const uint8_t __at(R_VDP_DW) g_VDP_DW;
 
 #define R_BASRVN	0x002B // Basic ROM version
 #define R_BASRVN1	0x002B // Basic ROM version [0]
@@ -48,22 +48,22 @@ const u8 __at(R_VDP_DW) g_VDP_DW;
 // │ │ │ │           2 = French (AZERTY), 3 = UK, 4 = German (DIN)
 // └─┴─┴─┴────────── Basic version
 //                   0000 = Japanese, 1111 = International
-const u8 __at(R_BASRVN) g_BASRVN[2];
+const uint8_t __at(R_BASRVN) g_BASRVN[2];
 struct BasicROMVersion
 {
-	u8 CharacterSet: 4; // Character Set
+	uint8_t CharacterSet: 4; // Character Set
 	// 0000 (0) = Japan;
 	// 0001 (1) = International;
 	// 0010 (2) = Russia.
-	u8 DateFormat: 3; // Date Format
+	uint8_t DateFormat: 3; // Date Format
 	// 000 (0) = Year/Month/Day (Japanese);
 	// 001 (1) = Month/Day/Year (U.S.A.);
 	// 010 (2) = Day/Month/Year (Latin countries).
-	u8 VSF: 1; // Vertical Synchronism and interruption Frequency
+	uint8_t VSF: 1; // Vertical Synchronism and interruption Frequency
 	// 0 = 60 Hz (NTSC [Japan, U.S.A., U.S.S.R.], PAL-M [Brazil]);
 	// 1 = 50 Hz (PAL-x [most European countries], SECAM [France]).
 	
-	u8 KeyboardType: 4; // Character Set
+	uint8_t KeyboardType: 4; // Character Set
 	// 0000 (0) = Japan;
 	// 0001 (1) = International;
 	// 0010 (2) = France;
@@ -71,16 +71,16 @@ struct BasicROMVersion
 	// 0100 (4) = Germany;
 	// 0101 (5) = USSR;
 	// 0110 (6) = Spain.
-	u8 SSM: 1; // Start-up Screen Mode
+	uint8_t SSM: 1; // Start-up Screen Mode
 	// 0 = SCREEN 1 (Japan);
 	// 1 = SCREEN 0 (International).
-	u8 SLS: 1; // String Length Specificator Character of PRINT USING
+	uint8_t SLS: 1; // String Length Specificator Character of PRINT USING
 	// 0 = ampersand ("&") (Japan);
 	// 1 = backslash ("\") (International).
-	u8 SRC: 1; // String Replacement Character of PRINT USING
+	uint8_t SRC: 1; // String Replacement Character of PRINT USING
 	// 0 = "at" ("@") (Japan);
 	// 1 = ampersand ("&") (International).
-	u8 Cur: 1; // Currency Symbol
+	uint8_t Cur: 1; // Currency Symbol
 	// 0 = yen (Japan), pound (U.K.);
 	// 1 = dollar (U.S.A.).
 };
@@ -91,13 +91,13 @@ const struct BasicROMVersion __at(R_BASRVN) g_ROMVersion;
 #define MSXVER_2	1 // MSX 2
 #define MSXVER_2P	2 // MSX 2+
 #define MSXVER_TR	3 // MSX turbo R
-const u8 __at(R_MSXVER) g_MSXVER;
+const uint8_t __at(R_MSXVER) g_MSXVER;
 
 #define R_MSXMID	0x002E // Bit 0: if 1 then MSX-MIDI is present internally (MSX turbo R only)
-const u8 __at(R_MSXMID) g_MSXMID;
+const uint8_t __at(R_MSXMID) g_MSXMID;
 
 #define R_CHAR_16	0x0034 // Default KANJI range. Copied to KANJTABLE by the DiskBIOS on boot
-const u16 __at(R_CHAR_16) g_CHAR_16[2];
+const uint16_t __at(R_CHAR_16) g_CHAR_16[2];
 
 
 //-----------------------------------------------------------------------------

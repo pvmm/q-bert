@@ -17,6 +17,7 @@
 //─────────────────────────────────────────────────────────────────────────────
 #pragma once
 
+#include <stdint.h>
 #include "core.h"
 #include "system_port.h"
 #include "psg_reg.h"
@@ -116,14 +117,14 @@ enum NOTE
 //-----------------------------------------------------------------------------
 struct PSG_Data
 {
-	u16		Tone[3];	// 6
-	u8		Noise;		// 1
-	u8		Mixer;		// 1
-	u8		Volume[3];	// 3
-	u16		Envelope;	// 2
-	u8		Shape;		// 1
-	u8		IOPortA;	// 1
-	u8		IOPortB;	// 1
+	uint16_t		Tone[3];	// 6
+	uint8_t		    Noise;		// 1
+	uint8_t		    Mixer;		// 1
+	uint8_t		    Volume[3];	// 3
+	uint16_t		Envelope;	// 2
+	uint8_t		    Shape;		// 1
+	uint8_t		    IOPortA;	// 1
+	uint8_t		    IOPortB;	// 1
 };
 
 #if (PSG_ACCESS == PSG_INDIRECT)
@@ -141,49 +142,49 @@ extern struct PSG_Data g_PSG2_Regs;
 
 // Function: PSG_SetRegister
 // Set the value of a given register
-void PSG_SetRegister(u8 reg, u8 value);
+void PSG_SetRegister(uint8_t reg, uint8_t value);
 
 // Function: PSG_GetRegister
 // Get the value of a given register
-u8 PSG_GetRegister(u8 reg);
+uint8_t PSG_GetRegister(uint8_t reg);
 
 // Group: Helper
 #if (PSG_USE_EXTRA)
 // Function: PSG_SetTone
 // Set the tone period of a given channel (tone generator control register)
-void PSG_SetTone(u8 chan, u16 period);
+void PSG_SetTone(uint8_t chan, uint16_t period);
 
 // Function: PSG_SetNoise
 // Set the noise period (noise generator control register)
-void PSG_SetNoise(u8 period);
+void PSG_SetNoise(uint8_t period);
 
 // Function: PSG_SetMixer
 // Setup mixer by enabling tune and noise generators for each channel (mixer control enable register)
-void PSG_SetMixer(u8 mix);
+void PSG_SetMixer(uint8_t mix);
 
 // Function: PSG_SetVolume
 // Set the volume of a given channel (Amplitude control register)
-void PSG_SetVolume(u8 chan, u8 vol);
+void PSG_SetVolume(uint8_t chan, uint8_t vol);
 
 // Function: PSG_SetEnvelope
 // Set the envelope period (Envelope priod control register)
-void PSG_SetEnvelope(u16 period);
+void PSG_SetEnvelope(uint16_t period);
 
 // Function: PSG_SetShape
 // Set the envelope shape (Envelope shape control register)
-void PSG_SetShape(u8 shape);
+void PSG_SetShape(uint8_t shape);
 
 // Function: PSG_EnableTone
 // Enable/disable tone on the given channel
-void PSG_EnableTone(u8 chan, u8 val);
+void PSG_EnableTone(uint8_t chan, uint8_t val);
 
 // Function: PSG_EnableNoise
 // Enable/disable noise on the given channel
-void PSG_EnableNoise(u8 chan, u8 val);
+void PSG_EnableNoise(uint8_t chan, uint8_t val);
 
 // Function: PSG_EnableEnvelope
 // Enable/disable envelope on the given channel
-void PSG_EnableEnvelope(u8 chan, u8 val);
+void PSG_EnableEnvelope(uint8_t chan, uint8_t val);
 
 #endif //(PSG_USE_EXTRA)
 

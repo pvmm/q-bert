@@ -22,143 +22,143 @@
 // Subroutines For Inter-Slot Read/Write/Call
 
 #define M_RDPRIM	0xF380	// 5	Routine that reads from a primary slot
-const u8 __at(M_RDPRIM) g_RDPRIM[5];
+const uint8_t __at(M_RDPRIM) g_RDPRIM[5];
 
 #define M_WRPRIM	0xF385	// 7	Routine that writes to a primary slot
-const u8 __at(M_WRPRIM) g_WRPRIM[7];
+const uint8_t __at(M_WRPRIM) g_WRPRIM[7];
 
 #define M_CLPRIM	0xF38C	// 14	Routine that calls a routine in a primary slot
-const u8 __at(M_CLPRIM) g_CLPRIM[14];
+const uint8_t __at(M_CLPRIM) g_CLPRIM[14];
 
 //-----------------------------------------------------------------------------
 // Addresses For Extra Subroutines In Language Machine
 
 #define M_USRTAB	0xF39A	// 2	Address to call with Basic USR0 / USR1 / ... / USR9
-const u16 __at(M_USRTAB) g_USRTAB[10];
+const uint16_t __at(M_USRTAB) g_USRTAB[10];
 
 //-----------------------------------------------------------------------------
 // Screen Parameters
 
 #define M_LINL40	0xF3AE	// 1	Width for SCREEN 0 (default 37)
-u8 __at(M_LINL40) g_LINL40;
+uint8_t __at(M_LINL40) g_LINL40;
 
 #define M_LINL32	0xF3AF	// 1	Width for SCREEN 1 (default 29)
-u8 __at(M_LINL32) g_LINL32;
+uint8_t __at(M_LINL32) g_LINL32;
 
 #define M_LINLEN	0xF3B0	// 1	Width for the current text mode
-u8 __at(M_LINLEN) g_LINLEN;
+uint8_t __at(M_LINLEN) g_LINLEN;
 
 #define M_CRTCNT	0xF3B1	// 1	Number of lines on screen
-u8 __at(M_CRTCNT) g_CRTCNT;
+uint8_t __at(M_CRTCNT) g_CRTCNT;
 
 #define M_CLMLST	0xF3B2	// 1	Column space. It’s uncertain what this address actually stores
-u8 __at(M_CLMLST) g_CLMLST;
+uint8_t __at(M_CLMLST) g_CLMLST;
 
 #define M_TXTNAM	0xF3B3	// 2	BASE(0) - SCREEN 0 name table
-u16 __at(M_TXTNAM) g_TXTNAM;
+uint16_t __at(M_TXTNAM) g_TXTNAM;
 
 #define M_TXTCOL	0xF3B5	// 2	BASE(1) - SCREEN 0 color table
-u16 __at(M_TXTCOL) g_TXTCOL;
+uint16_t __at(M_TXTCOL) g_TXTCOL;
 
 #define M_TXTCGP	0xF3B7	// 2	BASE(2) - SCREEN 0 character pattern table
-u16 __at(M_TXTCGP) g_TXTCGP;
+uint16_t __at(M_TXTCGP) g_TXTCGP;
 
 #define M_TXTATR	0xF3B9	// 2	BASE(3) - SCREEN 0 Sprite Attribute Table
-u16 __at(M_TXTATR) g_TXTATR;
+uint16_t __at(M_TXTATR) g_TXTATR;
 
 #define M_TXTPAT	0xF3BB	// 2	BASE(4) - SCREEN 0 Sprite Pattern Table
-u16 __at(M_TXTPAT) g_TXTPAT;
+uint16_t __at(M_TXTPAT) g_TXTPAT;
 
 #define M_T32NAM	0xF3BD	// 2	BASE(5) - SCREEN 1 name table
-u16 __at(M_T32NAM) g_T32NAM;
+uint16_t __at(M_T32NAM) g_T32NAM;
 
 #define M_T32COL	0xF3BF	// 2	BASE(6) - SCREEN 1 color table
-u16 __at(M_T32COL) g_T32COL;
+uint16_t __at(M_T32COL) g_T32COL;
 
 #define M_T32CGP	0xF3C1	// 2	BASE(7) - SCREEN 1 character pattern table
-u16 __at(M_T32CGP) g_T32CGP;
+uint16_t __at(M_T32CGP) g_T32CGP;
 
 #define M_T32ATR	0xF3C3	// 2	BASE(8) - SCREEN 1 sprite attribute table
-u16 __at(M_T32ATR) g_T32ATR;
+uint16_t __at(M_T32ATR) g_T32ATR;
 
 #define M_T32PAT	0xF3C5	// 2	BASE(9) - SCREEN 1 sprite pattern table
-u16 __at(M_T32PAT) g_T32PAT;
+uint16_t __at(M_T32PAT) g_T32PAT;
 
 #define M_GRPNAM	0xF3C7	// 2	BASE(10) - SCREEN 2 name table
-u16 __at(M_GRPNAM) g_GRPNAM;
+uint16_t __at(M_GRPNAM) g_GRPNAM;
 
 #define M_GRPCOL	0xF3C9	// 2	BASE(11) - SCREEN 2 color table
-u16 __at(M_GRPCOL) g_GRPCOL;
+uint16_t __at(M_GRPCOL) g_GRPCOL;
 
 #define M_GRPCGP	0xF3CB	// 2	BASE(12) - SCREEN 2 character pattern table
-u16 __at(M_GRPCGP) g_GRPCGP;
+uint16_t __at(M_GRPCGP) g_GRPCGP;
 
 #define M_GRPATR	0xF3CD	// 2	BASE(13) - SCREEN 2 sprite attribute table
-u16 __at(M_GRPATR) g_GRPATR;
+uint16_t __at(M_GRPATR) g_GRPATR;
 
 #define M_GRPPAT	0xF3CF	// 2	BASE(14) - SCREEN 2 sprite pattern table
-u16 __at(M_GRPPAT) g_GRPPAT;
+uint16_t __at(M_GRPPAT) g_GRPPAT;
 
 #define M_MLTNAM	0xF3D1	// 2	BASE(15) - SCREEN 3 name table
-u16 __at(M_MLTNAM) g_MLTNAM;
+uint16_t __at(M_MLTNAM) g_MLTNAM;
 
 #define M_MLTCOL	0xF3D3	// 2	BASE(16) - SCREEN 3 color table
-u16 __at(M_MLTCOL) g_MLTCOL;
+uint16_t __at(M_MLTCOL) g_MLTCOL;
 
 #define M_MLTCGP	0xF3D5	// 2	BASE(17) - SCREEN 3 character pattern table
-u16 __at(M_MLTCGP) g_MLTCGP;
+uint16_t __at(M_MLTCGP) g_MLTCGP;
 
 #define M_MLTATR	0xF3D7	// 2	BASE(18) - SCREEN 3 sprite attribute table
-u16 __at(M_MLTATR) g_MLTATR;
+uint16_t __at(M_MLTATR) g_MLTATR;
 
 #define M_MLTPAT	0xF3D9	// 2	BASE(19) - SCREEN 3 sprite pattern table
-u16 __at(M_MLTPAT) g_MLTPAT;
+uint16_t __at(M_MLTPAT) g_MLTPAT;
 
 //-----------------------------------------------------------------------------
 // Cursor and function Key Parameters
 
 #define M_CLIKSW	0xF3DB	// 1	Key click switch. (0 = Disabled / 1 = Enabled)
-u8 __at(M_CLIKSW) g_CLIKSW;
+uint8_t __at(M_CLIKSW) g_CLIKSW;
 
 #define M_CSRY	0xF3DC	// 1	Current row-position of the cursor
-u8 __at(M_CSRY) g_CSRY;
+uint8_t __at(M_CSRY) g_CSRY;
 
 #define M_CSRX	0xF3DD	// 1	Current column-position of the cursor
-u8 __at(M_CSRX) g_CSRX;
+uint8_t __at(M_CSRX) g_CSRX;
 
 #define M_CNSDFG	0xF3DE	// 1	=0 when function keys are not displayed
 // =1 when function keys are displayed
-const u8 __at(M_CNSDFG) g_CNSDFG;
+const uint8_t __at(M_CNSDFG) g_CNSDFG;
 
 //-----------------------------------------------------------------------------
 // Area To Save The Last Writting Value In VDP Registers
 
 #define M_RG0SAV	0xF3DF	// 1	Mirror of VDP register 0 (Basic: VDP(0))
-const u8 __at(M_RG0SAV) g_RG0SAV;
+const uint8_t __at(M_RG0SAV) g_RG0SAV;
 
 #define M_RG1SAV	0xF3E0	// 1	Mirror of VDP register 1 (Basic: VDP(1))
-const u8 __at(M_RG1SAV) g_RG1SAV;
+const uint8_t __at(M_RG1SAV) g_RG1SAV;
 
 #define M_RG2SAV	0xF3E1	// 1	Mirror of VDP register 2 (Basic: VDP(2))
-const u8 __at(M_RG2SAV) g_RG2SAV;
+const uint8_t __at(M_RG2SAV) g_RG2SAV;
 
 #define M_RG3SAV	0xF3E2	// 1	Mirror of VDP register 3 (Basic: VDP(3))
-const u8 __at(M_RG3SAV) g_RG3SAV;
+const uint8_t __at(M_RG3SAV) g_RG3SAV;
 
 #define M_RG4SAV	0xF3E3	// 1	Mirror of VDP register 4 (Basic: VDP(4))
-const u8 __at(M_RG4SAV) g_RG4SAV;
+const uint8_t __at(M_RG4SAV) g_RG4SAV;
 
 #define M_RG5SAV	0xF3E4	// 1	Mirror of VDP register 5 (Basic: VDP(5))
-const u8 __at(M_RG5SAV) g_RG5SAV;
+const uint8_t __at(M_RG5SAV) g_RG5SAV;
 
 #define M_RG6SAV	0xF3E5	// 1	Mirror of VDP register 6 (Basic: VDP(6))
-const u8 __at(M_RG6SAV) g_RG6SAV;
+const uint8_t __at(M_RG6SAV) g_RG6SAV;
 
 #define M_RG7SAV	0xF3E6	// 1	Mirror of VDP register 7 (Basic: VDP(7))
-const u8 __at(M_RG7SAV) g_RG7SAV;
+const uint8_t __at(M_RG7SAV) g_RG7SAV;
 
 #define M_STATFL	0xF3E7	// 1	Mirror of VDP(8) status register (S#0)
-const u8 __at(M_STATFL) g_STATFL;
+const uint8_t __at(M_STATFL) g_STATFL;
 
 //-----------------------------------------------------------------------------
 // Space bar / Triggers
@@ -170,54 +170,54 @@ const u8 __at(M_STATFL) g_STATFL;
 // │ │ └──────────── Stick 1, Trigger 2 (0 = pressed)
 // │ └────────────── Stick 2, Trigger 1 (0 = pressed)
 // └──────────────── Stick 2, Trigger 2 (0 = pressed)
-const u8 __at(M_TRGFLG) g_TRGFLG;
+const uint8_t __at(M_TRGFLG) g_TRGFLG;
 
 //-----------------------------------------------------------------------------
 // Color and drawing parameters
 
 #define M_FORCLR	0xF3E9	// Foreground color
-u8 __at(M_FORCLR) g_FORCLR;
+uint8_t __at(M_FORCLR) g_FORCLR;
 
 #define M_BAKCLR	0xF3EA	// Background color
-u8 __at(M_BAKCLR) g_BAKCLR;
+uint8_t __at(M_BAKCLR) g_BAKCLR;
 
 #define M_BDRCLR	0xF3EB	// Border color
-u8 __at(M_BDRCLR) g_BDRCLR;
+uint8_t __at(M_BDRCLR) g_BDRCLR;
 
 #define M_MAXUPD	0xF3EC	// Jump instruction used by Basic LINE command. The routines used are: RIGHTC, LEFTC, UPC and DOWNC
-const u8 __at(M_MAXUPD) g_MAXUPD[3];
+const uint8_t __at(M_MAXUPD) g_MAXUPD[3];
 
 #define M_MINUPD	0xF3EF	// Jump instruction used by Basic LINE command. The routines used are: RIGHTC, LEFTC, UPC and DOWNC
-const u8 __at(M_MINUPD) g_MINUPD[3];
+const uint8_t __at(M_MINUPD) g_MINUPD[3];
 
 #define M_ATRBYT	0xF3F2	// Attribute byte (for graphical routines it’s used to read the color)
-u8 __at(M_ATRBYT) g_ATRBYT;
+uint8_t __at(M_ATRBYT) g_ATRBYT;
 
 //-----------------------------------------------------------------------------
 // MML
 
 #define M_QUEUES	0xF3F3	// Queue table address, see QUETAB (initial value)
-const u16 __at(M_QUEUES) g_QUEUES;
+const uint16_t __at(M_QUEUES) g_QUEUES;
 
 #define M_FRCNEW	0xF3F5	// CLOAD flag / =0 when CLOAD / =255 when CLOAD?
-const u8 __at(M_FRCNEW) g_FRCNEW;
+const uint8_t __at(M_FRCNEW) g_FRCNEW;
 
 //-----------------------------------------------------------------------------
 // Key Input
 
 #define M_SCNCNT	0xF3F6	// Key scan timing
 // When it’s zero, the key scan routine will scan for pressed keys so characters can be written to the keyboard buffer
-const u8 __at(M_SCNCNT) g_SCNCNT;
+const uint8_t __at(M_SCNCNT) g_SCNCNT;
 
 #define M_REPCNT	0xF3F7	// This is the key repeat delay counter
 // When it reaches zero, the key will repeat
-const u8 __at(M_REPCNT) g_REPCNT;
+const uint8_t __at(M_REPCNT) g_REPCNT;
 
 #define M_PUTPNT	0xF3F8	// Address in the keyboard buffer where a character will be written
-const u16 __at(M_PUTPNT) g_PUTPNT;
+const uint16_t __at(M_PUTPNT) g_PUTPNT;
 
 #define M_GETPNT	0xF3FA	// Address in the keyboard buffer where the next character is read
-const u16 __at(M_GETPNT) g_GETPNT;
+const uint16_t __at(M_GETPNT) g_GETPNT;
 
 //-----------------------------------------------------------------------------
 // Parameters For Cassette
@@ -225,11 +225,11 @@ const u16 __at(M_GETPNT) g_GETPNT;
 #define M_CS120	0xF3FC	// Cassette I/O parameters to use for 1200 baud
 typedef struct tagCassetteIO
 {
-	u8 low0;	// LOW signal length of bit 0. (53h by default)
-	u8 high0;	// HIGH signal length of bit 0. (5Ch by default)
-	u8 low1;	// Length of LOW signal of bit 1. (26h by default)
-	u8 high1;	// Length of HIGH signal of bit 1. (2Dh by default)
-	u8 header;	// Length of the header signal calculated by HEADLEN * 2/256
+	uint8_t low0;	// LOW signal length of bit 0. (53h by default)
+	uint8_t high0;	// HIGH signal length of bit 0. (5Ch by default)
+	uint8_t low1;	// Length of LOW signal of bit 1. (26h by default)
+	uint8_t high1;	// Length of HIGH signal of bit 1. (2Dh by default)
+	uint8_t header;	// Length of the header signal calculated by HEADLEN * 2/256
 } CassetteIO;
 const CassetteIO __at(M_CS120) g_CS120;
 
@@ -239,25 +239,25 @@ const CassetteIO __at(M_CS240) g_CS240;
 #define M_LOW		0xF406	// Signal delay when writing a 0 to tape
 // LOW+0 = LOW signal length which represents bit 0 at the current transmission rate. (53h by default)
 // LOW+1 = HIGH signal length that represents bit 0 at the current transmission rate.(5Ch by default)
-const u8 __at(M_LOW) g_LOW[2];
+const uint8_t __at(M_LOW) g_LOW[2];
 
 #define M_HIGH	0xF408	// Signal delay when writing a 1 to tape
 // HIGH+0 = Length of the LOW signal that represents bit 1 at the current transmission rate. (26h by default)
 // HIGH+1 = Length of the HIGH signal that represents bit 1 at the current transmission rate. (2Dh by default)
-const u8 __at(M_HIGH) g_HIGH[2];
+const uint8_t __at(M_HIGH) g_HIGH[2];
 
 #define M_HEADER	0xF40A	// Delay of tape header (sync.) block
 // Length of the current header signal calculated by HEADLEN * 2/256 or HEADLEN * 4/256
-const u8 __at(M_HEADER) g_HEADER;
+const uint8_t __at(M_HEADER) g_HEADER;
 
 //-----------------------------------------------------------------------------
 // Aspect Ratio settings For CIRCLE
 
 #define M_ASPCT1	0xF40B	// Horizontal / Vertical aspect for CIRCLE command
-const u16 __at(M_ASPCT1) g_ASPCT1;
+const uint16_t __at(M_ASPCT1) g_ASPCT1;
 
 #define M_ASPCT2	0xF40D	// Horizontal / Vertical aspect for CIRCLE command
-const u16 __at(M_ASPCT2) g_ASPCT2;
+const uint16_t __at(M_ASPCT2) g_ASPCT2;
 
 //-----------------------------------------------------------------------------
 // Basic Interpreter
@@ -371,9 +371,9 @@ c8 __at(M_FNKSTR) g_FNKSTR[10][16];
 #define M_PATBAS	0xF926	// 2	Current sprite generator table address.
 #define M_ATRBAS	0xF928	// 2	Current sprite attribute table address.
 #define M_CLOC		0xF92A	// 2	Cursor location.
-u16 __at(M_CLOC) g_CLOC;
+uint16_t __at(M_CLOC) g_CLOC;
 #define M_CMASK		0xF92C	// 1	Graphic cursor mask (SCREEN 2 to 4) or ordinate (SCREEN 5 to 12).
-u8 __at(M_CMASK) g_CMASK;
+uint8_t __at(M_CMASK) g_CMASK;
 #define M_MINDEL	0xF92D	// 2	Work area used by instruction LINE of Basic.
 #define M_MAXDEL	0xF92F	// 2	End of the work area used by instruction LINE of Basic.
 
@@ -416,11 +416,11 @@ u8 __at(M_CMASK) g_CMASK;
 #define M_QUETAB	0xF959	// 24	Queue-table containing queue information. There are four queues in total, three PLAY queues and one RS232 queue, with 6-byte information blocks per queue:
 typedef struct tagRS232Queue
 {
-	u8	head; // Queue head offset (for writing)
-	u8	tail; // Queue tail offset (for reading)
-	u8	flag; // Flag indicating whether a byte has been returned
-	u8	size; // Queue size
-	u16	addr; // Queue start address
+	uint8_t	head; // Queue head offset (for writing)
+	uint8_t	tail; // Queue tail offset (for reading)
+	uint8_t	flag; // Flag indicating whether a byte has been returned
+	uint8_t	size; // Queue size
+	uint16_t	addr; // Queue start address
 } RS232Queue;
 const RS232Queue __at(M_QUETAB) g_QUETAB[4];
 
@@ -430,46 +430,46 @@ const RS232Queue __at(M_QUETAB) g_QUETAB[4];
 	// db 0	; Replacement characters (voice B)
 	// db 0	; Replacement characters (voice C)
 	// db 0	; Replacement characters (RS-232C) (MSX1 only)
-const u8 __at(M_QUEBAK) g_QUEBAK;
+const uint8_t __at(M_QUEBAK) g_QUEBAK;
 
 #define M_VOICAQ	0xF975	// 128	Voice A queue of instruction PLAY. (PSG)
 // If MSX-Music is present area #F9C0-#F9F8 is used to store copy of YM2413 registers.
-const u8 __at(M_VOICAQ) g_VOICAQ[128];
+const uint8_t __at(M_VOICAQ) g_VOICAQ[128];
 
 #define M_VOICBQ	0xF9F5	// 128	Voice B queue of instruction PLAY. (PSG)
-const u8 __at(M_VOICBQ) g_VOICBQ[128];
+const uint8_t __at(M_VOICBQ) g_VOICBQ[128];
 
 #define M_VOICCQ	0xFA75	// 128	Voice C queue of instruction PLAY. (PSG)
-const u8 __at(M_VOICCQ) g_VOICCQ[128];
+const uint8_t __at(M_VOICCQ) g_VOICCQ[128];
 
 #define M_RS2IQ	0xFAF5	// 64	RC-232C queue. (MSX1 only)
-const u8 __at(M_RS2IQ) g_RS2IQ[64];
+const uint8_t __at(M_RS2IQ) g_RS2IQ[64];
 
 //-----------------------------------------------------------------------------
 // Graphic pages
 
 #define M_DPPAGE	0xFAF5	// 1	Displayed page number. (MSX2~)
 // Modified by SETPAGE X.
-const u8 __at(M_DPPAGE) g_DPPAGE;
+const uint8_t __at(M_DPPAGE) g_DPPAGE;
 
 #define M_ACPAGE	0xFAF6	// 1	Destination page number. (MSX2~)
 // Modified by SETPAGE ,X.
-const u8 __at(M_ACPAGE) g_ACPAGE;
+const uint8_t __at(M_ACPAGE) g_ACPAGE;
 
 //-----------------------------------------------------------------------------
 // System
 
 #define M_AVCSAV	0xFAF7	// 1	Copy of AV control port (#F7) content. (MSX2+~)
-const u8 __at(M_AVCSAV) g_AVCSAV;
+const uint8_t __at(M_AVCSAV) g_AVCSAV;
 
 #define M_EXBRSA	0xFAF8	// 1	SUB-ROM Slot ID. (MSX2~)
-const u8 __at(M_EXBRSA) g_EXBRSA;
+const uint8_t __at(M_EXBRSA) g_EXBRSA;
 
 #define M_CHRCNT	0xFAF9	// 1	Character counter in the buffer, used in KANA-ROM. (MSX2~)
-const u8 __at(M_CHRCNT) g_CHRCNT;
+const uint8_t __at(M_CHRCNT) g_CHRCNT;
 
 #define M_ROMA	0xFAFA	// 2	Area to store KANA character (Japanese MSX2~ only)
-const u16 __at(M_ROMA) g_ROMA;
+const uint16_t __at(M_ROMA) g_ROMA;
 
 #define M_MODE	0xFAFC	// 1	Flag for screen mode.
 // bit 7: 1 = conversion to Katakana; 0 = conversion to Hiragana. (MSX2+~)
@@ -483,7 +483,7 @@ const u16 __at(M_ROMA) g_ROMA;
 	   // 10 for 128kB
 	   // 11 for 192kB
 // bit 0: 1 if the conversion of Romaji to Kana is possible. (MSX2~)
-const u8 __at(M_MODE) g_MODE;
+const uint8_t __at(M_MODE) g_MODE;
 
 #define M_NORUSE	0xFAFD	// 1	Used by KANJI-ROM for rendering KANJI fonts in graphic modes. (MSX2~)
 // bit 7 Don't return to textmode
@@ -497,43 +497,43 @@ const u8 __at(M_MODE) g_MODE;
 	  // 2 for OR
 	  // 3 for XOR
 	  // 4 for NOT
-const u8 __at(M_NORUSE) g_NORUSE;
+const uint8_t __at(M_NORUSE) g_NORUSE;
 
 #define M_XSAVE	0xFAFE	// 2	X-coordinate for Mouse/Trackball/Lightpen. (MSX2~)
 // XSAVE = X-coordinate
 // XSAVE+1 = P0000000 (bit 7 indicates a request to interrupt the optical pen)
-const u8 __at(M_XSAVE) g_XSAVE[2];
+const uint8_t __at(M_XSAVE) g_XSAVE[2];
 
 #define M_YSAVE	0xFB00	// 2	Y-coordinate for Mouse/Trackball/Lightpen. (MSX2~)
 // YSAVE = X-coordinate
 // YSAVE+1 = *0000000 (bit 7 unused)
-const u8 __at(M_YSAVE) g_YSAVE[2];
+const uint8_t __at(M_YSAVE) g_YSAVE[2];
 
 #define M_LOGOPR	0xFB02	// 1	Logical operation code. (MSX2~)
-u8 __at(M_LOGOPR) g_LOGOPR;
+uint8_t __at(M_LOGOPR) g_LOGOPR;
 
 //-----------------------------------------------------------------------------
 // Data Area Used By RS-232C
 
 #define M_RSTMP	0xFB03	// 1	Temporary data storage for RS232 Driver
-const u8 __at(M_RSTMP) g_RSTMP;
+const uint8_t __at(M_RSTMP) g_RSTMP;
 
 #define M_TOCNT	0xFB03	// 1	Counter used by the RS-232C interface.
-const u8 __at(M_TOCNT) g_TOCNT;
+const uint8_t __at(M_TOCNT) g_TOCNT;
 
 #define M_RSFCB	0xFB04	// 2	FCB ("File Control Block") address of the RS-232C.
-const u16 __at(M_RSFCB) g_RSFCB;
+const uint16_t __at(M_RSFCB) g_RSFCB;
 
 #define M_RSIQLN	0xFB06	// 1	Byte DATA used by the RS-232C interface.
-const u8 __at(M_RSIQLN) g_RSIQLN;
+const uint8_t __at(M_RSIQLN) g_RSIQLN;
 
 #define M_MEXBIh	0xFB07	// 5	Hook called by the RS-232C.
 typedef struct tagRS232Hook
 {
-	u8	rst;		// RST 30h (0F7h)
-	u8	slot;		// Slot ID
-	u16	address;	// Address
-	u8	ret;		// RET (0C9h)
+	uint8_t	rst;		// RST 30h (0F7h)
+	uint8_t	slot;		// Slot ID
+	uint16_t	address;	// Address
+	uint8_t	ret;		// RET (0C9h)
 } RS232Hook;
 const RS232Hook __at(M_MEXBIh) g_MEXBIh;
 
@@ -544,109 +544,109 @@ const RS232Hook __at(M_OLDSTT) g_OLDSTT;
 const RS232Hook __at(M_OLDINT) g_OLDINT;
 
 #define M_DEVNUM	0xFB16	// 1	Byte offset. (RS-232C)
-const u8 __at(M_DEVNUM) g_DEVNUM;
+const uint8_t __at(M_DEVNUM) g_DEVNUM;
 
 #define M_DATCNT	0xFB17	// 3	DATA area. (RS-232C)
 // DATCNT = Slot ID
 // DATCNT+1 = Address
 typedef struct tagRS232Area
 {
-	u8	slot; // Slot ID
-	u16	address;
+	uint8_t	 slot; // Slot ID
+	uint16_t address;
 } RS232Area;
 const RS232Area __at(M_DATCNT) g_DATCNT;
 
 #define M_ERRORS	0xFB1A	// 1	RS-232C error code.
-const u8 __at(M_ERRORS) g_ERRORS;
+const uint8_t __at(M_ERRORS) g_ERRORS;
 
 #define M_FLAGS	0xFB1B	// 1	RS-232C flags.
-const u8 __at(M_FLAGS) g_FLAGS;
+const uint8_t __at(M_FLAGS) g_FLAGS;
 
 #define M_ESTBLS	0xFB1C	// 1	Bit boolean. (RS-232C)
-const u8 __at(M_ESTBLS) g_ESTBLS;
+const uint8_t __at(M_ESTBLS) g_ESTBLS;
 
 #define M_COMMSK	0xFB1D	// 1	RS-232C mask.
-const u8 __at(M_COMMSK) g_COMMSK;
+const uint8_t __at(M_COMMSK) g_COMMSK;
 
 #define M_LSTCOM	0xFB1E	// 1	Byte Data. (RS-232C)
-const u8 __at(M_LSTCOM) g_LSTCOM;
+const uint8_t __at(M_LSTCOM) g_LSTCOM;
 
 #define M_LSTMOD	0xFB1F	// 1	Byte Data. (RS-232C)
-const u8 __at(M_LSTMOD) g_LSTMOD;
+const uint8_t __at(M_LSTMOD) g_LSTMOD;
 
 //-----------------------------------------------------------------------------
 // Variables For Instruction PLAY
 
 #define M_PRSCNT	0xFB35	// 1	Command counter.
-const u8 __at(M_PRSCNT) g_PRSCNT;
+const uint8_t __at(M_PRSCNT) g_PRSCNT;
 
 #define M_SAVSP	0xFB36	// 2	Stack pointer when instruction PLAY is used.
-const u16 __at(M_SAVSP) g_SAVSP;
+const uint16_t __at(M_SAVSP) g_SAVSP;
 
 #define M_VOICEN	0xFB38	// 1	Number of voice played.
-const u8 __at(M_VOICEN) g_VOICEN;
+const uint8_t __at(M_VOICEN) g_VOICEN;
 
 #define M_SAVVOL	0xFB39	// 2	The volume is saved here when Pause.
-const u16 __at(M_SAVVOL) g_SAVVOL;
+const uint16_t __at(M_SAVVOL) g_SAVVOL;
 
 #define M_MCLLEN	0xFB3B	// 1	Length of the macro being analyzed.
-const u8 __at(M_MCLLEN) g_MCLLEN;
+const uint8_t __at(M_MCLLEN) g_MCLLEN;
 
 #define M_MCLPTR	0xFB3C	// 2	Address of the macro being analyzed.
-const u16 __at(M_MCLPTR) g_MCLPTR;
+const uint16_t __at(M_MCLPTR) g_MCLPTR;
 
 #define M_QUEUEN	0xFB3E	// 1	Number of the current queue.
-const u8 __at(M_QUEUEN) g_QUEUEN;
+const uint8_t __at(M_QUEUEN) g_QUEUEN;
 
 #define M_MUSICF	0xFB3F	// 1	Music interruption flags.
-const u8 __at(M_MUSICF) g_MUSICF;
+const uint8_t __at(M_MUSICF) g_MUSICF;
 
 #define M_PLYCNT	0xFB40	// 1	Number of macro strings in the PLAY queue.
-const u8 __at(M_PLYCNT) g_PLYCNT;
+const uint8_t __at(M_PLYCNT) g_PLYCNT;
 
 #define M_VCBA	0xFB41	// 37	Data for voice A.
-const u8 __at(M_VCBA) g_VCBA[37];
+const uint8_t __at(M_VCBA) g_VCBA[37];
 
 #define M_VCBB	0xFB66	// 37	Data for voice B.
-const u8 __at(M_VCBB) g_VCBB[37];
+const uint8_t __at(M_VCBB) g_VCBB[37];
 
 #define M_VCBC	0xFB8B	// 37	Data for voice C.
-const u8 __at(M_VCBC) g_VCBC[37];
+const uint8_t __at(M_VCBC) g_VCBC[37];
 
 //-----------------------------------------------------------------------------
 // Keyboard
 
 #define M_ENSTOP	0xFBB0	// 1	<>0 when it is possible to resume execution of a BASIC program (CTRL+SHIFT+GRPH+KANA/CODE to resume)
-const u8 __at(M_ENSTOP) g_ENSTOP;
+const uint8_t __at(M_ENSTOP) g_ENSTOP;
 
 #define M_BASROM	0xFBB1	// 1	<>0 if basic is in rom. (CTRL+STOP disabled)
-const u8 __at(M_BASROM) g_BASROM;
+const uint8_t __at(M_BASROM) g_BASROM;
 
 #define M_LINTTB	0xFBB2	// 24	Table of 24 end-of-line flags for each physical line. (used by the Basic interpreter.)
 // 0 = The corresponding line contains a program line that continues on the next physical line,
 // Other value = The corresponding line contains a program line that ends here.
-const u8 __at(M_LINTTB) g_LINTTB[24];
+const uint8_t __at(M_LINTTB) g_LINTTB[24];
 
 #define M_FSTPOS	0xFBCA	// 2	first position for inlin.
-const u16 __at(M_FSTPOS) g_FSTPOS;
+const uint16_t __at(M_FSTPOS) g_FSTPOS;
 
 #define M_CODSAV	0xFBCC	// 1	ASCII code of character under the cursor
-const u8 __at(M_CODSAV) g_CODSAV;
+const uint8_t __at(M_CODSAV) g_CODSAV;
 
 #define M_FNKSWI	0xFBCD	// 1	Indicate which function keys is displayed.
-const u8 __at(M_FNKSWI) g_FNKSWI;
+const uint8_t __at(M_FNKSWI) g_FNKSWI;
 
 #define M_FNKFLG	0xFBCE	// 10	Function key which have subroutine.
-const u8 __at(M_FNKFLG) g_FNKFLG[10];
+const uint8_t __at(M_FNKFLG) g_FNKFLG[10];
 
 #define M_ONGSBF	0xFBD8	// 1	Global event flag.
-const u8 __at(M_ONGSBF) g_ONGSBF;
+const uint8_t __at(M_ONGSBF) g_ONGSBF;
 
 #define M_CLIKFL	0xFBD9	// 1	Flag to know if the key click has already occurred.
-const u8 __at(M_CLIKFL) g_CLIKFL;
+const uint8_t __at(M_CLIKFL) g_CLIKFL;
 
 #define M_OLDKEY	0xFBDA	// 11	Previous status of each keyboard matrix row.
-const u8 __at(M_OLDKEY) g_OLDKEY[11];
+const uint8_t __at(M_OLDKEY) g_OLDKEY[11];
 
 #define M_NEWKEY	0xFBE5	// 11	New status of each keyboard matrix row. The status is updated by the KEYINT interrupt routine.
 // Bit correspondence for a European Keyboard Layout:
@@ -662,25 +662,25 @@ const u8 __at(M_OLDKEY) g_OLDKEY[11];
 // NEWKEY+9  = 4      3      2      1      0      /      +      *
 // NEWKEY+10 = .      ,      -      9      8      7      6      5
 // See here for other keyboard layouts.
-const u8 __at(M_NEWKEY) g_NEWKEY[11];
+const uint8_t __at(M_NEWKEY) g_NEWKEY[11];
 
 #define M_KEYBUF	0xFBF0	// 40	Key code buffer.
-const u8 __at(M_KEYBUF) g_KEYBUF[40];
+const uint8_t __at(M_KEYBUF) g_KEYBUF[40];
 
 //-----------------------------------------------------------------------------
 // Buffers and work areas
 
 #define M_LINWRK	0xFC18	// 40	Work area for screen management.
-const u8 __at(M_LINWRK) g_LINWRK[40];
+const uint8_t __at(M_LINWRK) g_LINWRK[40];
 
 #define M_PATWRK	0xFC40	// 8	Work area for the name-to-form converter.
-const u8 __at(M_PATWRK) g_PATWRK[8];
+const uint8_t __at(M_PATWRK) g_PATWRK[8];
 
 #define M_BOTTOM	0xFC48	// 2	Address of the beginning of the available RAM area.
-const u16 __at(M_BOTTOM) g_BOTTOM;
+const uint16_t __at(M_BOTTOM) g_BOTTOM;
 
 #define M_HIMEM	0xFC4A	// 2	Address of the end of the available RAM area.
-const u16 __at(M_HIMEM) g_HIMEM;
+const uint16_t __at(M_HIMEM) g_HIMEM;
 
 //-----------------------------------------------------------------------------
 // Interruptions
@@ -693,62 +693,62 @@ const u16 __at(M_HIMEM) g_HIMEM;
 // TRPTBL+51 (3×1 byte) => ON INTERVAL GOSUB
 // TRPTBL+54 => Reserved
 // The first octet serves as an flag. 0 = OFF, 1 = ON, 2 = STOP, 3 = Call in progress, 7 = Call waiting. The other 2 bytes contain the address of the line number of the routine to be called by the GOSUB in the Basic program.
-const u8 __at(M_TRPTBL) g_TRPTBL[78];
+const uint8_t __at(M_TRPTBL) g_TRPTBL[78];
 
 #define M_RTYCNT	0xFC9A	// 1	Interrupt control.
-const u8 __at(M_RTYCNT) g_RTYCNT;
+const uint8_t __at(M_RTYCNT) g_RTYCNT;
 
 #define M_INTFLG	0xFC9B	// 1	This flag is set if STOP or CTRL+STOP is pressed.
 // 0 = Not Pressed
 // 3 = CTRL +STOP Pressed
 // 4 = STOP Pressed
-const u8 __at(M_INTFLG) g_INTFLG;
+const uint8_t __at(M_INTFLG) g_INTFLG;
 
 #define M_PADY	0xFC9C	// 1	Y-coordinate of a connected touch pad. (Until MSX2+)
-const u8 __at(M_PADY) g_PADY;
+const uint8_t __at(M_PADY) g_PADY;
 
 #define M_PADX	0xFC9D	// 1	X-coordinate of a connected touch pad. (Until MSX2+)
-const u8 __at(M_PADX) g_PADX;
+const uint8_t __at(M_PADX) g_PADX;
 
 #define M_JIFFY	0xFC9E	// 2	Contains value of the software clock, each interrupt of the VDP it is increased by 1.
 // The contents can be read or changed by the function 'TIME' or instruction 'TIME'.
-const u16 __at(M_JIFFY) g_JIFFY;
+const uint16_t __at(M_JIFFY) g_JIFFY;
 
 #define M_INTVAL	0xFCA0	// 2	Contains length of the interval when the ON INTERVAL routine was established.
-const u16 __at(M_INTVAL) g_INTVAL;
+const uint16_t __at(M_INTVAL) g_INTVAL;
 
 #define M_INTCNT	0xFCA2	// 2	ON INTERVAL counter (counts backwards).
-const u16 __at(M_INTCNT) g_INTCNT;
+const uint16_t __at(M_INTCNT) g_INTCNT;
 
 //-----------------------------------------------------------------------------
 // Cassette
 
 #define M_LOWLIM	0xFCA4	// 1	Used by the Cassette system (minimal length of startbit).
-const u8 __at(M_LOWLIM) g_LOWLIM;
+const uint8_t __at(M_LOWLIM) g_LOWLIM;
 
 #define M_WINWID	0xFCA5	// 1	Used by the Cassette system (store the difference between a low-and high-cycle).
-const u8 __at(M_WINWID) g_WINWID;
+const uint8_t __at(M_WINWID) g_WINWID;
 
 //-----------------------------------------------------------------------------
 // Display & System
 
 #define M_GRPHED	0xFCA6	// 1	Heading for the output of graphic characters.
-const u8 __at(M_GRPHED) g_GRPHED;
+const uint8_t __at(M_GRPHED) g_GRPHED;
 
 #define M_ESCCNT	0xFCA7	// 1	Escape sequence counter.
-const u8 __at(M_ESCCNT) g_ESCCNT;
+const uint8_t __at(M_ESCCNT) g_ESCCNT;
 
 #define M_INSFLG	0xFCA8	// 1	Insert mode flag.
-const u8 __at(M_INSFLG) g_INSFLG;
+const uint8_t __at(M_INSFLG) g_INSFLG;
 
 #define M_CSRSW		0xFCA9	// 1	Cursor display switch
-const u8 __at(M_CSRSW) g_CSRSW;
+const uint8_t __at(M_CSRSW) g_CSRSW;
 
 #define M_CSTYLE	0xFCAA	// 1	Cursor style i.e. Used if INS Key is used. ( 0 = Full Cursor / other = Halve Cursor )
-const u8 __at(M_CSTYLE) g_CSTYLE;
+const uint8_t __at(M_CSTYLE) g_CSTYLE;
 
 #define M_CAPST		0xFCAB	// 1	Capital status. ( 0 = Off / other = On )
-const u8 __at(M_CAPST) g_CAPST;
+const uint8_t __at(M_CAPST) g_CAPST;
 
 #define M_KANAST	0xFCAC	// 1	Kana mode flags for MSX Japanese, Russian key status ou "Dead Key" status.
 // 0 = No Dead Keys
@@ -756,57 +756,57 @@ const u8 __at(M_CAPST) g_CAPST;
 // 2 = SHIFT + Dead Key > Accent Egu
 // 3 = CODE + Dead Key > Accent Circumflex
 // 4 = SHIFT + CODE + Dead Key > Trema
-const u8 __at(M_KANAST) g_KANAST;
+const uint8_t __at(M_KANAST) g_KANAST;
 
 #define M_KANAMD	0xFCAD	// 1	Flag to know if the keyboard type is "KANA" (0) or "JIS" (other value). (Japanese MSX only)
-const u8 __at(M_KANAMD) g_KANAMD;
+const uint8_t __at(M_KANAMD) g_KANAMD;
 
 #define M_FLBMEM	0xFCAE	// 1	0 if loading basic program.
-const u8 __at(M_FLBMEM) g_FLBMEM;
+const uint8_t __at(M_FLBMEM) g_FLBMEM;
 
 #define M_SCRMOD	0xFCAF	// 1	Screen mode.
-const u8 __at(M_SCRMOD) g_SCRMOD;
+const uint8_t __at(M_SCRMOD) g_SCRMOD;
 
 #define M_OLDSCR	0xFCB0	// 1	Old screen mode.
-const u8 __at(M_OLDSCR) g_OLDSCR;
+const uint8_t __at(M_OLDSCR) g_OLDSCR;
 
 #define M_CASPRV	0xFCB1	// 1	Work area for the cassette (until MSX2+)
 // On MSX turbo R, bit 0 indicates the status of the Pause LED and bit 7 indicates the status of the R800 LED.
-const u8 __at(M_CASPRV) g_CASPRV;
+const uint8_t __at(M_CASPRV) g_CASPRV;
 
 #define M_BRDATR	0xFCB2	// 1	Border color for paint.
-const u8 __at(M_BRDATR) g_BRDATR;
+const uint8_t __at(M_BRDATR) g_BRDATR;
 
 #define M_GXPOS		0xFCB3	// 1	X-position of graphic cursor.
-const u8 __at(M_GXPOS) g_GXPOS;
+const uint8_t __at(M_GXPOS) g_GXPOS;
 
 #define M_GYPOS		0xFCB5	// 1	Y-position of graphic cursor.
-const u8 __at(M_GYPOS) g_GYPOS;
+const uint8_t __at(M_GYPOS) g_GYPOS;
 
 #define M_GRPACX	0xFCB7	// 1	X Graphics Accumulator.
-u8 __at(M_GRPACX) g_GRPACX;
+uint8_t __at(M_GRPACX) g_GRPACX;
 
 #define M_GRPACY	0xFCB9	// 1	Y Graphics Accumulator.
-u8 __at(M_GRPACY) g_GRPACY;
+uint8_t __at(M_GRPACY) g_GRPACY;
 
 #define M_DRWFLG	0xFCBB	// 1	Used by the instruction DRAW (DrawFlag).
 // Bit 7 = Draw Line 0 = No / 1 = Yes (,N)
 // Bit 6 = Move Cursor 0 = Yes / 1 = Yes (,B)
 // Bit 5 - 0 Unused
-const u8 __at(M_DRWFLG) g_DRWFLG;
+const uint8_t __at(M_DRWFLG) g_DRWFLG;
 
 #define M_DRWSCL	0xFCBC	// 1	Used by the instruction DRAW (DrawScaling).
-const u8 __at(M_DRWSCL) g_DRWSCL;
+const uint8_t __at(M_DRWSCL) g_DRWSCL;
 
 #define M_DRWANG	0xFCBD	// 1	Used by the instruction DRAW (DrawAngle).
 // 0 = 0° rotation
 // 1 = 90° rotation
 // 2 = 180° rotation
 // 3 = 270° rotation
-const u8 __at(M_DRWANG) g_DRWANG;
+const uint8_t __at(M_DRWANG) g_DRWANG;
 
 #define M_MNROM		0xFCC1	// 1
-const u8 __at(M_MNROM) g_MNROM;
+const uint8_t __at(M_MNROM) g_MNROM;
 #define M_EXPTBL	0xFCC1	// 4	Bit 7 of these variables is a flag for each primary slot to indicate if the slot is expanded or not. The other bits are reset.
 //                                  The first variable (also called MNROM) indicates the slot ID of the Main-ROM. 
 //                                  This implies that the Main-ROM of an MSX is always in primary slot 0, or secondary slot 0-0.
@@ -814,7 +814,7 @@ const u8 __at(M_MNROM) g_MNROM;
 // EXPTBL+1 = Flag for slot 1
 // EXPTBL+2 = Flag for slot 2
 // EXPTBL+3 = Flag for slot 3
-const u8 __at(M_EXPTBL) g_EXPTBL[4];
+const uint8_t __at(M_EXPTBL) g_EXPTBL[4];
 
 #define M_SLTTBL	0xFCC5	// 4	Saves the state of the 4 secondary slot registers of each extended Primary Slot.
 // SLTTBL+0 = Value for slot 0
@@ -826,14 +826,14 @@ const u8 __at(M_EXPTBL) g_EXPTBL[4];
 //   Bits 3-2 = Extended slot on page 4000h~7FFFh
 //   Bits 5-4 = Extended slot on page 8000h~BFFFh
 //   Bits 7-6 = Extended slot on page C000h~FFFFh
-const u8 __at(M_SLTTBL) g_SLTTBL[4];
+const uint8_t __at(M_SLTTBL) g_SLTTBL[4];
 
 #define M_SLTATR	0xFCC9	// 64	Slot attributes given during MSX boot process.
 // Bit 7 = 1 if Basic program, else 0
 // Bit 6 = 1 if device extension, else 0
 // Bit 5 = 1 if statement extension, else 0
 // Bits 4~0 = Unused
-const u8 __at(M_SLTATR) g_SLTATR[64];
+const uint8_t __at(M_SLTATR) g_SLTATR[64];
 
 #define M_SLTWRK	0xFD09	// 128	SLTWRK is a 128-byte variable array used to reserve a RAM work area in Main-RAM for ROM applications. This array consists of 8 bytes per slot (2 per memory page). Each of these 2 octets are provided to place an slot ID with flags on a byte (MSB) or an address on two bytes as follows.
 // SLTWRK+0 = Work area for slot 0-0, page 0000h~3FFFh
@@ -857,10 +857,10 @@ const u8 __at(M_SLTATR) g_SLTATR[64];
 // APP = Set if the RAM used by an application, 0 otherwise
 // RMD = Set if the RAM is used by instruction CALL MEMINI, 0 otherwise
 // F = Set if secondary slot, 0 if primary slot.
-const u8 __at(M_SLTWRK) g_SLTWRK[128];
+const uint8_t __at(M_SLTWRK) g_SLTWRK[128];
 
 #define M_PROCNM	0xFD89	// 16	Work aera of the instructions CALL and OPEN. Contents the instruction name or device name.
-const u8 __at(M_PROCNM) g_PROCNM[16];
+const uint8_t __at(M_PROCNM) g_PROCNM[16];
 
 #define M_HOOKS	0xFD9A	// 570	System hooks
 // @see bios_hook.h
@@ -869,73 +869,73 @@ const u8 __at(M_PROCNM) g_PROCNM[16];
 // Area Added For MSX2 To Save Each Value Written Into VDP Registers
 
 #define M_RG08SAV	0xFFE7	// 1	System saves the byte written to the register R#08 here, Used by VDP(9) in Basic. (MSX2~)
-const u8 __at(M_RG08SAV) g_RG08SAV;
+const uint8_t __at(M_RG08SAV) g_RG08SAV;
 
 #define M_RG09SAV	0xFFE8	// 1	System saves the byte written to the register R#09 here, Used by VDP(10) in Basic. (MSX2~)
-const u8 __at(M_RG09SAV) g_RG09SAV;
+const uint8_t __at(M_RG09SAV) g_RG09SAV;
 
 #define M_RG10SAV	0xFFE9	// 1	System saves the byte written to the register R#10 here, Used by VDP(11) in Basic. (MSX2~)
-const u8 __at(M_RG10SAV) g_RG10SAV;
+const uint8_t __at(M_RG10SAV) g_RG10SAV;
 
 #define M_RG11SAV	0xFFEA	// 1	System saves the byte written to the register R#11 here, Used by VDP(12) in Basic. (MSX2~)
-const u8 __at(M_RG11SAV) g_RG11SAV;
+const uint8_t __at(M_RG11SAV) g_RG11SAV;
 
 #define M_RG12SAV	0xFFEB	// 1	System saves the byte written to the register R#12 here, Used by VDP(13) in Basic. (MSX2~)
-const u8 __at(M_RG12SAV) g_RG12SAV;
+const uint8_t __at(M_RG12SAV) g_RG12SAV;
 
 #define M_RG13SAV	0xFFEC	// 1	System saves the byte written to the register R#13 here, Used by VDP(14) in Basic. (MSX2~)
-const u8 __at(M_RG13SAV) g_RG13SAV;
+const uint8_t __at(M_RG13SAV) g_RG13SAV;
 
 #define M_RG14SAV	0xFFED	// 1	System saves the byte written to the register R#14 here, Used by VDP(15) in Basic. (MSX2~)
-const u8 __at(M_RG14SAV) g_RG14SAV;
+const uint8_t __at(M_RG14SAV) g_RG14SAV;
 
 #define M_RG15SAV	0xFFEE	// 1	System saves the byte written to the register R#15 here, Used by VDP(16) in Basic. (MSX2~)
-const u8 __at(M_RG15SAV) g_RG15SAV;
+const uint8_t __at(M_RG15SAV) g_RG15SAV;
 
 #define M_RG16SAV	0xFFEF	// 1	System saves the byte written to the register R#16 here, Used by VDP(17) in Basic. (MSX2~)
-const u8 __at(M_RG16SAV) g_RG16SAV;
+const uint8_t __at(M_RG16SAV) g_RG16SAV;
 
 #define M_RG17SAV	0xFFF0	// 1	System saves the byte written to the register R#17 here, Used by VDP(18) in Basic. (MSX2~)
-const u8 __at(M_RG17SAV) g_RG17SAV;
+const uint8_t __at(M_RG17SAV) g_RG17SAV;
 
 #define M_RG18SAV	0xFFF1	// 1	System saves the byte written to the register R#18 here, Used by VDP(19) in Basic. (MSX2~)
-const u8 __at(M_RG18SAV) g_RG18SAV;
+const uint8_t __at(M_RG18SAV) g_RG18SAV;
 
 #define M_RG19SAV	0xFFF2	// 1	System saves the byte written to the register R#19 here, Used by VDP(20) in Basic. (MSX2~)
-const u8 __at(M_RG19SAV) g_RG19SAV;
+const uint8_t __at(M_RG19SAV) g_RG19SAV;
 
 #define M_RG20SAV	0xFFF3	// 1	System saves the byte written to the register R#20 here, Used by VDP(21) in Basic. (MSX2~)
-const u8 __at(M_RG20SAV) g_RG20SAV;
+const uint8_t __at(M_RG20SAV) g_RG20SAV;
 
 #define M_RG21SAV	0xFFF4	// 1	System saves the byte written to the register R#21 here, Used by VDP(22) in Basic. (MSX2~)
-const u8 __at(M_RG21SAV) g_RG21SAV;
+const uint8_t __at(M_RG21SAV) g_RG21SAV;
 
 #define M_RG22SAV	0xFFF5	// 1	System saves the byte written to the register R#22 here, Used by VDP(23) in Basic. (MSX2~)
-const u8 __at(M_RG22SAV) g_RG22SAV;
+const uint8_t __at(M_RG22SAV) g_RG22SAV;
 
 #define M_RG23SAV	0xFFF6	// 1	System saves the byte written to the register R#23 here, Used by VDP(24) in Basic. (MSX2~)
-const u8 __at(M_RG23SAV) g_RG23SAV;
+const uint8_t __at(M_RG23SAV) g_RG23SAV;
 
 #define M_MINROM	0xFFF7	// 1	Slot address of Main-ROM. Use EXPTBL+0 to know slot ID of the internal Main-ROM. (MSX2~)
-const u8 __at(M_MINROM) g_MINROM;
+const uint8_t __at(M_MINROM) g_MINROM;
 
 #define M_SVFFF8	0xFFF8	// 2	Reserved
-const u8 __at(M_SVFFF8) g_SVFFF8[2];
+const uint8_t __at(M_SVFFF8) g_SVFFF8[2];
 
 //-----------------------------------------------------------------------------
 // Area Added for MSX2+ to save each value written into VDP registers
 
 #define M_RG25SAV	0xFFFA	// 1	System saves the byte written to the register R#25 here, Used by VDP(26) in Basic. (MSX2+~)
-const u8 __at(M_RG25SAV) g_RG25SAV;
+const uint8_t __at(M_RG25SAV) g_RG25SAV;
 
 #define M_RG26SAV	0xFFFB	// 1	System saves the byte written to the register R#26 here, Used by VDP(27) in Basic. (MSX2+~)
-const u8 __at(M_RG26SAV) g_RG26SAV;
+const uint8_t __at(M_RG26SAV) g_RG26SAV;
 
 #define M_RG27SAV	0xFFFC	// 1	System saves the byte written to the register R#27 here, Used by VDP(28) in Basic. (MSX2+~)
-const u8 __at(M_RG27SAV) g_RG27SAV;
+const uint8_t __at(M_RG27SAV) g_RG27SAV;
 
 #define M_SVFFFD	0xFFFD	// 2	Reserved
-const u8 __at(M_SVFFFD) g_SVFFFD[2];
+const uint8_t __at(M_SVFFFD) g_SVFFFD[2];
 
 //-----------------------------------------------------------------------------
 // Secondary slots registers
@@ -947,4 +947,5 @@ const u8 __at(M_SVFFFD) g_SVFFFD[2];
 //  Bits 5-4 = Extended slot on page 2 (8000h~BFFFh)
 //  Bits 7-6 = Extended slot on page 3 (C000h~FFFFh)
 // Note: Read value has the INVERTED bits of previous written value.
-u8 __at(M_SLTSL) g_SLTSL;
+uint8_t __at(M_SLTSL) g_SLTSL;
+
