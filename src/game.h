@@ -8,7 +8,7 @@ enum game_status
 {
     PLAYING = 0,
     LEVEL_COMPLETED,
-    SECOND_CYCLE,
+    LEVEL_COMPLETED_2,
 };
 
 #ifndef LOCAL

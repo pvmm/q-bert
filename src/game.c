@@ -20,6 +20,7 @@
 // generated
 typedef uint8_t u8;
 #include "ayvgm_psg_music.h"
+#include "level_clear.h"
 #include "map.h"
 #include "player.h"
 #include "enemy.h"
@@ -32,10 +33,13 @@ struct entity* self;
 // game still running?
 bool looping;
 enum game_status game_status;
-int8_t completed_delay;
+int8_t plate_redraw_delay;
 uint8_t old_plate_color;
 uint8_t plate_color;
-#define COMPLETED_DELAY_IN_FRAMES   2
+uint8_t completed;
+#define PLATE_REDRAW_DELAY_IN_FRAMES    2
+#define COMPLETED_DELAY_IN_FRAMES       45
+#define COMPLETED 200
 
 // Q*bert's rainbow-colored frisbees
 uint8_t frisbees;
@@ -197,7 +201,8 @@ void run_game()
     lives = MAX_LIVES;
     invuln = 0;
     gameover_delay = 0;
-    completed_delay = COMPLETED_DELAY_IN_FRAMES;
+    plate_redraw_delay = PLATE_REDRAW_DELAY_IN_FRAMES;
+    completed = COMPLETED_DELAY_IN_FRAMES;
     old_plate_color = 0xe0;
     plate_color = 0xe0;
     control = 0;
@@ -255,17 +260,16 @@ void run_game()
             break;
         }
         case LEVEL_COMPLETED:
-        case SECOND_CYCLE: {
-            if (completed_delay-- <= 0) {
-                completed_delay = COMPLETED_DELAY_IN_FRAMES;
+            LVGM_Play(level_clear, false);
+            game_status = LEVEL_COMPLETED_2;
+
+        case LEVEL_COMPLETED_2: {
+            if (plate_redraw_delay-- <= 0) {
+                plate_redraw_delay = PLATE_REDRAW_DELAY_IN_FRAMES;
                 set_opened_plate_colors(plate_color += 0x10);
                 // cycle through palette twice
-                if (game_status == LEVEL_COMPLETED) {
-                    if (plate_color == old_plate_color)
-                        game_status = SECOND_CYCLE;
-                } else {
-                    if (plate_color == old_plate_color)
-                        looping = false;
+                if (--completed == 0) {
+                    looping = false;
                 }
             }
         }}
