@@ -52,13 +52,15 @@ void set_closed_plate_colors(uint8_t color)
 
 void set_opened_plate_colors(uint8_t color)
 {
+    // update all plates
     for (uint8_t i = 0; i < sizeof(opened_plates_colors); ++i)
     {
         if ((opened_plates_colors[i] & FG_MASK) == last_opened_color)
             opened_plates_colors[i] = color | (opened_plates_colors[i] & BG_MASK);
     }
 
-    for (uint8_t i = 0; i < sizeof(change_to_plate_color); ++i)
+    // update tiny plate (5 top lines only)
+    for (uint8_t i = 0; i < 5; ++i)
     {
         if ((change_to_plate_color[i] & FG_MASK) == last_opened_color)
             change_to_plate_color[i] = color | (change_to_plate_color[i] & BG_MASK);
