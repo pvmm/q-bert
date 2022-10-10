@@ -237,24 +237,23 @@ void put_qbert_sprite()
     sa.y = fast_y;
     sa.x = fast_x;
 
-    // sclera (white of the eyes)
-    sa.pattern = qbert.pattern;
-    //debug("pattern: ", qbert.pattern);
-    sa.attr = BG_WHITE;
-    spman_alloc_sprite(&sa);
-
     // eyes and mouth
-    sa.pattern = qbert.pattern + 4;
     sa.attr = BG_BLACK;
-    spman_alloc_sprite(&sa);
-
-    // face
-    sa.pattern = qbert.pattern + 8;
-    sa.attr = BG_LIGHTRED;
+    sa.pattern = qbert.pattern;
     spman_alloc_sprite(&sa);
 
     // the bod (always visible)
-    sa.pattern = qbert.pattern + 12;
     sa.attr = BG_DARKRED;
+    sa.pattern = qbert.pattern + 4;
+    spman_alloc_sprite(&sa);
+
+    // face
+    sa.attr = BG_LIGHTRED;
+    sa.pattern = qbert.pattern + 8;
+    spman_alloc_sprite(&sa);
+
+    // sclera (white of the eyes)
+    sa.pattern = qbert.pattern + 12;
+    sa.attr = BG_WHITE;
     spman_alloc_fixed_sprite(&sa);
 }

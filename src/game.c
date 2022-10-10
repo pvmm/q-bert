@@ -13,7 +13,6 @@
 #define LOCAL
 #include "entities.h"
 #include "game.h"
-#include "sprites.h"
 #include "level.h"
 #include "plate.h"
 
@@ -71,10 +70,10 @@ void init_map_entities()
     // m += (uint16_t)(m[0] | m[1] << 8) + 3;
 
     // fill sprite allocation table up
-    spman_alloc_pat(SPRITE_DOWN_RIGHT   , sprites[0][0], 4, 0);
-    spman_alloc_pat(SPRITE_DOWN_LEFT    , sprites[0][0], 4, 1);
-    spman_alloc_pat(SPRITE_UP_RIGHT     , sprites[1][0], 4, 0);
-    spman_alloc_pat(SPRITE_UP_LEFT      , sprites[1][0], 4, 1);
+    spman_alloc_pat(SPRITE_DOWN_RIGHT, *player_sprite, 4, 0);
+    spman_alloc_pat(SPRITE_DOWN_LEFT , *player_sprite, 4, true);
+    spman_alloc_pat(SPRITE_UP_RIGHT  , *(player_sprite + (sizeof(player_sprite)/32/2)), 4, 0);
+    spman_alloc_pat(SPRITE_UP_LEFT   , *(player_sprite + (sizeof(player_sprite)/32/2)), 4, true);
 
     // the entity list ends with 255
     // while (*m != 0xff)
