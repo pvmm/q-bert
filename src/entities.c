@@ -248,12 +248,12 @@ void put_qbert_sprite()
     spman_alloc_sprite(&sa);
 
     // face
-    sa.attr = BG_LIGHTRED;
-    sa.pattern = qbert.pattern + 8;
-    spman_alloc_sprite(&sa);
+    //sa.attr = BG_LIGHTRED;
+    //sa.pattern = qbert.pattern + 8;
+    //spman_alloc_sprite(&sa);
 
     // sclera (white of the eyes)
-    sa.pattern = qbert.pattern + 12;
+    sa.pattern = qbert.pattern + 8;
     sa.attr = BG_WHITE;
     spman_alloc_fixed_sprite(&sa);
 }
