@@ -70,7 +70,7 @@ enum entity_id
 
 struct entity
 {
-    //uint8_t type;
+    uint8_t type;
     uint8_t tile_x;                 // pressed plate position
     uint8_t tile_y;
     uint8_t x;
@@ -84,7 +84,7 @@ struct entity
     uint8_t frame;                  // current animation frame
     uint8_t pos;
 
-    void (*update)(void);
+    void (*update)(struct entity* entity);
 };
 
 // fixed entity of the player
@@ -93,14 +93,17 @@ LOCAL struct entity qbert;
 // other entities
 LOCAL struct entity entities[MAX_ENTITIES];
 
-void update_enemy(void);
-
 void init_entities(void);
-void init_player(void);
+void update_entity(struct entity* entity);
+void update_entity_left(struct entity* entity);
+void update_entity_right(struct entity* entity);
+void update_entity_up(struct entity* entity);
+void update_entity_down(struct entity* entity);
 
-void update_player(void);
-void update_player_left(void);
-void update_player_right(void);
+void init_player(void);
+void update_player(struct entity* entity);
+void update_player_left(struct entity* entity);
+void update_player_right(struct entity* entity);
 
 void put_qbert_sprite();
 

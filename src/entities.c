@@ -24,132 +24,77 @@ uint8_t row;                            // player vertical coordinate
 
 void init_entities()
 {
-    const uint8_t *m = cur_map;
-    // uint8_t typ, last = 0;
-    // uint16_t i;
+    for (uint8_t i = 0; i < MAX_ENTITIES; ++i)
+        entities[i].active = 0;
 
-    // this sets everything to 0, which is useful as
-    // entity ET_UNUSED is 0
-    memset(entities, 0, sizeof(struct entity) * MAX_ENTITIES);
+    entities[BALL1].x = random() > 128 ? 138 : 106;
+    entities[BALL1].y = 208;
+    entities[BALL1].pattern = 0;
+    entities[BALL1].active = false;
+    entities[BALL1].update = update_entity;
 
     //entities[GREENBALL].x = 218 > 128 ? 138 : 106;
     //entities[GREENBALL].y = 208;
     //entities[GREENBALL].pattern = GREENBALL;
-
-    entities[BALL1].x = 218 > 128 ? 138 : 106;
-    entities[BALL1].y = 208;
-    entities[BALL1].pattern = 0;
-    entities[BALL1].active = false;
-
-    // the entity list ends with 255
-    // while (*m != 0xff)
-    // {
-    //     // first byte is type + direction flag on MSB
-    //     // remove MSB
-    //     typ = m[0] & (~DIR_FLAG);
-    //
-    //     entities[last].type = typ;
-    //     entities[last].x = m[1];
-    //     entities[last].y = m[2];
-    //     // in the map: param is 1 (int) to look left
-    //     entities[last].dir = m[0] & DIR_FLAG ? DIR_LEFT : DIR_RIGHT;
-    //
-    //     switch (typ)
-    //     {
-    //         // can be only one; always first entity
-    //         // because our entities are sorted by type!
-    //         case ET_PLAYER:
-    //             // 3 frames x 2 sprites = 6
-    //             entities[last].pat = spman_alloc_pat(PAT_PLAYER, player_sprite[0], 6, 0);
-    //             spman_alloc_pat(PAT_PLAYER_FLIP, player_sprite[0], 6, 1);
-    //             entities[last].update = update_player;
-    //             break;
-    //
-    //         case ET_ENEMY:
-    //             // 3 frames
-    //             entities[last].pat = spman_alloc_pat(PAT_ENEMY, enemy_sprite[0], 3, 0);
-    //             spman_alloc_pat(PAT_ENEMY_FLIP, enemy_sprite[0], 3, 1);
-    //             entities[last].update = update_enemy;
-    //             break;
-    //     }
-    //
-    //     // next entity
-    //     last++;
-    //
-    //     // all our entities are 3 bytes
-    //     m += 3;
-    // }
-
-    // // count how many batteries are in the map
-    // batteries = 0;
-    // for (i = 0; i < MAP_W * MAP_H; ++i)
-    //     if (cur_map_data[i] == BATTERY_TILE)
-    //         batteries++;
 }
 
 
-void update_enemy(void)
+void update_entity(struct entity* entity)
 {
-    // check for the player; if alive and not invulnerable!
-    // we use small hit boxes
-    // if (lives && !invuln
-    //         && entities[0].x + 6 < self->x + 10 && self->x + 6 < entities[0].x + 10
-    //         && self->y == entities[0].y)
-    // {
-    //     // change direction
-    //     self->dir ^= 1;
-    //
-    //     // remove one life (is more like "hits")
-    //     lives--;
-    //     draw_hud();
-    //     invuln = INVUL_TIME;
-    //
-    //     if (!lives)
-    //     {
-    //         // different sound effects if is game over
-    //         mplayer_init(SONG, SONG_SILENCE);
-    //         mplayer_play_effect_p(EFX_DEAD, EFX_CHAN_NO, 0);
-    //         gameover_delay = GAMEOVER_DELAY;
-    //     }
-    //     else
-    //         mplayer_play_effect_p(EFX_HIT, EFX_CHAN_NO, 0);
-    // }
-    //
-    // // left or right?
-    // if (self->dir)
-    // {
-    //     // change direction
-    //     if (self->x == 2 || is_map_blocked(self->x, self->y + 15))
-    //         self->dir ^= 1;
-    //     else
-    //         self->x -= 1;
-    // }
-    // else
-    // {
-    //     // change direction
-    //     if (self->x == 255 - 16 || is_map_blocked(self->x + 15, self->y + 15))
-    //         self->dir ^= 1;
-    //     else
-    //         self->x += 1;
-    // }
-    //
-    // // update the walking animation
-    // if (self->delay++ == FRAME_WAIT)
-    // {
-    //     self->delay = 0;
-    //     if (++self->frame == WALK_CYCLE)
-    //         self->frame = 0;
-    // }
-    //
-    // // allocate the sprites
-    // sp.x = self->x;
-    // // y on the screen starts in 255
-    // sp.y = self->y - 1;
-    // // find which pattern to show
-    // sp.pattern = self->pat + (walk_frames[self->frame] + self->dir * 3) * 4;
-    // // red
-    // sp.attr = 9;
-    // spman_alloc_sprite(&sp);
+    switch (entity->type)
+    {
+    case BALL1:
+    case BALL2:
+        entity->update = random() > 128 ? update_entity_left : update_entity_right;
+        break;
+
+    case COILY:
+        // TODO: follow the player
+        break;
+
+    case SAM:
+    case SLICK:
+        entity->update = random() > 128 ? update_entity_left : update_entity_right;
+        break;
+
+    case WRONG_WAY1:
+    case WRONG_WAY2:
+        entity->update = random() > 128 ? update_entity_up : update_entity_down;
+        break;
+
+    case UGG1:
+    case UGG2:
+        entity->update = random() > 128 ? update_entity_up : update_entity_down;
+        break;
+
+    case GREENBALL:
+        entity->update = random() > 128 ? update_entity_left : update_entity_right;
+        break;
+    }
+}
+
+
+void update_entity_left(struct entity* entity)
+{
+    entity;
+}
+
+
+void update_entity_right(struct entity* entity)
+{
+    entity;
+}
+
+
+void update_entity_up(struct entity* entity)
+{
+    entity;
+}
+
+
+void update_entity_down(struct entity* entity)
+{
+    entity;
 }
 
 
@@ -176,8 +121,9 @@ void init_player()
 }
 
 
-void update_player()
+void update_player(struct entity* entity)
 {
+    entity;
     old_pattern = qbert.pattern;
 
     switch (control)
@@ -222,8 +168,9 @@ void update_player()
 }
 
 
-void update_player_left()
+void update_player_left(struct entity* entity)
 {
+    entity;
     put_qbert_sprite();
 
     if (qbert.frame < 16)
@@ -261,8 +208,9 @@ void update_player_left()
 }
 
 
-void update_player_right()
+void update_player_right(struct entity* entity)
 {
+    entity;
     put_qbert_sprite();
 
     if (qbert.frame < 16)

@@ -116,6 +116,12 @@ inline void update_frisbees()
 }
 
 
+uint8_t random()
+{
+    return 0;
+}
+
+
 void run_game()
 {
     uint8_t i;
@@ -207,10 +213,10 @@ void run_game()
         // - self is a pointer to THIS entity
         // - because we don't create/destroy entities dynamically
         //   when we found one that is unused we are done
-        qbert.update();
+        qbert.update(NULL);
         for (i = 0, self = entities; i < MAX_ENTITIES; i++, self++) {
             if (self->active)
-                self->update();
+                self->update(self);
         }
 
         // ensure we wait to our desired update rate
