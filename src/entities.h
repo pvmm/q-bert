@@ -9,7 +9,7 @@
 #endif
 
 // max items and enemies on screen at the same time
-#define MAX_ENTITIES 10
+#define MAX_ENTITIES 11
 
 // player lives
 LOCAL uint8_t lives;
@@ -55,18 +55,23 @@ enum Moves {
 };
 
 // how long we wait between animation frames
-#define FRAME_WAIT 3
+#define FRAME_WAIT              3
 
 // how long the player is invulnerable after death
 // time in frames
-#define INVUL_TIME 64
+#define INVUL_TIME              64
+
+// entities start position
+#define ENTITY_START_X1          104
+#define ENTITY_START_X2          136
+#define ENTITY_START_Y           35
 
 // used by all entities
 LOCAL struct sprite_attr sp;
 
 enum entity_id
 {
-    QBERT = 0,
+    QBERT = 1,
     BALL1,
     BALL2,
     COILY,
@@ -118,7 +123,7 @@ void move_right(struct entity* entity);
 void move_up(struct entity* entity);
 void move_down(struct entity* entity);
 
-void put_qbert_sprite();
+void put_entity_sprite(struct entity* entity);
 
 #ifdef LOCAL
 #undef LOCAL

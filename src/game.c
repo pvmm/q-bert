@@ -208,14 +208,16 @@ void run_game()
         }}
 
         qbert.update(&qbert);
-        put_qbert_sprite();
+        put_entity_sprite(&qbert);
         // update all the entities:
         // - self is a pointer to THIS entity
         // - because we don't create/destroy entities dynamically
         //   when we found one that is unused we are done
         for (i = 0, self = entities; i < MAX_ENTITIES; i++, self++) {
-            if (self->active)
+            if (self->active) {
                 self->update(self);
+                put_entity_sprite(self);
+            }
         }
 
         // ensure we wait to our desired update rate
