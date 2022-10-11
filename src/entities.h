@@ -9,7 +9,16 @@
 #endif
 
 // max items and enemies on screen at the same time
-#define MAX_ENTITIES 5
+#define MAX_ENTITIES 6
+
+// player lives
+LOCAL uint8_t lives;
+// invulnerability time after death
+LOCAL uint8_t invuln;
+// batteries left
+LOCAL uint8_t batteries;
+// show some delay once the lives run out
+LOCAL uint8_t gameover_delay;
 
 // sprite pattern base offset
 enum Pattern {
@@ -70,6 +79,7 @@ LOCAL struct entity entities[MAX_ENTITIES];
 
 void update_enemy(void);
 
+void init_entities(void);
 void init_player(void);
 
 void update_player(void);
@@ -77,5 +87,9 @@ void update_player_left(void);
 void update_player_right(void);
 
 void put_qbert_sprite();
+
+#ifdef LOCAL
+#undef LOCAL
+#endif
 
 #endif // ENTITIES_H

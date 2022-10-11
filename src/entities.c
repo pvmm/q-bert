@@ -1,9 +1,17 @@
-#include "game.h"
+#include <string.h>
+
+#define LOCAL
 #include "entities.h"
+
+#include "game.h"
 #include "palette.h"
 #include "lookup_tables.h"
 #include "level.h"
 #include "spman.h"
+
+// generated
+#include "player.h"
+#include "enemy.h"
 
 
 const int8_t (*jump_table)[16];
@@ -12,6 +20,67 @@ extern enum game_status game_status;    // completed the plates?
 extern uint8_t control;
 uint8_t old_pattern;
 uint8_t row;                            // player vertical coordinate
+
+
+void init_entities()
+{
+    const uint8_t *m = cur_map;
+    // uint8_t typ, last = 0;
+    // uint16_t i;
+
+    // this sets everything to 0, which is useful as
+    // entity ET_UNUSED is 0
+    memset(entities, 0, sizeof(struct entity) * MAX_ENTITIES);
+
+    // get to the beginning of the entities:
+    // map size + 3 bytes of header (the map size and the entities size)
+    // m += (uint16_t)(m[0] | m[1] << 8) + 3;
+
+    // the entity list ends with 255
+    // while (*m != 0xff)
+    // {
+    //     // first byte is type + direction flag on MSB
+    //     // remove MSB
+    //     typ = m[0] & (~DIR_FLAG);
+    //
+    //     entities[last].type = typ;
+    //     entities[last].x = m[1];
+    //     entities[last].y = m[2];
+    //     // in the map: param is 1 (int) to look left
+    //     entities[last].dir = m[0] & DIR_FLAG ? DIR_LEFT : DIR_RIGHT;
+    //
+    //     switch (typ)
+    //     {
+    //         // can be only one; always first entity
+    //         // because our entities are sorted by type!
+    //         case ET_PLAYER:
+    //             // 3 frames x 2 sprites = 6
+    //             entities[last].pat = spman_alloc_pat(PAT_PLAYER, player_sprite[0], 6, 0);
+    //             spman_alloc_pat(PAT_PLAYER_FLIP, player_sprite[0], 6, 1);
+    //             entities[last].update = update_player;
+    //             break;
+    //
+    //         case ET_ENEMY:
+    //             // 3 frames
+    //             entities[last].pat = spman_alloc_pat(PAT_ENEMY, enemy_sprite[0], 3, 0);
+    //             spman_alloc_pat(PAT_ENEMY_FLIP, enemy_sprite[0], 3, 1);
+    //             entities[last].update = update_enemy;
+    //             break;
+    //     }
+    //
+    //     // next entity
+    //     last++;
+    //
+    //     // all our entities are 3 bytes
+    //     m += 3;
+    // }
+
+    // // count how many batteries are in the map
+    // batteries = 0;
+    // for (i = 0; i < MAP_W * MAP_H; ++i)
+    //     if (cur_map_data[i] == BATTERY_TILE)
+    //         batteries++;
+}
 
 
 void update_enemy(void)
@@ -81,6 +150,12 @@ void update_enemy(void)
 
 void init_player()
 {
+    // fill sprite allocation table up
+    spman_alloc_pat(SPRITE_DOWN_RIGHT, *player_sprite, 4, 0);
+    spman_alloc_pat(SPRITE_DOWN_LEFT , *player_sprite, 4, true);
+    spman_alloc_pat(SPRITE_UP_RIGHT  , *(player_sprite + (sizeof(player_sprite)/32/2)), 4, 0);
+    spman_alloc_pat(SPRITE_UP_LEFT   , *(player_sprite + (sizeof(player_sprite)/32/2)), 4, true);
+
     row = 1;
     qbert.dirty = true;
     qbert.pos = 1;
@@ -243,12 +318,12 @@ void put_qbert_sprite()
     spman_alloc_sprite(&sa);
 
     // the bod (always visible)
-    sa.attr = BG_DARKRED;
+    sa.attr = BG_DARKYELLOW;
     sa.pattern = qbert.pattern + 4;
     spman_alloc_sprite(&sa);
 
     // face
-    //sa.attr = BG_LIGHTRED;
+    //sa.attr = BG_LIGHTYELLOW;
     //sa.pattern = qbert.pattern + 8;
     //spman_alloc_sprite(&sa);
 

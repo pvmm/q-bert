@@ -7,22 +7,20 @@
 #include "lvgm_player.h"
 #include "ap.h"
 
-#include "helpers.h"
-#include "main.h"
-
 #define LOCAL
-#include "entities.h"
 #include "game.h"
+
+// generated
+#include "main.h"
+#include "helpers.h"
+#include "entities.h"
 #include "level.h"
 #include "plate.h"
 
-// generated
 typedef uint8_t u8;
 #include "ayvgm_psg_music.h"
 #include "level_clear.h"
 #include "map.h"
-#include "player.h"
-#include "enemy.h"
 
 #define BG_TILE_MAP 0x1800
 
@@ -51,75 +49,6 @@ uint8_t frisbee_anim_delay;
 #define FRISBEE_NUM_TILES           2
 #define FRISBEE_MAX_TILES           (4 * 2)
 
-
-void init_map_entities()
-{
-    const uint8_t *m = cur_map;
-    // uint8_t typ, last = 0;
-    // uint16_t i;
-
-    // init sprite and patterns
-    spman_init();
-
-    // this sets everything to 0, which is useful as
-    // entity ET_UNUSED is 0
-    memset(entities, 0, sizeof(struct entity) * MAX_ENTITIES);
-
-    // get to the beginning of the entities:
-    // map size + 3 bytes of header (the map size and the entities size)
-    // m += (uint16_t)(m[0] | m[1] << 8) + 3;
-
-    // fill sprite allocation table up
-    spman_alloc_pat(SPRITE_DOWN_RIGHT, *player_sprite, 4, 0);
-    spman_alloc_pat(SPRITE_DOWN_LEFT , *player_sprite, 4, true);
-    spman_alloc_pat(SPRITE_UP_RIGHT  , *(player_sprite + (sizeof(player_sprite)/32/2)), 4, 0);
-    spman_alloc_pat(SPRITE_UP_LEFT   , *(player_sprite + (sizeof(player_sprite)/32/2)), 4, true);
-
-    // the entity list ends with 255
-    // while (*m != 0xff)
-    // {
-    //     // first byte is type + direction flag on MSB
-    //     // remove MSB
-    //     typ = m[0] & (~DIR_FLAG);
-    //
-    //     entities[last].type = typ;
-    //     entities[last].x = m[1];
-    //     entities[last].y = m[2];
-    //     // in the map: param is 1 (int) to look left
-    //     entities[last].dir = m[0] & DIR_FLAG ? DIR_LEFT : DIR_RIGHT;
-    //
-    //     switch (typ)
-    //     {
-    //         // can be only one; always first entity
-    //         // because our entities are sorted by type!
-    //         case ET_PLAYER:
-    //             // 3 frames x 2 sprites = 6
-    //             entities[last].pat = spman_alloc_pat(PAT_PLAYER, player_sprite[0], 6, 0);
-    //             spman_alloc_pat(PAT_PLAYER_FLIP, player_sprite[0], 6, 1);
-    //             entities[last].update = update_player;
-    //             break;
-    //
-    //         case ET_ENEMY:
-    //             // 3 frames
-    //             entities[last].pat = spman_alloc_pat(PAT_ENEMY, enemy_sprite[0], 3, 0);
-    //             spman_alloc_pat(PAT_ENEMY_FLIP, enemy_sprite[0], 3, 1);
-    //             entities[last].update = update_enemy;
-    //             break;
-    //     }
-    //
-    //     // next entity
-    //     last++;
-    //
-    //     // all our entities are 3 bytes
-    //     m += 3;
-    // }
-
-    // // count how many batteries are in the map
-    // batteries = 0;
-    // for (i = 0; i < MAP_W * MAP_H; ++i)
-    //     if (cur_map_data[i] == BATTERY_TILE)
-    //         batteries++;
-}
 
 void draw_map()
 {
@@ -221,8 +150,9 @@ void run_game()
     ap_uncompress(cur_map_data, cur_map + 3);
 
     // init entities before drawing
+    spman_init();
+    init_entities();
     init_player();
-    init_map_entities();
     init_level();
     draw_map();
 

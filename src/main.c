@@ -6,12 +6,13 @@
 
 #include "helpers.h"
 #include "game.h"
-
-#define LOCAL
-#include "main.h"
+#include "entities.h"
 
 // generated
 #include "tiles.h"
+
+#define LOCAL
+#include "main.h"
 
 
 void draw_menu()
