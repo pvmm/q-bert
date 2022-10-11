@@ -208,8 +208,10 @@ void run_game()
         // - because we don't create/destroy entities dynamically
         //   when we found one that is unused we are done
         qbert.update();
-        for (i = 0, self = entities; i < MAX_ENTITIES && self->type; i++, self++)
-            self->update();
+        for (i = 0, self = entities; i < MAX_ENTITIES; i++, self++) {
+            if (self->active)
+                self->update();
+        }
 
         // ensure we wait to our desired update rate
         ubox_wait();

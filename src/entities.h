@@ -22,13 +22,15 @@ LOCAL uint8_t gameover_delay;
 
 // sprite pattern base offset
 enum Pattern {
-    SPRITE_DOWN_RIGHT = 0,
-    SPRITE_DOWN_LEFT  = 16, // 010000
-    SPRITE_UP_RIGHT   = 32, // 100000
-    SPRITE_UP_LEFT    = 48, // 110000
+    QBERT_DOWN_RIGHT    = 0,  // 000000
+    QBERT_DOWN_LEFT     = 12, // 001100
+    QBERT_UP_RIGHT      = 24, // 011000
+    QBERT_UP_LEFT       = 36, // 100100
+    BALL_NORMAL         = 40,
+    BALL_PRESSED        = 41,
 };
 
-#define LEFT_PATTERN_MASK(x)            ((x) & 0b10000)
+#define LEFT_PATTERN_MASK(x)            ((x) & 0b100)
 
 // sprite movement bits
 enum Moves {
@@ -52,17 +54,31 @@ enum Moves {
 // used by all entities
 LOCAL struct sprite_attr sp;
 
+enum entity_id
+{
+    BALL1 = 0,
+    BALL2,
+    COILY,
+    SAM,
+    SLICK,
+    WRONG_WAY1,
+    WRONG_WAY2,
+    UGG1,
+    UGG2,
+    GREENBALL,
+};
+
 struct entity
 {
-    uint8_t type;
+    //uint8_t type;
     uint8_t tile_x;                 // pressed plate position
     uint8_t tile_y;
     uint8_t x;
     uint8_t y;
     uint8_t x0;                     // previous x,y positions
     uint8_t y0;
-    // uint8_t dir;                    // 4 directions
-    bool dirty;
+    // uint8_t dir;                 // 4 directions
+    bool active;
     uint8_t pattern;                // pattern group
     // uint8_t delay;
     uint8_t frame;                  // current animation frame

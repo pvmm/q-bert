@@ -32,9 +32,14 @@ void init_entities()
     // entity ET_UNUSED is 0
     memset(entities, 0, sizeof(struct entity) * MAX_ENTITIES);
 
-    // get to the beginning of the entities:
-    // map size + 3 bytes of header (the map size and the entities size)
-    // m += (uint16_t)(m[0] | m[1] << 8) + 3;
+    //entities[GREENBALL].x = 218 > 128 ? 138 : 106;
+    //entities[GREENBALL].y = 208;
+    //entities[GREENBALL].pattern = GREENBALL;
+
+    entities[BALL1].x = 218 > 128 ? 138 : 106;
+    entities[BALL1].y = 208;
+    entities[BALL1].pattern = 0;
+    entities[BALL1].active = false;
 
     // the entity list ends with 255
     // while (*m != 0xff)
@@ -151,13 +156,12 @@ void update_enemy(void)
 void init_player()
 {
     // fill sprite allocation table up
-    spman_alloc_pat(SPRITE_DOWN_RIGHT, *player_sprite, 4, 0);
-    spman_alloc_pat(SPRITE_DOWN_LEFT , *player_sprite, 4, true);
-    spman_alloc_pat(SPRITE_UP_RIGHT  , *(player_sprite + (sizeof(player_sprite)/32/2)), 4, 0);
-    spman_alloc_pat(SPRITE_UP_LEFT   , *(player_sprite + (sizeof(player_sprite)/32/2)), 4, true);
+    spman_alloc_pat(QBERT_DOWN_RIGHT, *player_sprite, 3, 0);
+    spman_alloc_pat(QBERT_DOWN_LEFT , *player_sprite, 3, true);
+    spman_alloc_pat(QBERT_UP_RIGHT  , *(player_sprite + (sizeof(player_sprite)/32/2)), 3, 0);
+    spman_alloc_pat(QBERT_UP_LEFT   , *(player_sprite + (sizeof(player_sprite)/32/2)), 3, true);
 
     row = 1;
-    qbert.dirty = true;
     qbert.pos = 1;
     qbert.frame = 0;
     qbert.x0 = 122;
@@ -166,7 +170,7 @@ void init_player()
     qbert.y = 8;
     qbert.tile_x = 14;
     qbert.tile_y = 2;
-    qbert.pattern = SPRITE_DOWN_RIGHT;
+    qbert.pattern = QBERT_DOWN_RIGHT;
     old_pattern = qbert.pattern;
     qbert.update = update_player;
 }
@@ -187,28 +191,28 @@ void update_player()
 
         case MOV_DOWN_RIGHT:
             //debug_msg("down-right");
-            qbert.pattern = SPRITE_DOWN_RIGHT;
+            qbert.pattern = QBERT_DOWN_RIGHT;
             jump_table = &jump_down;
             qbert.update = update_player_right;
             break;
 
         case MOV_DOWN_LEFT:
             //debug_msg("down-left");
-            qbert.pattern = SPRITE_DOWN_LEFT;
+            qbert.pattern = QBERT_DOWN_LEFT;
             jump_table = &jump_down;
             qbert.update = update_player_left;
             break;
 
         case MOV_UP_RIGHT:
             //debug_msg("up-right");
-            qbert.pattern = SPRITE_UP_RIGHT;
+            qbert.pattern = QBERT_UP_RIGHT;
             jump_table = &jump_up;
             qbert.update = update_player_right;
             break;
 
         case MOV_UP_LEFT:
             //debug_msg("up-left");
-            qbert.pattern = SPRITE_UP_LEFT;
+            qbert.pattern = QBERT_UP_LEFT;
             jump_table = &jump_up;
             qbert.update = update_player_left;
             break;
@@ -314,7 +318,7 @@ void put_qbert_sprite()
 
     // eyes and mouth
     sa.attr = BG_BLACK;
-    sa.pattern = qbert.pattern;
+    sa.pattern = qbert.pattern + 0;
     spman_alloc_sprite(&sa);
 
     // the bod (always visible)
