@@ -65,8 +65,6 @@ void draw_map()
 
 void draw_hud()
 {
-    uint8_t i;
-
     // "PLAYER 1"
     ubox_put_tile(0, 1, 19);
     ubox_put_tile(1, 1, 20);
@@ -92,7 +90,7 @@ void draw_hud()
     ubox_put_tile(29, 2, 59);
 
     // hearts
-    for (i = 0; i < MAX_LIVES; ++i)
+    for (uint8_t i = 0; i < MAX_LIVES; ++i)
         if (i < lives)
             // our hearts tile
             ubox_put_tile(2 + i, 2, 192);
@@ -209,11 +207,12 @@ void run_game()
             }
         }}
 
+        qbert.update(&qbert);
+        put_qbert_sprite();
         // update all the entities:
         // - self is a pointer to THIS entity
         // - because we don't create/destroy entities dynamically
         //   when we found one that is unused we are done
-        qbert.update(NULL);
         for (i = 0, self = entities; i < MAX_ENTITIES; i++, self++) {
             if (self->active)
                 self->update(self);
@@ -236,3 +235,4 @@ void run_game()
     // hide all the sprites before going back to the menu
     spman_hide_all_sprites();
 }
+

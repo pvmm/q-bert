@@ -9,7 +9,7 @@
 #endif
 
 // max items and enemies on screen at the same time
-#define MAX_ENTITIES 6
+#define MAX_ENTITIES 10
 
 // player lives
 LOCAL uint8_t lives;
@@ -22,12 +22,22 @@ LOCAL uint8_t gameover_delay;
 
 // sprite pattern base offset
 enum Pattern {
-    QBERT_DOWN_RIGHT    = 0,  // 000000
-    QBERT_DOWN_LEFT     = 12, // 001100
-    QBERT_UP_RIGHT      = 24, // 011000
-    QBERT_UP_LEFT       = 36, // 100100
-    BALL_NORMAL         = 40,
-    BALL_PRESSED        = 41,
+    QBERT_DOWN_RIGHT    = 0,  // 0b000000 (+3 = 3 sprites)
+    QBERT_DOWN_LEFT     = 12, // 0b001100 (+3 = 6 sprites)
+    QBERT_UP_RIGHT      = 24, // 0b011000 (+3 = 9 sprites) 
+    QBERT_UP_LEFT       = 36, // 0b100100 (+3 = 12 sprites)
+    BALL_NORMAL         = 48, //          (+1 = 13 sprites)
+    BALL_PRESSED        = 52, //          (+1 = 14 sprites)
+    GREENBALL_NORMAL    = 56, //          (+1 = 15 sprites)
+    GREENBALL_PRESSED   = 60, //          (+1 = 16 sprites)
+    UGG_UP              = 64, //          (+1 = 17 sprites)
+    UGG_DOWN            = 68, //          (+1 = 18 sprites)
+    WRONG_WAY_UP        = 72, //          (+1 = 19 sprites)
+    WRONG_WAY_DOWN      = 76, //          (+1 = 20 sprites)
+    COILY_DOWN_RIGHT    = 80, //          (+2 = 22 sprites)
+    COILY_DOWN_LEFT     = 88, //          (+2 = 24 sprites)
+    COILY_UP_LEFT       = 88, //          (+2 = 26 sprites)
+    COILY_UP_RIGHT      = 92, //          (+2 = 28 sprites)
 };
 
 #define LEFT_PATTERN_MASK(x)            ((x) & 0b100)
@@ -56,7 +66,8 @@ LOCAL struct sprite_attr sp;
 
 enum entity_id
 {
-    BALL1 = 0,
+    QBERT = 0,
+    BALL1,
     BALL2,
     COILY,
     SAM,
@@ -70,7 +81,7 @@ enum entity_id
 
 struct entity
 {
-    uint8_t type;
+    enum entity_id type;
     uint8_t tile_x;                 // pressed plate position
     uint8_t tile_y;
     uint8_t x;
@@ -101,9 +112,11 @@ void update_entity_up(struct entity* entity);
 void update_entity_down(struct entity* entity);
 
 void init_player(void);
-void update_player(struct entity* entity);
-void update_player_left(struct entity* entity);
-void update_player_right(struct entity* entity);
+void update_entity(struct entity* entity);
+void move_left(struct entity* entity);
+void move_right(struct entity* entity);
+void move_up(struct entity* entity);
+void move_down(struct entity* entity);
 
 void put_qbert_sprite();
 
