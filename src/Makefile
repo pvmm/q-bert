@@ -48,10 +48,10 @@ $(TMPDIR)/%.rel: %.c
 $(TMPDIR)/%.rel: %.z80
 	$(AS) -g -o $@ $<
 
-$(TMPDIR)/akm.rel: akm.z80 song.asm effects.asm
-	rasm akm.z80 -o $(TMPDIR)/akm -s -sl -sq
-	Disark --sourceProfile sdcc --symbolFile $(TMPDIR)/akm.sym --src16bitsValuesInHex --src8bitsValuesInHex --undocumentedOpcodesToBytes $(TMPDIR)/akm.bin $(TMPDIR)/akm_sdcc.asm
-	$(AS) -g -o $@ $(TMPDIR)/akm_sdcc.asm
+#$(TMPDIR)/akm.rel: akm.z80
+#	rasm akm.z80 -o $(TMPDIR)/akm -s -sl -sq
+#	Disark --sourceProfile sdcc --symbolFile $(TMPDIR)/akm.sym --src16bitsValuesInHex --src8bitsValuesInHex --undocumentedOpcodesToBytes $(TMPDIR)/akm.bin $(TMPDIR)/akm_sdcc.asm
+#	$(AS) -g -o $@ $(TMPDIR)/akm_sdcc.asm
 
 $(TMPDIR)/$(TARGET).rom: $(OBJS) $(TMPDIR)/crt0.rel $(UBOX_LIBS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LIBS) --code-loc $(CODE) --data-loc $(DATA) $(TMPDIR)/crt0.rel $(OBJS) -o $(TMPDIR)/$(TARGET).ihx
