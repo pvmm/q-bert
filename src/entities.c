@@ -15,12 +15,8 @@
 #include "player.h"
 
 
-const int8_t (*jump_table)[16];
-
-extern enum game_status game_status;    // completed the plates?
-extern uint8_t control;
+const int8_t (*jump_table)[16] = &jump_down;
 uint8_t old_pattern;
-uint8_t row;                            // player vertical coordinate
 
 
 inline void update_player()
@@ -69,12 +65,6 @@ inline void update_player()
 
 void init_player()
 {
-    // fill sprite allocation table up
-    spman_alloc_pat(QBERT_DOWN_RIGHT, *player_sprite, 3, 0);
-    spman_alloc_pat(QBERT_DOWN_LEFT , *player_sprite, 3, true);
-    spman_alloc_pat(QBERT_UP_RIGHT  , *(player_sprite + (sizeof(player_sprite)/32/2)), 3, 0);
-    spman_alloc_pat(QBERT_UP_LEFT   , *(player_sprite + (sizeof(player_sprite)/32/2)), 3, true);
-
     row = 1;
     qbert.type = QBERT;
     qbert.pos = 1;
@@ -88,12 +78,18 @@ void init_player()
     qbert.pattern = QBERT_DOWN_RIGHT;
     old_pattern = qbert.pattern;
     qbert.update = update_entity;
+
+    // fill sprite allocation table up
+    spman_alloc_pat(QBERT_DOWN_RIGHT, *player_sprite, 3, 0);
+    spman_alloc_pat(QBERT_DOWN_LEFT , *player_sprite, 3, true);
+    spman_alloc_pat(QBERT_UP_RIGHT  , *(player_sprite + (sizeof(player_sprite)/32/2)), 3, 0);
+    spman_alloc_pat(QBERT_UP_LEFT   , *(player_sprite + (sizeof(player_sprite)/32/2)), 3, true);
 }
 
 
 void init_entities()
 {
-    for (uint8_t i = 0; i < MAX_ENTITIES; ++i)
+    for (uint8_t i = 0; i < LAST_ENTITY; ++i)
         entities[i].active = 0;
 
     // normal ball
@@ -103,6 +99,7 @@ void init_entities()
     entities[BALL1].x0 = ENTITY_START_X1; // entities[BALL1].x;
     entities[BALL1].y = ENTITY_START_Y; // 208;
     entities[BALL1].y0 = ENTITY_START_Y; // entities[BALL1].y;
+    entities[BALL1].tile_y = 5;
     entities[BALL1].pattern = BALL_NORMAL;
     entities[BALL1].active = true;
     entities[BALL1].update = update_entity;
@@ -134,7 +131,7 @@ void update_entity(struct entity* entity)
     case SAM:
     case SLICK:
     case GREENBALL:
-        //entity->update = random() > 128 ? move_left : move_right;
+        entity->update = random() > 128 ? move_left : move_right;
         break;
 
     case COILY:
@@ -166,104 +163,170 @@ void move_down(struct entity* entity)
 }
 
 
-void move_left(struct entity* entity)
+inline void qbert_move_left()
+{
+    if (qbert.frame < 16)
+    {
+        qbert.y = qbert.y0 + (*jump_table)[qbert.frame];
+        qbert.frame++;
+        qbert.x = qbert.x0 - qbert.frame;
+    }
+    else
+    {
+        qbert.tile_x -= 2;
+
+        if (qbert.y0 < qbert.y)
+        {
+            // going down
+            qbert.tile_y += 3;
+            qbert.pos += row++;
+        }
+        else
+        {
+            // going up
+            qbert.tile_y -= 3;
+            qbert.pos -= row--;
+        }
+        game_status = press_plate(qbert.pos, qbert.tile_x, qbert.tile_y);
+
+        // reset animation status
+        qbert.x0 = qbert.x;
+        qbert.y0 = qbert.y;
+        qbert.frame = 0;
+        qbert.update = update_entity;
+    }
+}
+
+
+inline void entity_move_left(struct entity* entity)
 {
     if (entity->frame < 16)
     {
-        entity->y = entity->y0 + (*jump_table)[entity->frame];
+        entity->y = entity->y0 + jump_down[entity->frame];
         entity->frame++;
         entity->x = entity->x0 - entity->frame;
     }
     else
     {
-        entity->tile_x -= 2;
-
-        if (entity->type == QBERT)
+        if (entity->y0 < entity->y)
         {
-            if (entity->y0 < entity->y)
-            {
-                // going down
-                entity->tile_y += 3;
-                entity->pos += row++;
-            }
-            else
-            {
-                // going up
-                entity->tile_y -= 3;
-                entity->pos -= row--;
-            }
-            game_status = press_plate(entity->pos, entity->tile_x, entity->tile_y);
+            // going down
+            entity->tile_y += 3;
         }
         else
         {
-            if (entity->y0 < entity->y)
-            {
-                // going down
-                entity->tile_y += 3;
-            }
-            else
-            {
-                // going up
-                entity->tile_y -= 3;
-            }
+            // going up
+            entity->tile_y -= 3;
         }
 
+        // fell off the screen?
+        if (entity->tile_y > 22) {
+            entity->active = false;
+        } else {
+            // reset animation status
+            entity->x0 = entity->x;
+            entity->y0 = entity->y;
+            entity->frame = 0;
+            entity->update = update_entity;
+        }
+    }
+}
+
+
+void move_left(struct entity* entity)
+{
+    switch (entity->type) {
+    case QBERT:
+        qbert_move_left();
+        break;
+
+    default:
+        entity_move_left(entity);
+        break;
+    }
+}
+
+
+inline void qbert_move_right()
+{
+    if (qbert.frame < 16)
+    {
+        qbert.y = qbert.y0 + (*jump_table)[qbert.frame];
+        qbert.frame++;
+        qbert.x = qbert.x0 + qbert.frame;
+    }
+    else
+    {
+        qbert.tile_x += 2;
+
+        if (qbert.y0 < qbert.y)
+        {
+            // going down
+            qbert.tile_y += 3;
+            qbert.pos += ++row;
+        }
+        else
+        {
+            // going up
+            qbert.tile_y -= 3;
+            qbert.pos -= --row;
+        }
+        game_status = press_plate(qbert.pos, qbert.tile_x, qbert.tile_y);
+
         // reset animation status
-        entity->x0 = entity->x;
-        entity->y0 = entity->y;
-        entity->frame = 0;
-        entity->update = update_entity;
+        qbert.x0 = qbert.x;
+        qbert.y0 = qbert.y;
+        qbert.frame = 0;
+        qbert.update = update_entity;
+    }
+}
+
+
+inline void entity_move_right(struct entity* entity)
+{
+    if (entity->frame < 16)
+    {
+        entity->y = entity->y0 + jump_down[entity->frame];
+        entity->frame++;
+        entity->x = entity->x0 + entity->frame;
+    }
+    else
+    {
+        if (entity->y0 < entity->y)
+        {
+            // going down
+            entity->tile_y += 3;
+        }
+        else
+        {
+            // going up
+            entity->tile_y -= 3;
+        }
+
+        // fell off the screen?
+        if (entity->tile_y > 22) {
+            entity->active = false;
+        } else {
+            // reset animation status
+            entity->x0 = entity->x;
+            entity->y0 = entity->y;
+            entity->frame = 0;
+            entity->update = update_entity;
+        }
     }
 }
 
 
 void move_right(struct entity* entity)
 {
-    if (entity->frame < 16)
-    {
-        entity->y = entity->y0 + (*jump_table)[entity->frame];
-        entity->frame++;
-        entity->x = entity->x0 + entity->frame;
-    }
-    else
-    {
-        entity->tile_x += 2;
+    switch (entity->type) {
+    case QBERT:
+        qbert_move_right();
+        break;
 
-        if (entity->type == QBERT)
-        {
-            if (entity->y0 < entity->y)
-            {
-                // going down
-                entity->tile_y += 3;
-                entity->pos += ++row;
-            }
-            else
-            {
-                // going up
-                entity->tile_y -= 3;
-                entity->pos -= --row;
-            }
-            game_status = press_plate(qbert.pos, qbert.tile_x, qbert.tile_y);
-        }
-        else
-        {
-            if (entity->y0 < entity->y)
-            {
-                // going down
-                entity->tile_y += 3;
-            }
-            else
-            {
-                // going up
-                entity->tile_y -= 3;
-            }
-        }
-
-        // reset animation status
-        entity->x0 = entity->x;
-        entity->y0 = entity->y;
-        entity->frame = 0;
-        entity->update = update_entity;
+    default:
+        entity_move_right(entity);
+        break;
     }
 }
 
@@ -283,18 +346,18 @@ void put_entity_sprite(struct entity* entity)
 
         // eyes and mouth
         sa.attr = BG_BLACK;
-        sa.pattern = qbert.pattern + 0;
+        sa.pattern = qbert.pattern;
         spman_alloc_sprite(&sa);
 
         // the bod (always visible)
         sa.attr = BG_DARKYELLOW;
         sa.pattern = qbert.pattern + 4;
-        spman_alloc_sprite(&sa);
+        spman_alloc_fixed_sprite(&sa);
 
         // sclera (white of the eyes)
         sa.pattern = qbert.pattern + 8;
         sa.attr = BG_WHITE;
-        spman_alloc_fixed_sprite(&sa);
+        spman_alloc_sprite(&sa);
         break;
     }
     case BALL1:

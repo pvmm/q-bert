@@ -29,7 +29,6 @@ struct entity* self;
 
 // game still running?
 bool looping;
-enum game_status game_status;
 int8_t plate_redraw_delay;
 uint8_t old_plate_color;
 uint8_t plate_color;
@@ -155,8 +154,8 @@ void run_game()
 
     // init entities before drawing
     spman_init();
-    init_entities();
     init_player();
+    init_entities();
     init_level();
     draw_map();
 
@@ -189,7 +188,7 @@ void run_game()
 
             // read the selected control
             control = ubox_read_ctl(ctl);
-
+            debug("control = ", control);
             break;
         }
         case LEVEL_COMPLETED:
@@ -213,7 +212,7 @@ void run_game()
         // - self is a pointer to THIS entity
         // - because we don't create/destroy entities dynamically
         //   when we found one that is unused we are done
-        for (i = 0, self = entities; i < MAX_ENTITIES; i++, self++) {
+        for (i = 0, self = entities; i < LAST_ENTITY; i++, self++) {
             if (self->active) {
                 self->update(self);
                 put_entity_sprite(self);

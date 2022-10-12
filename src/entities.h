@@ -8,9 +8,6 @@
 #define LOCAL extern
 #endif
 
-// max items and enemies on screen at the same time
-#define MAX_ENTITIES 11
-
 // player lives
 LOCAL uint8_t lives;
 // invulnerability time after death
@@ -19,6 +16,8 @@ LOCAL uint8_t invuln;
 LOCAL uint8_t batteries;
 // show some delay once the lives run out
 LOCAL uint8_t gameover_delay;
+// Pyramid position (Pascal's triangle)
+LOCAL uint8_t row;
 
 // sprite pattern base offset
 enum Pattern {
@@ -82,6 +81,7 @@ enum entity_id
     UGG1,
     UGG2,
     GREENBALL,
+    LAST_ENTITY,
 };
 
 struct entity
@@ -107,7 +107,7 @@ struct entity
 LOCAL struct entity qbert;
 
 // other entities
-LOCAL struct entity entities[MAX_ENTITIES];
+LOCAL struct entity entities[LAST_ENTITY];
 
 void init_entities(void);
 void update_entity(struct entity* entity);

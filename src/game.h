@@ -15,6 +15,9 @@ enum game_status
     LEVEL_COMPLETED_2,
 };
 
+// game state machine
+LOCAL enum game_status game_status;
+
 /**
  * Game implementation and helpers.
  */

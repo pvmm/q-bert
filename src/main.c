@@ -86,7 +86,7 @@ void draw_game_over()
 void main()
 {
     debug_msg("Q*Bert demo");
-    debug_break();
+    //debug_break();
 
     //  PAL: 50/1 = 50 FPS
     // NTSC: 60/1 = 60 FPS
