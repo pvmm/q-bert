@@ -1,5 +1,7 @@
 # Q*Bert
 
+warning: SDCC 4.1.0 is buggy, use newer compiler version.
+
 TODO:
 
  - "Pyramid" boundary check;
