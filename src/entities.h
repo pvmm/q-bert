@@ -84,19 +84,28 @@ enum entity_id
     LAST_ENTITY,
 };
 
+enum state_machine
+{
+    DISABLED = 0,                   // not displayed
+    DROPPING,                       // dropping from above
+    WALKING,                        // walking around the pyramid
+    HOMING,                         // only coily follows the player
+    LEAVING,                        // dropping out of the pyramid
+};
+
 struct entity
 {
     enum entity_id type;
+    enum state_machine state;       // current entity status
     uint8_t tile_x;                 // pressed plate position
     uint8_t tile_y;
     uint8_t x;
     uint8_t y;
     uint8_t x0;                     // previous x,y positions
     uint8_t y0;
-    // uint8_t dir;                 // 4 directions
     bool active;
     uint8_t pattern;                // pattern group
-    // uint8_t delay;
+    uint8_t delay;                  // pause between movements
     uint8_t frame;                  // current animation frame
     uint8_t pos;
 

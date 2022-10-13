@@ -28,7 +28,6 @@ LOCAL enum game_status game_status;
 
 #define MAX_LIVES 3
 
-uint8_t random();
 void run_game();
 void draw_map();
 void draw_hud();

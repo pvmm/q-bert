@@ -1,4 +1,5 @@
 #include <string.h>
+#include "extras.h"
 
 #define LOCAL
 #include "enemy_ball.h"
@@ -95,10 +96,10 @@ void init_entities()
     // normal ball
     entities[BALL1].type = BALL1;
     entities[BALL1].frame = 0;
-    entities[BALL1].x = ENTITY_START_X1; // random() > 128 ? 136 : 104;
-    entities[BALL1].x0 = ENTITY_START_X1; // entities[BALL1].x;
-    entities[BALL1].y = ENTITY_START_Y; // 208;
-    entities[BALL1].y0 = ENTITY_START_Y; // entities[BALL1].y;
+    entities[BALL1].x0 = random_uint8_t() > 128 ? ENTITY_START_X1 : ENTITY_START_X2;
+    entities[BALL1].x = entities[BALL1].x0;
+    entities[BALL1].y0 = ENTITY_START_Y;
+    entities[BALL1].y = 208;
     entities[BALL1].tile_y = 5;
     entities[BALL1].pattern = BALL_NORMAL;
     entities[BALL1].active = true;
@@ -110,11 +111,21 @@ void init_entities()
 
     // green ball
     entities[GREENBALL].type = GREENBALL;
-    entities[GREENBALL].x = random() > 128 ? 138 : 106;
+    entities[GREENBALL].x = random_uint8_t() > 128 ? 138 : 106;
     entities[GREENBALL].y = 208;
+    entities[GREENBALL].y0 = ENTITY_START_Y;
     entities[GREENBALL].pattern = 0;
     entities[GREENBALL].pattern = GREENBALL;
     entities[GREENBALL].active = false;
+}
+
+
+void dropping(struct entity* entity)
+{
+    if (++entity->y == entity->y0) {
+        entity->state = WALKING;
+        entity->update = update_entity;
+    }
 }
 
 
@@ -122,31 +133,43 @@ void update_entity(struct entity* entity)
 {
     switch (entity->type)
     {
-    case QBERT:
-        update_player();
-        break;
+        case QBERT:
+            update_player();
+            break;
 
-    case BALL1:
-    case BALL2:
-    case SAM:
-    case SLICK:
-    case GREENBALL:
-        entity->update = random() > 128 ? move_left : move_right;
-        break;
+        case BALL1:
+        case BALL2:
+        case SAM:
+        case SLICK:
+        case GREENBALL:
+            switch (entity->state)
+            {
+                case DROPPING:
+                    entity->update = dropping;
+                    break;
 
-    case COILY:
-        // TODO: follow the player
-        break;
+                case WALKING:
+                    entity->update = random_uint8_t() > 128 ? move_left : move_right;
+                    break;
 
-    case UGG1:
-    case UGG2:
-    case WRONG_WAY1:
-    case WRONG_WAY2:
-        entity->update = random() > 128 ? move_up : move_down;
-        break;
+                default:
+                    break;
+            }
+            break;
 
-    default:
-        break;
+        case COILY:
+            // TODO: follow the player
+            break;
+
+        case UGG1:
+        case UGG2:
+        case WRONG_WAY1:
+        case WRONG_WAY2:
+            entity->update = random_uint8_t() > 128 ? move_up : move_down;
+            break;
+
+        default:
+            break;
     }
 }
 

@@ -113,12 +113,6 @@ inline void update_frisbees()
 }
 
 
-uint8_t random()
-{
-    return 0;
-}
-
-
 void run_game()
 {
     uint8_t i;

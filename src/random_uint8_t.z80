@@ -1,0 +1,17 @@
+; uint8_t random_uint8_t()
+
+_random_uint8_t::
+    ld a, (_seed)
+    ld b, a
+    rrca ; multiply by 32
+    rrca
+    rrca
+    xor #0x1f
+    add a, b
+    sbc a, #255 ; carry
+    ld (_seed), a
+    ld l, a
+    ret
+
+_seed::
+    .db 0xfe
