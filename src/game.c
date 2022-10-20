@@ -200,7 +200,7 @@ void run_game()
             }
         }}
 
-        qbert.update(&qbert);
+        update_player();
         put_entity_sprite(&qbert);
         // update all the entities:
         // - self is a pointer to THIS entity

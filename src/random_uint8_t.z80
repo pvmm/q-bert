@@ -13,5 +13,7 @@ _random_uint8_t::
     ld l, a
     ret
 
+.area _DATA 
+
 _seed::
-    .db 0xfe
+    .db #0x0f

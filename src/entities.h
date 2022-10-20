@@ -126,6 +126,7 @@ void update_entity_up(struct entity* entity);
 void update_entity_down(struct entity* entity);
 
 void init_player(void);
+void update_player(void);
 void update_entity(struct entity* entity);
 void move_left(struct entity* entity);
 void move_right(struct entity* entity);

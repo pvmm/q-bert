@@ -95,6 +95,7 @@ void init_entities()
 
     // normal ball
     entities[BALL1].type = BALL1;
+    entities[BALL1].state = DROPPING;
     entities[BALL1].frame = 0;
     entities[BALL1].x0 = random_uint8_t() > 128 ? ENTITY_START_X1 : ENTITY_START_X2;
     entities[BALL1].x = entities[BALL1].x0;
@@ -133,10 +134,6 @@ void update_entity(struct entity* entity)
 {
     switch (entity->type)
     {
-        case QBERT:
-            update_player();
-            break;
-
         case BALL1:
         case BALL2:
         case SAM:

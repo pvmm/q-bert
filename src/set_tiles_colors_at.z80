@@ -1,4 +1,5 @@
 ; void set_tiles_colors_at(uint8_t *colors, uint16_t addr, uint16_t len)
+
 .globl _set_tiles_colors_at
 
 LDIRVM = 0x005c
@@ -11,14 +12,14 @@ _set_tiles_colors_at::
     ld hl, #BG_COLS
     ld e, 2(iy)
     ld d, 3(iy)
-    add hl, de
+    add hl, de                      ; hl <- addr + BG_COLS
 
     ld c, 4(iy)
-    ld b, 5(iy)
+    ld b, 5(iy)                     ; bc <- len
 
     ld e, 0(iy)
     ld d, 1(iy)
-    ex de, hl
+    ex de, hl                       ; hl <- colors, de <- addr + BG_COLS
 
     push iy
     call LDIRVM
